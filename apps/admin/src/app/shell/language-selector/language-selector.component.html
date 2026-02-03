@@ -1,0 +1,11 @@
+<mat-icon class="language-icon">language</mat-icon>
+<mat-form-field appearance="outline">
+  <mat-select
+    [value]="localeService.currentLocale()"
+    (selectionChange)="onLanguageChange($event.value)"
+    [attr.aria-label]="'app.language.select' | translate"
+  >
+    <mat-option value="en-US">English</mat-option>
+    <mat-option value="uk-UA">Українська</mat-option>
+  </mat-select>
+</mat-form-field>

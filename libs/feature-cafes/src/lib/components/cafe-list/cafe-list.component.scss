@@ -1,0 +1,27 @@
+// Cafe list uses global table styles from apps/admin/src/styles.scss
+// No additional styling needed
+
+.actions-column {
+  text-align: right;
+}
+
+.info-icon {
+  font-size: 1.125rem;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+mat-card-actions {
+  margin: 0;
+  padding: 0.5rem;
+}
+
+@media (width <= 768px) {
+  .cafe-list-container {
+    padding: 1rem;
+  }
+
+  .list-header h1 {
+    font-size: 1.5rem;
+  }
+}
