@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>{{ 'cafes.create' | translate }}</h2>
+<form [formGroup]="cafeForm" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <mat-form-field class="full-width">
+      <mat-label>{{ 'cafes.name' | translate }}</mat-label>
+      <input
+        matInput
+        formControlName="name"
+        [placeholder]="'form.namePlaceholder' | translate"
+        required
+        data-testid="cafe-name-input"
+      />
+      @if (cafeForm.get('name')?.hasError('required') && cafeForm.get('name')?.touched) {
+        <mat-error>{{ 'form.required' | translate }}</mat-error>
+      }
+      @if (cafeForm.get('name')?.hasError('maxlength')) {
+        <mat-error>{{ 'form.maxLength' | translate: { max: 100 } }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>{{ 'cafes.contactInfo' | translate }}</mat-label>
+      <textarea
+        matInput
+        formControlName="contactInfo"
+        [placeholder]="'form.contactPlaceholder' | translate"
+        rows="3"
+        data-testid="cafe-contact-input"
+      >
+      </textarea>
+      @if (cafeForm.get('contactInfo')?.hasError('maxlength')) {
+        <mat-error>{{ 'form.maxLength' | translate: { max: 500 } }}</mat-error>
+      }
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()" data-testid="cancel-button">
+      {{ 'common.cancel' | translate }}
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!cafeForm.valid || isSubmitting()"
+      data-testid="submit-button"
+    >
+      {{ 'common.create' | translate }}
+    </button>
+  </mat-dialog-actions>
+</form>

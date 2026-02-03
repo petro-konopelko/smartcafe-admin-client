@@ -1,0 +1,81 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+:host {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: $radius-btn;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  color: var(--md-on-surface);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: $font-family;
+
+  &:hover {
+    background: var(--md-surface-variant);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--md-focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+.dropdown-menu {
+  display: block;
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background: var(--md-surface);
+  border-radius: 4px;
+  box-shadow: $shadow-2;
+  min-width: 160px;
+  z-index: $z-dropdown;
+  padding: 8px 0;
+  border: 1px solid var(--md-surface-variant);
+  animation: fadeIn 0.1s ease-out;
+}
+
+.dropdown-item {
+  padding: 10px 16px;
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  color: var(--md-on-surface);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: $font-family;
+
+  &:hover {
+    background: var(--md-surface-variant);
+  }
+
+  &.selected {
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

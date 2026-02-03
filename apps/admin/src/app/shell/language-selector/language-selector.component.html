@@ -1,0 +1,31 @@
+<button
+  class="dropdown-trigger"
+  [attr.aria-label]="'app.language.select' | translate"
+  (click)="toggleDropdown()"
+  #dropdownButton
+>
+  <mat-icon>language</mat-icon>
+  <span>{{ getCurrentLanguageName() }}</span>
+  <mat-icon>arrow_drop_down</mat-icon>
+</button>
+
+@if (isOpen()) {
+  <div class="dropdown-menu" role="menu">
+    <button
+      class="dropdown-item"
+      role="menuitem"
+      [class.selected]="localeService.currentLocale() === 'en-US'"
+      (click)="onLanguageChange('en-US')"
+    >
+      English
+    </button>
+    <button
+      class="dropdown-item"
+      role="menuitem"
+      [class.selected]="localeService.currentLocale() === 'uk-UA'"
+      (click)="onLanguageChange('uk-UA')"
+    >
+      Українська
+    </button>
+  </div>
+}

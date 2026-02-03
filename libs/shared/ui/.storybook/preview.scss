@@ -1,0 +1,15 @@
+// Import global application styles for Storybook
+@import '../../../../apps/admin/src/styles.scss';
+
+// Additional Storybook-specific styles
+.sb-show-main {
+  background-color: var(--md-bg);
+  color: var(--md-on-surface);
+  font-family: 'Roboto', sans-serif;
+}
+
+// Dark theme support in Storybook
+.dark-theme .sb-show-main {
+  background-color: var(--md-bg);
+  color: var(--md-on-surface);
+}

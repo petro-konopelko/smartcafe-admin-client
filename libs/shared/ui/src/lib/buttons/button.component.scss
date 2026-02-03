@@ -1,0 +1,99 @@
+// Button component styles using Material Design 3
+// Note: These styles rely on CSS custom properties defined in the global theme
+
+.btn {
+  height: 40px;
+  padding: 0 24px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 14px;
+  white-space: nowrap;
+  background: transparent;
+  color: inherit;
+  font-family: 'Roboto', sans-serif;
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.38;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--md-focus-ring, #0B57D0);
+    outline-offset: 2px;
+  }
+}
+
+.btn-filled {
+  background: var(--md-primary, #0B57D0);
+  color: var(--md-on-primary, #FFFFFF);
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.btn-outlined {
+  border: 1px solid var(--md-outline, #747775);
+  color: var(--md-primary, #0B57D0);
+
+  &:hover:not(:disabled) {
+    background: rgba(11, 87, 208, 0.04);
+  }
+}
+
+.btn-text {
+  color: var(--md-primary, #0B57D0);
+  padding: 0 12px;
+
+  &:hover:not(:disabled) {
+    background: rgba(11, 87, 208, 0.04);
+  }
+}
+
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover:not(:disabled) {
+    background: var(--md-surface-variant, #E1E3E1);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.38;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--md-focus-ring, #0B57D0);
+    outline-offset: 2px;
+  }
+}
+
+:host.full-width .btn {
+  width: 100%;
+}

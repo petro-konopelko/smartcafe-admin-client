@@ -1,0 +1,111 @@
+@use '@angular/material' as mat;
+@use './variables' as *;
+
+// ===========================
+// Material Theming
+// ===========================
+
+@include mat.core();
+
+// CSS Custom Properties for theming
+:root {
+  // Light theme variables
+  --md-primary: #{$md-primary};
+  --md-on-primary: #{$md-on-primary};
+  --md-primary-container: #{$md-primary-container};
+  --md-on-primary-container: #{$md-on-primary-container};
+  
+  --md-bg: #{$md-bg};
+  --md-surface: #{$md-surface};
+  --md-on-surface: #{$md-on-surface};
+  --md-surface-variant: #{$md-surface-variant};
+  --md-on-surface-variant: #{$md-on-surface-variant};
+  --md-outline: #{$md-outline};
+  --md-outline-variant: #{$md-outline-variant};
+  --md-error: #{$md-error};
+  --md-focus-ring: #{$md-focus-ring};
+
+  --chip-active-bg: #{$chip-active-bg};
+  --chip-active-text: #{$chip-active-text};
+  --chip-draft-bg: #{$chip-draft-bg};
+  --chip-draft-text: #{$chip-draft-text};
+  --chip-published-bg: #{$chip-published-bg};
+  --chip-published-text: #{$chip-published-text};
+  
+  // Border radius
+  --radius-s: #{$radius-s};
+  --radius-m: #{$radius-m};
+  --radius-l: #{$radius-l};
+  --radius-btn: #{$radius-btn};
+  
+  // Shadows
+  --shadow-1: #{$shadow-1};
+  --shadow-2: #{$shadow-2};
+}
+
+// Light theme (Material Design 3)
+$light-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$blue-palette,
+    tertiary: mat.$orange-palette,
+  ),
+  typography: (
+    plain-family: $font-family,
+    brand-family: $font-family,
+  ),
+  density: (
+    scale: 0,
+  ),
+));
+
+// Apply light theme by default
+@include mat.all-component-themes($light-theme);
+
+// Dark theme (Material Design 3)
+$dark-theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: mat.$blue-palette,
+    tertiary: mat.$orange-palette,
+  ),
+  typography: (
+    plain-family: $font-family,
+    brand-family: $font-family,
+  ),
+  density: (
+    scale: 0,
+  ),
+));
+
+// Apply dark theme when .dark-theme class is present
+.dark-theme {
+  @include mat.all-component-themes($dark-theme);
+  
+  // CSS Custom Properties for dark theme
+  --md-primary: #{$md-dark-primary};
+  --md-on-primary: #{$md-dark-on-primary};
+  --md-primary-container: #{$md-dark-primary-container};
+  --md-on-primary-container: #{$md-dark-on-primary-container};
+  
+  --md-bg: #{$md-dark-bg};
+  --md-surface: #{$md-dark-surface};
+  --md-on-surface: #{$md-dark-on-surface};
+  --md-surface-variant: #{$md-dark-surface-variant};
+  --md-on-surface-variant: #{$md-dark-on-surface-variant};
+  --md-outline: #{$md-dark-outline};
+  --md-outline-variant: #{$md-dark-outline-variant};
+  --md-error: #{$md-dark-error};
+  --md-focus-ring: #{$md-dark-focus-ring};
+
+  --chip-active-bg: #{$chip-dark-active-bg};
+  --chip-active-text: #{$chip-dark-active-text};
+  --chip-draft-bg: #{$chip-dark-draft-bg};
+  --chip-draft-text: #{$chip-dark-draft-text};
+  --chip-published-bg: #{$chip-dark-published-bg};
+  --chip-published-text: #{$chip-dark-published-text};
+  
+  // Custom dark theme overrides
+  background-color: var(--md-bg);
+  color: var(--md-on-surface);
+}
