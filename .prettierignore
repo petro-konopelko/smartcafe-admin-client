@@ -1,0 +1,16 @@
+# Dependencies
+node_modules
+dist
+.nx
+coverage
+
+# Build outputs
+*.tsbuildinfo
+.angular
+
+# IDE
+.vscode
+.idea
+
+# Storybook
+storybook-static

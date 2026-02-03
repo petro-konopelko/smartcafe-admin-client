@@ -1,0 +1,373 @@
+.item-card {
+  background: var(--app-surface);
+  border: 1px solid var(--app-outline-variant);
+  border-radius: var(--radius-m);
+  padding: 20px;
+  margin-bottom: 16px;
+  transition: all 0.2s;
+
+  &:hover {
+    box-shadow: var(--shadow-1);
+  }
+
+  &.collapsed {
+    .item-content {
+      display: none;
+    }
+  }
+}
+
+// Item fields row (horizontal layout)
+.item-fields-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+
+  .drag-handle {
+    padding: 8px 0 0;
+    color: var(--app-on-surface-variant);
+    cursor: grab;
+    flex-shrink: 0;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  .flex-1 {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .flex-2 {
+    flex: 2;
+    min-width: 0;
+  }
+
+  .item-actions {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+    flex-shrink: 0;
+    padding-top: 20px;
+  }
+
+  @media (width <= 1024px) {
+    flex-wrap: wrap;
+
+    .flex-1,
+    .flex-2 {
+      flex: 1 1 calc(50% - 6px);
+    }
+  }
+
+  @media (width <= 768px) {
+    flex-direction: column;
+
+    .flex-1,
+    .flex-2 {
+      flex: 1 1 100%;
+      width: 100%;
+    }
+  }
+}
+
+.item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+// Description and image row
+.description-image-row {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+
+  .description-field {
+    min-width: 0;
+
+    textarea {
+      min-height: 100px;
+    }
+  }
+
+  @media (width <= 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.image-upload-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .image-label {
+    display: block;
+    font-size: 12px;
+    color: var(--app-on-surface-variant);
+    font-weight: 500;
+  }
+}
+
+.image-upload-group {
+  min-width: 240px;
+}
+
+.file-input-hidden {
+  display: none;
+}
+
+.image-upload-box {
+  width: 100%;
+  height: 160px;
+  border: 2px dashed var(--app-outline-variant);
+  border-radius: var(--radius-s);
+  background: transparent;
+  color: var(--app-primary);
+  display: flex;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+  padding: 16px;
+
+  &:hover {
+    border-color: var(--app-primary);
+    background: rgb(11 87 208 / 4%);
+  }
+
+  mat-icon {
+    color: var(--app-primary);
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .upload-text {
+    font-size: 14px;
+    color: var(--app-primary);
+    font-weight: 500;
+  }
+}
+
+.image-preview-container {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  border-radius: var(--radius-s);
+  overflow: hidden;
+  border: 2px solid var(--app-outline-variant);
+
+  .image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .remove-image-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--app-error);
+    color: var(--md-on-error);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
+
+    &:hover {
+      background: #d32f2f;
+      transform: scale(1.1);
+    }
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+// Ingredients simple layout
+.ingredients-simple {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.ingredients-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 40px;
+}
+
+.ingredient-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 10px;
+  background: var(--app-surface);
+  border: 1.5px solid var(--app-outline-variant);
+  border-radius: 24px;
+  transition: all 0.2s;
+
+  &.checked {
+    background: var(--app-primary-container);
+    border-color: var(--app-primary);
+
+    .ingredient-name {
+      color: var(--app-primary);
+      font-weight: 500;
+    }
+  }
+
+  &:hover {
+    border-color: var(--app-primary);
+  }
+
+  .ingredient-checkbox {
+    // Component-level styling only
+    // Material checkbox customization should be done via theme configuration
+    transform: scale(0.9);
+    margin: 0;
+  }
+
+  .ingredient-name {
+    font-size: 14px;
+    color: var(--app-on-primary-container);
+    font-weight: 500;
+    user-select: none;
+  }
+
+  .chip-remove-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: var(--app-on-primary-container);
+    }
+  }
+}
+
+.no-ingredients {
+  color: var(--app-on-surface-variant);
+  font-size: 14px;
+  font-style: italic;
+  margin: 0;
+}
+
+.add-ingredient-link {
+  color: var(--app-primary);
+  font-weight: 500;
+  font-size: 14px;
+  padding: 4px 8px;
+  align-self: flex-start;
+
+  &:hover {
+    background: transparent;
+  }
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+// Form group styles
+.form-group {
+  margin-bottom: 0;
+
+  label {
+    display: block;
+    font-size: 12px;
+    color: var(--app-on-surface-variant);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  input[type='text'],
+  input[type='number'],
+  select,
+  .md-select,
+  textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--app-outline-variant);
+    border-radius: var(--radius-s);
+    background: var(--app-surface);
+    color: var(--app-on-surface);
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: var(--app-primary);
+      box-shadow: 0 0 0 1px var(--app-primary);
+    }
+
+    &:hover:not(:disabled) {
+      border-color: var(--app-on-surface);
+    }
+
+    &:disabled {
+      background: var(--app-surface-variant);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    &::placeholder {
+      color: var(--app-on-surface-variant);
+      opacity: 0.6;
+    }
+  }
+
+  select,
+  .md-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%235f6368' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 36px;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .error-text {
+    color: var(--app-error);
+    font-size: 12px;
+    margin-top: 4px;
+  }
+}

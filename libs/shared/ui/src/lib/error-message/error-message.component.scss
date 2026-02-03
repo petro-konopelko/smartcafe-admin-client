@@ -1,0 +1,30 @@
+.error-card {
+  background-color: #ffebee;
+  border-left: 4px solid #f44336;
+}
+
+.error-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.error-icon {
+  color: #f44336;
+  font-size: 2rem;
+  width: 2rem;
+  height: 2rem;
+}
+
+.error-text h3 {
+  margin: 0 0 0.5rem;
+  color: #c62828;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.error-text p {
+  margin: 0;
+  color: #b71c1c;
+  font-size: 0.875rem;
+}

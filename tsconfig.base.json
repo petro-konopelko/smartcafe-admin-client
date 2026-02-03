@@ -1,0 +1,26 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@smartcafe/admin/feature-cafes": ["libs/feature-cafes/src/index.ts"],
+      "@smartcafe/admin/feature-menus": ["libs/feature-menus/src/index.ts"],
+      "@smartcafe/admin/shared/ui": ["libs/shared/ui/src/index.ts"],
+      "@smartcafe/admin/shared/models": ["libs/shared/models/src/index.ts"],
+      "@smartcafe/admin/shared/data-access": ["libs/shared/data-access/src/index.ts"],
+      "@smartcafe/admin/shared/utils": ["libs/shared/utils/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

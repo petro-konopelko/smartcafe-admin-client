@@ -1,0 +1,15 @@
+@if (localeService.isReady()) {
+  <sc-toolbar />
+}
+
+<div class="app-container">
+  @if (!localeService.isReady() || isLoading()) {
+    <div class="global-loading">
+      <sc-loading-spinner />
+    </div>
+  }
+
+  @if (localeService.isReady()) {
+    <router-outlet />
+  }
+</div>

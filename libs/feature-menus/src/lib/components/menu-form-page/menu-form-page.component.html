@@ -1,0 +1,92 @@
+<div class="container">
+  <div class="flex-row space-between mb-2">
+    <div class="flex-row">
+      <button class="btn btn-icon action-primary" [routerLink]="['/cafes', cafeId(), 'menus']">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>{{ (isEditMode() ? 'menus.editTitle' : 'menus.createTitle') | translate }}</h1>
+    </div>
+    <div class="flex-row">
+      @if (isEditMode()) {
+        <button class="btn btn-outlined" (click)="onPreview()" [disabled]="isSubmitting()">
+          <mat-icon>visibility</mat-icon>
+          {{ 'menus.preview' | translate }}
+        </button>
+      }
+      <button
+        class="btn btn-filled"
+        (click)="onSubmit()"
+        [disabled]="menuForm.invalid || isSubmitting()"
+      >
+        <mat-icon>save</mat-icon>
+        {{ 'common.save' | translate }}
+      </button>
+    </div>
+  </div>
+
+  @if (menuStore.loading()) {
+    <div class="loading">
+      <mat-icon>hourglass_empty</mat-icon>
+      {{ 'common.loading' | translate }}
+    </div>
+  }
+
+  @if (menuStore.error()) {
+    <div class="error-card">
+      <mat-icon color="warn">error</mat-icon>
+      <span>{{ menuStore.error() }}</span>
+    </div>
+  }
+
+  <form [formGroup]="menuForm" class="menu-form">
+    <!-- Menu Name & Description -->
+    <div class="section-block">
+      <div class="form-group">
+        <label for="menu-name">{{ 'menus.form.name' | translate }}</label>
+        <input type="text" id="menu-name" formControlName="name" [placeholder]="'menus.form.namePlaceholder' | translate" />
+        @if (menuForm.get('name')?.hasError('required') && menuForm.get('name')?.touched) {
+          <div class="error-text">{{ 'common.required' | translate }}</div>
+        } @else if (menuForm.get('name')?.hasError('maxlength')) {
+          <div class="error-text">{{ 'common.maxLength' | translate: {max: 100} }}</div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="menu-description">{{ 'menus.form.description' | translate }}</label>
+        <input type="text" id="menu-description" formControlName="description" [placeholder]="'menus.form.descriptionPlaceholder' | translate" />
+        @if (menuForm.get('description')?.hasError('maxlength')) {
+          <div class="error-text">{{ 'common.maxLength' | translate: {max: 500} }}</div>
+        }
+      </div>
+    </div>
+    
+    <!-- Sections -->
+    <div class="sections-container" formArrayName="sections" cdkDropList (cdkDropListDropped)="dropSection($event)">
+      @for (section of sections.controls; track $index; let sectionIndex = $index) {
+        <div [formGroupName]="sectionIndex" class="section-block" cdkDrag>
+          <sc-menu-section
+            [sectionForm]="$any(section)"
+            [sectionIndex]="sectionIndex"
+            [isExpanded]="isSectionExpanded(sectionIndex)"
+            (removeSection)="removeSection(sectionIndex)"
+            (toggleExpand)="toggleSection(sectionIndex)"
+            (addItem)="addItem(sectionIndex)"
+            (removeItem)="removeItem(sectionIndex, $event)"
+            (dropItem)="dropItem($event, sectionIndex)"
+            (addIngredient)="addIngredient(sectionIndex, $event)"
+            (removeIngredient)="removeIngredient(sectionIndex, $event.itemIndex, $event.ingredientIndex)"
+          />
+        </div>
+      }
+    </div>
+    
+    <button
+      class="btn btn-text add-section-button"
+      type="button"
+      (click)="addSection()"
+    >
+      <mat-icon>add</mat-icon>
+      {{ 'menus.form.addSection' | translate }}
+    </button>
+  </form>
+</div>

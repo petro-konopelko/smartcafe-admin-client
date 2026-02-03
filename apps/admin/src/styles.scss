@@ -1,0 +1,676 @@
+/* Global styles and theme configuration */
+
+// Import design system
+@use './styles/variables' as *;
+@use './styles/mixins' as *;
+@use './styles/themes';
+
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: $font-family;
+}
+
+body {
+  background-color: var(--app-background);
+  color: var(--app-on-surface);
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+  padding-bottom: 80px; // Space for mobile bottom navigation
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 2px solid var(--app-primary) !important;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.dark-theme ::-webkit-scrollbar-track {
+  background: #424242;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.dark-theme ::-webkit-scrollbar-thumb {
+  background: #666;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.dark-theme ::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
+/* Material Design snackbar customization */
+.error-snackbar {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+.success-snackbar {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+/* Utility classes */
+.full-width {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-1 {
+  margin-top: 0.5rem;
+}
+
+.mt-2 {
+  margin-top: 1rem;
+}
+
+.mt-3 {
+  margin-top: 1.5rem;
+}
+
+.mt-4 {
+  margin-top: 2rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-2 {
+  margin-bottom: 1rem;
+}
+
+.mb-3 {
+  margin-bottom: 1.5rem;
+}
+
+.mb-4 {
+  margin-bottom: 2rem;
+}
+
+.ml-1 {
+  margin-left: 0.5rem;
+}
+
+.ml-2 {
+  margin-left: 1rem;
+}
+
+.mr-1 {
+  margin-right: 0.5rem;
+}
+
+.mr-2 {
+  margin-right: 1rem;
+}
+
+.p-1 {
+  padding: 0.5rem;
+}
+
+.p-2 {
+  padding: 1rem;
+}
+
+.p-3 {
+  padding: 1.5rem;
+}
+
+.p-4 {
+  padding: 2rem;
+}
+
+/* Responsive grid container */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+
+  @media (width >= 768px) {
+    padding: 2rem;
+  }
+}
+
+/* Card grid layout */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+
+  @media (width >= 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+}
+
+/* Accessibility */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Container styles */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Flex utilities */
+.flex-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.gap-1 {
+  gap: 8px;
+}
+
+.gap-2 {
+  gap: 16px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.mb-1 {
+  margin-bottom: 8px;
+}
+
+.mb-2 {
+  margin-bottom: 16px;
+}
+
+.mb-3 {
+  margin-bottom: 24px;
+}
+
+.mb-4 {
+  margin-bottom: 32px;
+}
+
+/* Responsive tables */
+.data-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--app-surface);
+  border-radius: $radius-l;
+  border: 1px solid var(--app-surface-variant);
+  overflow: hidden;
+
+  th {
+    text-align: left;
+    padding: 16px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--md-on-surface-variant);
+    border-bottom: 1px solid var(--app-surface-variant);
+  }
+
+  td {
+    padding: 16px;
+    border-bottom: 1px solid var(--app-surface-variant);
+  }
+
+  @include mobile-only {
+    border: none;
+    background: transparent;
+
+    thead {
+      display: none;
+    }
+
+    tr {
+      display: block;
+      background: var(--app-surface);
+      margin-bottom: 12px;
+      border: 1px solid var(--app-surface-variant);
+      border-radius: 12px;
+    }
+
+    td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--app-surface-variant);
+
+      &::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--app-primary);
+        font-size: 12px;
+      }
+
+      &:last-child {
+        justify-content: flex-end;
+        border-bottom: none;
+
+        &::before {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+/* Chip styles */
+.chip {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 700;
+
+  &.chip-active,
+  &.active {
+    background: var(--chip-active-bg);
+    color: var(--chip-active-text);
+  }
+
+  &.chip-draft,
+  &.draft {
+    background: var(--chip-draft-bg);
+    color: var(--chip-draft-text);
+  }
+
+  &.chip-published,
+  &.published {
+    background: var(--chip-published-bg);
+    color: var(--chip-published-text);
+  }
+}
+
+/* Actions cell in tables */
+.actions-cell {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Section block for forms */
+.section-block {
+  background: var(--app-surface);
+  border: 1px solid var(--app-outline-variant);
+  border-radius: var(--radius-m);
+  padding: 16px;
+  margin-bottom: 24px;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: var(--app-primary);
+  }
+}
+
+/* ===========================
+   Button Styles (Material Design 3)
+   =========================== */
+.btn {
+  height: 40px;
+  padding: 0 24px;
+  border-radius: var(--radius-btn);
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 14px;
+  white-space: nowrap;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  user-select: none;
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  &:disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+.btn-filled {
+  background: var(--app-primary);
+  color: var(--md-on-primary);
+
+  &:hover {
+    opacity: 0.9;
+    box-shadow: var(--shadow-1);
+  }
+}
+
+.btn-outlined {
+  border: 1px solid var(--app-outline);
+  color: var(--app-primary);
+
+  &:hover {
+    background: rgb(11 87 208 / 4%);
+  }
+}
+
+.btn-text {
+  color: var(--app-primary);
+  padding: 0 12px;
+
+  &:hover {
+    background: rgb(11 87 208 / 8%);
+  }
+}
+
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+
+  &:hover {
+    background: var(--app-surface-variant);
+  }
+}
+
+.action-primary {
+  color: var(--app-primary);
+}
+
+.action-delete {
+  color: var(--md-error);
+}
+
+/* ===========================
+   Form Elements (Material Design 3)
+   =========================== */
+.md-input,
+.md-select {
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--app-outline-variant);
+  border-radius: 8px;
+  background: var(--app-surface);
+  color: var(--md-on-surface);
+  width: 100%;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: var(--app-primary);
+    box-shadow: 0 0 0 1px var(--app-primary);
+  }
+
+  &:disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+  }
+
+  &::placeholder {
+    color: var(--md-on-surface-variant);
+    opacity: 0.6;
+  }
+}
+
+label {
+  font-size: 12px;
+  color: var(--md-on-surface-variant);
+  font-weight: 500;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.md-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--app-primary);
+  cursor: pointer;
+}
+
+/* ===========================
+   Dropdown Component
+   =========================== */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-btn);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  color: var(--md-on-surface);
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s;
+
+  &:hover {
+    background: var(--app-surface-variant);
+  }
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background: var(--app-surface);
+  border-radius: 4px;
+  box-shadow: var(--shadow-2);
+  min-width: 160px;
+  z-index: $z-dropdown;
+  padding: 8px 0;
+  border: 1px solid var(--app-surface-variant);
+
+  &.show {
+    display: block;
+    animation: fade-in 0.1s ease-out;
+  }
+}
+
+.dropdown-item {
+  padding: 10px 16px;
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  color: var(--md-on-surface);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: var(--app-surface-variant);
+  }
+
+  &.selected {
+    background: var(--app-primary-container);
+    color: var(--md-on-primary-container);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===========================
+   Top App Bar
+   =========================== */
+.top-app-bar {
+  padding: 12px 24px;
+  background: var(--app-surface);
+  border-bottom: 1px solid var(--app-surface-variant);
+  position: sticky;
+  top: 0;
+  z-index: $z-sticky;
+}
+
+/* ===========================
+   Item Row (for menu editing)
+   =========================== */
+.item-row {
+  border: 1px solid var(--app-outline-variant);
+  border-radius: var(--radius-s);
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: var(--app-primary);
+  }
+}
+
+/* Desktop grid layouts */
+@include desktop-up {
+  .item-main-grid {
+    display: grid;
+    grid-template-columns: 32px 3fr 1fr 1.5fr 1fr auto;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .item-details-grid {
+    padding-left: 44px;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 12px;
+    align-items: end;
+  }
+}
+
+.drag-handle {
+  color: var(--app-outline);
+  cursor: grab;
+  user-select: none;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.collapsible-content {
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rotate-icon {
+  transition: transform 0.3s;
+
+  &.collapsed {
+    transform: rotate(-90deg);
+  }
+}
+
+/* ===========================
+   Ingredient Tags
+   =========================== */
+.ingredient-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--app-outline-variant);
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+
+  &:hover {
+    background: var(--app-surface-variant);
+  }
+}
+
+/* ===========================
+   Material Symbols (Icon styling)
+   =========================== */
+.material-symbols-rounded {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+/* ===========================
+   Hidden utility
+   =========================== */
+.hidden {
+  display: none !important;
+}
