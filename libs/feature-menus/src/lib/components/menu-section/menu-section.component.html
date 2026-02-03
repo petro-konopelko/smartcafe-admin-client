@@ -1,0 +1,70 @@
+<!-- Section Header -->
+<div class="section-header-row" [formGroup]="sectionForm()">
+  <div class="drag-handle-wrapper">
+    <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
+  </div>
+  <div class="section-header-fields">
+    <div class="form-group flex-2">
+      <label [attr.for]="'section-name-' + sectionIndex()">{{ 'menus.form.sectionName' | translate }}</label>
+      <input type="text" [attr.id]="'section-name-' + sectionIndex()" formControlName="name" />
+      @if (sectionForm().get('name')?.hasError('required') && sectionForm().get('name')?.touched) {
+        <div class="error-text">{{ 'common.required' | translate }}</div>
+      }
+    </div>
+
+    <div class="form-group flex-1">
+      <label [attr.for]="'available-from-' + sectionIndex()">{{ 'menus.form.availableFrom' | translate }}</label>
+      <input type="time" [attr.id]="'available-from-' + sectionIndex()" formControlName="availableFrom" />
+    </div>
+
+    <div class="form-group flex-1">
+      <label [attr.for]="'available-to-' + sectionIndex()">{{ 'menus.form.availableTo' | translate }}</label>
+      <input type="time" [attr.id]="'available-to-' + sectionIndex()" formControlName="availableTo" />
+    </div>
+  </div>
+
+  <div class="section-actions">
+    <button
+      class="btn btn-icon action-delete"
+      type="button"
+      (click)="removeSection.emit()"
+      [attr.aria-label]="'common.delete' | translate"
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+    <button
+      class="btn btn-icon action-primary"
+      type="button"
+      (click)="toggleExpand.emit()"
+      [class.rotated]="!isExpanded()"
+    >
+      <mat-icon>expand_more</mat-icon>
+    </button>
+  </div>
+</div>
+
+<!-- Items Container -->
+@if (isExpanded()) {
+  <div class="items-container" formArrayName="items" cdkDropList (cdkDropListDropped)="dropItem.emit($event)">
+    @for (item of items.controls; track $index; let itemIndex = $index) {
+      <sc-menu-item
+        [itemForm]="$any(item)"
+        [itemIndex]="itemIndex"
+        [sectionIndex]="sectionIndex()"
+        (removeItem)="removeItem.emit(itemIndex)"
+        (addIngredient)="addIngredient.emit(itemIndex)"
+        (removeIngredient)="removeIngredient.emit({ itemIndex: itemIndex, ingredientIndex: $event })"
+        cdkDrag
+      />
+    }
+    
+    <button
+      class="btn btn-text add-item-button"
+      type="button"
+      (click)="addItem.emit()"
+    >
+      <mat-icon>add</mat-icon>
+      {{ 'menus.form.addItem' | translate }}
+    </button>
+  </div>
+}

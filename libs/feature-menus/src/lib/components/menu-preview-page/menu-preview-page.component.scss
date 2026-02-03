@@ -1,0 +1,194 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: var(--app-background);
+}
+
+// Loading and error states
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 4rem 2rem;
+  color: var(--app-on-surface-variant);
+}
+
+.error-card {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 2rem;
+  padding: 1rem;
+  background-color: var(--app-error-container, #ffebee);
+  color: var(--md-on-error-container, #c62828);
+  border-radius: 8px;
+}
+
+// Preview page layout
+.preview-page {
+  min-height: 100vh;
+}
+
+// Hero header with blue background
+.preview-header {
+  background: var(--app-primary-container);
+  padding: 4rem 1rem;
+  text-align: center;
+
+  @media (width <= 768px) {
+    padding: 3rem 1rem;
+  }
+}
+
+.header-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cafe-name {
+  margin: 0 0 0.5rem;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--app-on-primary-container);
+  letter-spacing: -0.5px;
+
+  @media (width <= 768px) {
+    font-size: 2rem;
+  }
+}
+
+.header-subtitle {
+  margin: 0 0 2rem;
+  font-size: 1.125rem;
+  color: var(--app-on-primary-container);
+  font-weight: 400;
+  opacity: 0.9;
+
+  @media (width <= 768px) {
+    font-size: 1rem;
+  }
+}
+
+.back-to-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 32px;
+  background: var(--app-primary, #0b57d0);
+  color: var(--app-on-primary, white);
+  border: none;
+  border-radius: 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+
+  &:hover {
+    background: var(--app-primary);
+    filter: brightness(0.9);
+    box-shadow: 0 4px 8px rgb(0 0 0 / 15%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Content area
+.preview-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1rem;
+
+  @media (width <= 768px) {
+    padding: 2rem 1rem;
+  }
+}
+
+// Section styling
+.menu-section {
+  margin-bottom: 4rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.section-title {
+  margin: 0 0 2rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--app-on-surface);
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--app-on-surface);
+  display: inline-block;
+
+  @media (width <= 768px) {
+    font-size: 1.5rem;
+  }
+}
+
+// Items list (vertical stack, not grid)
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+// Menu item card
+.menu-item {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+
+  @media (width <= 768px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+.item-content {
+  flex: 1;
+}
+
+.item-name {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--app-on-surface);
+}
+
+.item-description {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  color: var(--app-on-surface-variant);
+  line-height: 1.5;
+}
+
+.item-price {
+  margin-top: 0.5rem;
+
+  .price,
+  .discounted-price {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--app-primary, #0b57d0);
+  }
+}
+
+// Image placeholder
+.item-image {
+  width: 100px;
+  height: 100px;
+  background: var(--app-surface-variant);
+  border-radius: 8px;
+  flex-shrink: 0;
+
+  @media (width <= 768px) {
+    width: 100%;
+    height: 200px;
+  }
+}

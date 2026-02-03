@@ -1,0 +1,127 @@
+<div class="item-card" [formGroup]="itemForm()">
+  <!-- Item Fields Row -->
+  <div class="item-fields-row">
+    <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
+    
+    <div class="form-group flex-2">
+      <label [attr.for]="'item-name-' + sectionIndex() + '-' + itemIndex()">{{ 'menus.form.itemName' | translate }}</label>
+      <input type="text" [attr.id]="'item-name-' + sectionIndex() + '-' + itemIndex()" formControlName="name" />
+      @if (itemForm().get('name')?.hasError('required') && itemForm().get('name')?.touched) {
+        <div class="error-text">{{ 'common.required' | translate }}</div>
+      }
+    </div>
+
+    <div class="form-group flex-1">
+      <label [attr.for]="'price-' + sectionIndex() + '-' + itemIndex()">{{ 'menus.form.price' | translate }}</label>
+      <input type="number" [attr.id]="'price-' + sectionIndex() + '-' + itemIndex()" formControlName="priceAmount" min="0" step="0.01" />
+      @if (itemForm().get('priceAmount')?.hasError('required') && itemForm().get('priceAmount')?.touched) {
+        <div class="error-text">{{ 'common.required' | translate }}</div>
+      }
+      @if (itemForm().get('priceAmount')?.hasError('min')) {
+        <div class="error-text">{{ 'common.min' | translate: {min: 0} }}</div>
+      }
+    </div>
+
+    <div class="form-group flex-1">
+      <label [attr.for]="'unit-' + sectionIndex() + '-' + itemIndex()">{{ 'menus.form.unit' | translate }}</label>
+      <select [attr.id]="'unit-' + sectionIndex() + '-' + itemIndex()" formControlName="priceUnit" class="md-select">
+        <option [value]="PriceUnit.PerItem">{{ 'menus.form.perItem' | translate }}</option>
+        <option [value]="PriceUnit.Per100Grams">{{ 'menus.form.per100g' | translate }}</option>
+      </select>
+    </div>
+
+    <div class="form-group flex-1">
+      <label [attr.for]="'discount-' + sectionIndex() + '-' + itemIndex()">{{ 'menus.form.discount' | translate }} %</label>
+      <input type="number" [attr.id]="'discount-' + sectionIndex() + '-' + itemIndex()" formControlName="priceDiscount" min="0" max="100" />
+    </div>
+    
+    <div class="item-actions">
+      <button
+        class="btn btn-icon action-delete"
+        type="button"
+        (click)="removeItem.emit()"
+        [attr.aria-label]="'common.delete' | translate"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button
+        class="btn btn-icon action-collapse"
+        type="button"
+        (click)="toggleCollapse()"
+        [attr.aria-label]="isCollapsed() ? 'Expand' : 'Collapse'"
+      >
+        <mat-icon>{{ isCollapsed() ? 'expand_more' : 'expand_less' }}</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  @if (!isCollapsed()) {
+    <div class="item-content">
+      <!-- Description and Image Row -->
+      <div class="description-image-row">
+        <div class="form-group description-field">
+          <label [attr.for]="'description-' + sectionIndex() + '-' + itemIndex()">{{ 'menus.form.description' | translate }}</label>
+          <textarea [attr.id]="'description-' + sectionIndex() + '-' + itemIndex()" formControlName="description" rows="4"></textarea>
+        </div>
+
+        <div class="image-upload-wrapper">
+          <label class="image-label" [attr.for]="'image-upload-' + sectionIndex() + '-' + itemIndex()">{{ 'menus.form.image' | translate }}</label>
+          @if (imagePreview()) {
+            <div class="image-preview-container">
+              <img [src]="imagePreview()" alt="Preview" class="image-preview" />
+              <button
+                type="button"
+                class="remove-image-btn"
+                (click)="removeImage()"
+                [attr.aria-label]="'common.delete' | translate"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          } @else {
+            <label class="image-upload-box" for="image-upload-{{ sectionIndex() }}-{{ itemIndex() }}">
+              <mat-icon>image</mat-icon>
+              <span class="upload-text">{{ 'menus.form.uploadImage' | translate }}</span>
+            </label>
+            <input
+              type="file"
+              id="image-upload-{{ sectionIndex() }}-{{ itemIndex() }}"
+              accept="image/*"
+              (change)="handleImageUpload($event)"
+              class="file-input-hidden"
+            />
+          }
+        </div>
+      </div>
+
+      <!-- Ingredients (No bordered section) -->
+      <div class="ingredients-simple" formArrayName="ingredients">
+        <div class="ingredients-chips">
+          @for (ingredient of ingredients.controls; track $index; let ingredientIndex = $index) {
+            <div [formGroupName]="ingredientIndex" class="ingredient-chip" [class.checked]="ingredient.get('isExcludable')?.value">
+              <mat-checkbox formControlName="isExcludable" class="ingredient-checkbox"></mat-checkbox>
+              <span class="ingredient-name">{{ ingredient.get('name')?.value }}</span>
+              <button
+                class="chip-remove-btn"
+                type="button"
+                (click)="removeIngredient.emit(ingredientIndex)"
+                [attr.aria-label]="'common.delete' | translate"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+        
+        <button
+          class="btn btn-text add-ingredient-link"
+          type="button"
+          (click)="addIngredient.emit()"
+        >
+          <mat-icon>add</mat-icon>
+          {{ 'menus.form.addIngredient' | translate }}
+        </button>
+      </div>
+    </div>
+  }
+</div>

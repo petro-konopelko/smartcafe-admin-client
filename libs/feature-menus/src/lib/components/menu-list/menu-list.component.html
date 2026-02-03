@@ -1,0 +1,116 @@
+<div class="container">
+  <div class="flex-row space-between mb-2">
+    <h1>{{ 'menus.title' | translate }}</h1>
+    <div class="flex-row gap-1">
+      <button mat-button (click)="onBack()" data-testid="back-button">
+        <mat-icon>arrow_back</mat-icon>
+        {{ 'common.back' | translate }}
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="onCreateMenu()"
+        data-testid="create-menu-button"
+      >
+        <mat-icon>add</mat-icon>
+        {{ 'menus.create' | translate }}
+      </button>
+    </div>
+  </div>
+
+  @if (menuStore.loading()) {
+    <sc-loading-spinner [message]="'common.loading' | translate" />
+  } @else if (menuStore.error()) {
+    <sc-error-message [title]="'common.error' | translate" [message]="menuStore.error() ?? ''" />
+  } @else if (!menuStore.hasMenus()) {
+    <sc-empty-state
+      icon="restaurant_menu"
+      [title]="'menus.noMenus' | translate"
+      [message]="'menus.createFirst' | translate"
+    />
+  } @else {
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ 'menus.name' | translate }}</th>
+          <th>{{ 'common.status' | translate }}</th>
+          <th>{{ 'common.created' | translate }}</th>
+          <th class="actions-column">{{ 'common.actions' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (menu of menuStore.menus(); track menu.menuId) {
+          <tr [attr.data-testid]="'menu-row-' + menu.menuId">
+            <td data-label="{{ 'menus.name' | translate }}">
+              <strong data-testid="menu-name">{{ menu.name }}</strong>
+            </td>
+            <td data-label="{{ 'common.status' | translate }}">
+              <span
+                class="chip"
+                [class.chip-draft]="menu.state === MenuState.Draft"
+                [class.chip-published]="menu.state === MenuState.Published"
+                [class.chip-active]="menu.state === MenuState.Active"
+              >
+                {{ getStateLabel(menu.state) | translate }}
+              </span>
+            </td>
+            <td data-label="{{ 'common.created' | translate }}">
+              {{ menu.createdAt | scLocalDate }}
+            </td>
+            <td>
+              <div class="actions-cell">
+                @if (menu.state === MenuState.Draft) {
+                  <button
+                    mat-button
+                    color="primary"
+                    (click)="onPublish(menu)"
+                    [matTooltip]="'menus.publish' | translate"
+                    data-testid="publish-menu-button"
+                  >
+                    <mat-icon>publish</mat-icon>
+                    {{ 'menus.publish' | translate }}
+                  </button>
+                }
+                @if (menu.state === MenuState.Published) {
+                  <button
+                    mat-button
+                    color="accent"
+                    (click)="onActivate(menu)"
+                    [matTooltip]="'menus.activate' | translate"
+                    data-testid="activate-menu-button"
+                  >
+                    <mat-icon>check_circle</mat-icon>
+                    {{ 'menus.activate' | translate }}
+                  </button>
+                }
+                <button mat-icon-button [matMenuTriggerFor]="menuActions">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menuActions="matMenu">
+                  <button mat-menu-item (click)="onPreview(menu)">
+                    <mat-icon>visibility</mat-icon>
+                    {{ 'menus.preview' | translate }}
+                  </button>
+                  <button mat-menu-item (click)="onEdit(menu)">
+                    <mat-icon>edit</mat-icon>
+                    {{ 'common.edit' | translate }}
+                  </button>
+                  <button mat-menu-item (click)="onClone(menu)">
+                    <mat-icon>content_copy</mat-icon>
+                    {{ 'menus.clone' | translate }}
+                  </button>
+                  @if (menu.state !== MenuState.Active) {
+                    <button mat-menu-item (click)="onDelete(menu)">
+                      <mat-icon color="warn">delete</mat-icon>
+                      {{ 'common.delete' | translate }}
+                    </button>
+                  }
+                </mat-menu>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

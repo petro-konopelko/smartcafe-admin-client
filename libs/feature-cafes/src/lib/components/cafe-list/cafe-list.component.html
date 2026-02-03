@@ -1,0 +1,77 @@
+<div class="container">
+  <div class="flex-row space-between mb-2">
+    <h1>{{ 'cafes.title' | translate }}</h1>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onCreateCafe()"
+      [attr.aria-label]="'cafes.create' | translate"
+      data-testid="create-cafe-button"
+    >
+      <mat-icon>add</mat-icon>
+      {{ 'cafes.create' | translate }}
+    </button>
+  </div>
+
+  @if (cafeStore.loading()) {
+    <sc-loading-spinner [message]="'common.loading' | translate" />
+  } @else if (cafeStore.error()) {
+    <sc-error-message [title]="'common.error' | translate" [message]="cafeStore.error() ?? ''" />
+  } @else if (!cafeStore.hasCafes()) {
+    <sc-empty-state
+      icon="store"
+      [title]="'cafes.noCafes' | translate"
+      [message]="'cafes.createFirst' | translate"
+    />
+  } @else {
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ 'cafes.name' | translate }}</th>
+          <th>{{ 'cafes.contact' | translate }}</th>
+          <th>{{ 'common.created' | translate }}</th>
+          <th class="actions-column">{{ 'common.actions' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (cafe of cafeStore.cafes(); track cafe.id) {
+          <tr [attr.data-testid]="'cafe-row-' + cafe.id">
+            <td data-label="{{ 'cafes.name' | translate }}">
+              <strong data-testid="cafe-name">{{ cafe.name }}</strong>
+            </td>
+            <td data-label="{{ 'cafes.contact' | translate }}">
+              {{ cafe.contactInfo || '—' }}
+            </td>
+            <td data-label="{{ 'common.created' | translate }}">
+              {{ cafe.createdAt | scLocalDate }}
+            </td>
+            <td>
+              <div class="actions-cell">
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="onViewMenus(cafe)"
+                  [attr.aria-label]="'menus.view' | translate"
+                  [matTooltip]="'menus.view' | translate"
+                  data-testid="view-menus-button"
+                >
+                  <mat-icon>restaurant_menu</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  color="warn"
+                  (click)="onDeleteCafe(cafe)"
+                  [attr.aria-label]="'cafes.delete' | translate"
+                  [matTooltip]="'cafes.delete' | translate"
+                  data-testid="delete-cafe-button"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

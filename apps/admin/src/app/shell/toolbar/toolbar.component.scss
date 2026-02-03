@@ -1,0 +1,43 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+:host {
+  display: block;
+}
+
+mat-toolbar {
+  padding: 12px 24px;
+  background: var(--app-surface);
+  color: var(--app-on-surface);
+  border-bottom: 1px solid var(--app-outline-variant);
+  position: sticky;
+  top: 0;
+  z-index: $z-sticky;
+}
+
+.app-title {
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-left: 8px;
+  color: var(--app-on-surface);
+}
+
+.home-icon {
+  color: var(--app-primary);
+  font-size: 28px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+@include mobile-only {
+  .app-title {
+    font-size: 1rem;
+  }
+
+  mat-toolbar {
+    padding: 8px 16px;
+  }
+}

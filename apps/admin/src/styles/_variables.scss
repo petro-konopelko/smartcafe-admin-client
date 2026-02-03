@@ -1,0 +1,81 @@
+// ===========================
+// Layout & Spacing Variables
+// ===========================
+// Only layout-related variables - colors come from Material via CSS variables
+
+// Spacing scale (8px base unit)
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-2xl: 48px;
+$spacing-3xl: 64px;
+
+// Typography
+$font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+$font-family-mono: 'Roboto Mono', monospace;
+$font-size-xs: 0.75rem; // 12px
+$font-size-sm: 0.875rem; // 14px
+$font-size-md: 1rem; // 16px
+$font-size-lg: 1.25rem; // 20px
+$font-size-xl: 1.5rem; // 24px
+$font-size-2xl: 2rem; // 32px
+$font-size-3xl: 2.5rem; // 40px
+
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+$line-height-tight: 1.2;
+$line-height-normal: 1.5;
+$line-height-relaxed: 1.75;
+
+// Breakpoints
+$breakpoint-mobile: 0;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+$breakpoint-wide: 1440px;
+
+// Border radius
+$radius-s: 8px;
+$radius-m: 12px;
+$radius-l: 16px;
+$radius-btn: 12px;
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-xl: 16px;
+$radius-full: 9999px;
+
+// Shadows (Material Design 3)
+$shadow-1:
+  0 1px 2px rgb(0 0 0 / 10%),
+  0 1px 3px 1px rgb(0 0 0 / 15%);
+$shadow-2:
+  0 4px 8px 3px rgb(0 0 0 / 15%),
+  0 1px 3px rgb(0 0 0 / 30%);
+$shadow-sm: 0 1px 2px rgb(0 0 0 / 5%);
+$shadow-md: 0 2px 4px rgb(0 0 0 / 10%);
+$shadow-lg: 0 4px 8px rgb(0 0 0 / 15%);
+$shadow-xl: 0 8px 16px rgb(0 0 0 / 20%);
+
+// Z-index layers
+$z-dropdown: 1000;
+$z-sticky: 1020;
+$z-fixed: 1030;
+$z-modal-backdrop: 1040;
+$z-modal: 1050;
+$z-popover: 1060;
+$z-tooltip: 1070;
+
+// Transitions
+$transition-fast: 150ms ease-in-out;
+$transition-base: 250ms ease-in-out;
+$transition-slow: 350ms ease-in-out;
+
+// Container widths
+$container-sm: 640px;
+$container-md: 768px;
+$container-lg: 1024px;
+$container-xl: 1280px;

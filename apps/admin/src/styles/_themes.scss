@@ -1,0 +1,116 @@
+@use '@angular/material' as mat;
+
+// ===========================
+// Material Design 3 Theming
+// ===========================
+
+@include mat.core;
+
+// Define M3 Light Theme
+$light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$blue-palette,
+      tertiary: mat.$orange-palette
+    ),
+    typography: (
+      plain-family: 'Roboto',
+      brand-family: 'Roboto'
+    ),
+    density: (
+      scale: 0
+    )
+  )
+);
+
+// Define M3 Dark Theme
+$dark-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: mat.$blue-palette,
+      tertiary: mat.$orange-palette
+    ),
+    typography: (
+      plain-family: 'Roboto',
+      brand-family: 'Roboto'
+    ),
+    density: (
+      scale: 0
+    )
+  )
+);
+
+// Apply light theme by default
+html {
+  @include mat.all-component-themes($light-theme);
+}
+
+// Apply dark theme when .dark-theme class is present
+.dark-theme {
+  @include mat.all-component-colors($dark-theme);
+}
+
+// ===========================
+// Custom CSS Variables (mapped to Material tokens)
+// ===========================
+// These provide a stable API for components without direct Material dependencies
+
+:root {
+  // Primary colors
+  --app-primary: var(--mat-sys-primary);
+  --app-on-primary: var(--mat-sys-on-primary);
+  --app-primary-container: var(--mat-sys-primary-container);
+  --app-on-primary-container: var(--mat-sys-on-primary-container);
+
+  // Surface colors
+  --app-surface: var(--mat-sys-surface);
+  --app-on-surface: var(--mat-sys-on-surface);
+  --app-surface-variant: var(--mat-sys-surface-variant);
+  --app-on-surface-variant: var(--mat-sys-on-surface-variant);
+  --app-background: var(--mat-sys-background);
+  --app-on-background: var(--mat-sys-on-background);
+
+  // Semantic colors
+  --app-error: var(--mat-sys-error);
+  --app-on-error: var(--mat-sys-on-error);
+  --app-error-container: var(--mat-sys-error-container);
+  --app-on-error-container: var(--mat-sys-on-error-container);
+  --app-outline: var(--mat-sys-outline);
+  --app-outline-variant: var(--mat-sys-outline-variant);
+
+  // Status colors (custom semantic mapping)
+  --app-success: #1b5e20;
+  --app-on-success: #fff;
+  --app-warning: #e65100;
+  --app-on-warning: #fff;
+  --app-info: #0d47a1;
+  --app-on-info: #fff;
+
+  // Chip/Badge status colors (light theme)
+  --chip-active-bg: #e8f5e9;
+  --chip-active-text: #1b5e20;
+  --chip-draft-bg: #e3f2fd;
+  --chip-draft-text: #0d47a1;
+  --chip-published-bg: #fff4e5;
+  --chip-published-text: #e65100;
+}
+
+.dark-theme {
+  // Status colors for dark theme
+  --app-success: #81c784;
+  --app-on-success: #1b1b1f;
+  --app-warning: #ffb74d;
+  --app-on-warning: #1b1b1f;
+  --app-info: #64b5f6;
+  --app-on-info: #1b1b1f;
+
+  // Chip/Badge status colors (dark theme)
+  --chip-active-bg: rgb(129 199 132 / 20%);
+  --chip-active-text: #81c784;
+  --chip-draft-bg: rgb(100 181 246 / 20%);
+  --chip-draft-text: #64b5f6;
+  --chip-published-bg: rgb(255 183 77 / 20%);
+  --chip-published-text: #ffb74d;
+}
