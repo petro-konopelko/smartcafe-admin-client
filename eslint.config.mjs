@@ -1,13 +1,14 @@
+// typescript-eslint provides better type checking for ESLint flat config
+import { defineConfig } from 'eslint/config';
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from "eslint-plugin-storybook";
+import storybook from 'eslint-plugin-storybook';
 // eslint-config-prettier: Turns off all rules that are unnecessary or might conflict with Prettier
-import eslintConfigPrettier from "eslint-config-prettier";
+import eslintConfigPrettier from 'eslint-config-prettier';
 
 import nx from '@nx/eslint-plugin';
 import angular from 'angular-eslint';
-import tseslint from 'typescript-eslint';
 
-export default tseslint.config(
+export default defineConfig(
   ...nx.configs['flat/base'],
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
@@ -20,8 +21,8 @@ export default tseslint.config(
       '**/.angular/**',
       '**/node_modules',
       '**/node_modules/**',
-      'full-gemini-blue-royal-v5.html',
-    ],
+      'full-gemini-blue-royal-v5.html'
+    ]
   },
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
@@ -34,46 +35,51 @@ export default tseslint.config(
           depConstraints: [
             {
               sourceTag: 'type:app',
-              onlyDependOnLibsWithTags: ['*'],
+              onlyDependOnLibsWithTags: ['*']
             },
             {
               sourceTag: 'type:feature',
-              onlyDependOnLibsWithTags: ['type:feature', 'type:ui', 'type:data-access', 'type:models', 'type:utils', 'scope:shared'],
+              onlyDependOnLibsWithTags: [
+                'type:feature',
+                'type:ui',
+                'type:data-access',
+                'type:models',
+                'type:utils',
+                'scope:shared'
+              ]
             },
             {
               sourceTag: 'scope:shared',
-              onlyDependOnLibsWithTags: ['scope:shared'],
+              onlyDependOnLibsWithTags: ['scope:shared']
             },
             {
               sourceTag: 'scope:cafes',
-              onlyDependOnLibsWithTags: ['scope:cafes', 'scope:shared'],
+              onlyDependOnLibsWithTags: ['scope:cafes', 'scope:shared']
             },
             {
               sourceTag: 'scope:menus',
-              onlyDependOnLibsWithTags: ['scope:menus', 'scope:shared'],
+              onlyDependOnLibsWithTags: ['scope:menus', 'scope:shared']
             },
             {
               sourceTag: 'scope:shop',
-              onlyDependOnLibsWithTags: ['scope:shop', 'scope:shared'],
+              onlyDependOnLibsWithTags: ['scope:shop', 'scope:shared']
             },
             {
               sourceTag: 'scope:api',
-              onlyDependOnLibsWithTags: ['scope:api', 'scope:shared'],
+              onlyDependOnLibsWithTags: ['scope:api', 'scope:shared']
             },
             {
               sourceTag: 'type:data',
-              onlyDependOnLibsWithTags: ['type:data'],
-            },
-          ],
-        },
-      ],
-    },
+              onlyDependOnLibsWithTags: ['type:data']
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     files: ['**/*.ts'],
-    extends: [
-      ...angular.configs.tsRecommended,
-    ],
+    extends: [...angular.configs.tsRecommended],
     processor: angular.processInlineTemplates,
     rules: {
       '@angular-eslint/directive-selector': [
@@ -81,32 +87,29 @@ export default tseslint.config(
         {
           type: 'attribute',
           prefix: 'sc',
-          style: 'camelCase',
-        },
+          style: 'camelCase'
+        }
       ],
       '@angular-eslint/component-selector': [
         'error',
         {
           type: 'element',
           prefix: 'sc',
-          style: 'kebab-case',
-        },
+          style: 'kebab-case'
+        }
       ],
       '@angular-eslint/component-class-suffix': 'error',
       '@angular-eslint/directive-class-suffix': 'error',
-      '@typescript-eslint/no-explicit-any': 'error',
-    },
+      '@typescript-eslint/no-explicit-any': 'error'
+    }
   },
   {
     files: ['**/*.html'],
-    extends: [
-      ...angular.configs.templateRecommended,
-      ...angular.configs.templateAccessibility,
-    ],
+    extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
     rules: {
       '@angular-eslint/template/no-negated-async': 'error',
-      '@angular-eslint/template/use-track-by-function': 'error',
-    },
+      '@angular-eslint/template/use-track-by-function': 'error'
+    }
   },
   {
     files: [
@@ -117,13 +120,13 @@ export default tseslint.config(
       '**/*.js',
       '**/*.jsx',
       '**/*.cjs',
-      '**/*.mjs',
+      '**/*.mjs'
     ],
     // Override or add rules here
-    rules: {},
+    rules: {}
   },
   // Storybook ESLint plugin configurations
-  ...storybook.configs["flat/recommended"],
+  ...storybook.configs['flat/recommended'],
   // eslint-config-prettier MUST be last to override conflicting rules
   eslintConfigPrettier
 );

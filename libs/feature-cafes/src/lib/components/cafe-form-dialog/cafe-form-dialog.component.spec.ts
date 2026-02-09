@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { CafeFormDialogComponent } from './cafe-form-dialog.component';
@@ -15,7 +14,7 @@ describe('CafeFormDialogComponent', () => {
 
   beforeEach(async () => {
     mockDialogRef = {
-      close: vi.fn(),
+      close: vi.fn()
     };
 
     await TestBed.configureTestingModule({
@@ -23,10 +22,9 @@ describe('CafeFormDialogComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideAnimationsAsync(),
         CafeStore,
-        { provide: MatDialogRef, useValue: mockDialogRef },
-      ],
+        { provide: MatDialogRef, useValue: mockDialogRef }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CafeFormDialogComponent);
@@ -43,7 +41,7 @@ describe('CafeFormDialogComponent', () => {
 
     component['cafeForm'].patchValue({
       name: 'Test Cafe',
-      contactInfo: 'test@cafe.com',
+      contactInfo: 'test@cafe.com'
     });
 
     expect(component['cafeForm'].valid).toBe(true);

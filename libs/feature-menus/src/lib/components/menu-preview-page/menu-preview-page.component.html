@@ -7,7 +7,7 @@
 
 @if (menuStore.error()) {
   <div class="error-card">
-    <mat-icon color="warn">error</mat-icon>
+    <mat-icon class="icon-error">error</mat-icon>
     <span>{{ menuStore.error() }}</span>
   </div>
 }
@@ -29,7 +29,12 @@
           }
         </p>
       }
-      <button class="back-to-edit-btn" (click)="onEdit()">Back to Edit</button>
+      <button
+        class="back-to-edit-btn"
+        (click)="onEdit()"
+      >
+        Back to Edit
+      </button>
     </div>
   </div>
 

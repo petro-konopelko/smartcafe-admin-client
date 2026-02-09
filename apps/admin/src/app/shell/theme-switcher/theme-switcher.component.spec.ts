@@ -4,7 +4,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { ThemeSwitcherComponent } from './theme-switcher.component';
-import { ThemeService } from '@smartcafe/admin/shared/data-access';
+import { ThemeService } from '../../services/theme.service';
 
 describe('ThemeSwitcherComponent', () => {
   let component: ThemeSwitcherComponent;
@@ -14,7 +14,7 @@ describe('ThemeSwitcherComponent', () => {
     // Mock window.matchMedia
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
-      value: vi.fn().mockImplementation(query => ({
+      value: vi.fn().mockImplementation((query) => ({
         matches: false,
         media: query,
         onchange: null,
@@ -22,13 +22,13 @@ describe('ThemeSwitcherComponent', () => {
         removeListener: vi.fn(),
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
+        dispatchEvent: vi.fn()
+      }))
     });
 
     await TestBed.configureTestingModule({
       imports: [ThemeSwitcherComponent, TranslateModule.forRoot()],
-      providers: [provideHttpClient(), provideHttpClientTesting(), ThemeService],
+      providers: [provideHttpClient(), provideHttpClientTesting(), ThemeService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ThemeSwitcherComponent);

@@ -1,3 +1,5 @@
+@use 'variables';
+
 // Menu list component - responsive layout
 
 .actions-column {
@@ -9,20 +11,37 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-}
+  gap: 4px;
 
-// Chip status colors
-.chip-draft {
-  background-color: #e3f2fd !important;
-  color: #0d47a1 !important;
-}
+  // Mobile-first: show menu trigger, hide action buttons
+  .menu-trigger {
+    display: flex;
+  }
 
-.chip-published {
-  background-color: #fff4e5 !important;
-  color: #e65100 !important;
-}
+  .action-buttons {
+    display: none;
+  }
 
-.chip-active {
-  background-color: #e8f5e9 !important;
-  color: #1b5e20 !important;
+  // Desktop (1024px+): hide menu trigger, show action buttons
+  @media (min-width: variables.$breakpoint-desktop) {
+    .menu-trigger {
+      display: none;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+  }
+
+  // Delete button uses M3 error token
+  .btn-delete {
+    --mat-icon-button-icon-color: var(--mat-sys-error);
+    --mat-icon-button-ripple-color: color-mix(
+      in srgb,
+      var(--mat-sys-error) calc(var(--mat-sys-pressed-state-layer-opacity) * 100%),
+      transparent
+    );
+  }
 }

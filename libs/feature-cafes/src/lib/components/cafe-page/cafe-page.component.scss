@@ -1,11 +1,10 @@
-// Cafe list component - responsive layout with Material table
-
+// Cafe page component - responsive layout with Material table
 .actions-column {
   text-align: right;
   width: 120px;
 }
 
-.actions-cell {
+.action-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 8px;

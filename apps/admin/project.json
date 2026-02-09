@@ -17,6 +17,9 @@
         "browser": "apps/admin/src/main.ts",
         "tsConfig": "apps/admin/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
+        "stylePreprocessorOptions": {
+          "includePaths": ["apps/admin/src/styles"]
+        },
         "assets": [
           {
             "glob": "**/*",
@@ -74,9 +77,7 @@
     },
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": [
-        "{workspaceRoot}/coverage/apps/admin"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/apps/admin"],
       "options": {
         "rerunFailedOnly": false
       }

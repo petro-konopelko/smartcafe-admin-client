@@ -1,8 +1,16 @@
-<mat-toolbar>
-  <button matIconButton routerLink="/" [attr.aria-label]="'app.navigation.home' | translate">
+<mat-toolbar class="toolbar">
+  <button
+    matIconButton
+    routerLink="/"
+    [attr.aria-label]="'app.navigation.home' | translate"
+  >
     <mat-icon class="home-icon">restaurant</mat-icon>
   </button>
-  <span class="app-title" routerLink="/">SmartCafe</span>
+  <span
+    class="app-title"
+    routerLink="/"
+    >SmartCafe</span
+  >
   <span class="spacer"></span>
   <sc-language-selector />
   <sc-theme-switcher />

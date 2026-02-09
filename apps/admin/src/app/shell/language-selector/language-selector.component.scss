@@ -1,14 +1,12 @@
 // Language selector - Material form field styling
 @use '../../../styles/mixins' as *;
 
-:host {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .language-container {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
+  --mat-button-text-label-text-size: 16px;
+
+  span {
+    @include mobile-only {
+      display: none;
+    }
+  }
 }
