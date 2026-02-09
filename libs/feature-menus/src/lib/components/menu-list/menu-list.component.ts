@@ -12,11 +12,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MenuStore } from '../../store/menu.store';
 import { MenuState, MenuSummaryDto } from '../../models';
 import {
-  LoadingSpinnerComponent,
-  EmptyStateComponent,
   ErrorMessageComponent,
   ConfirmDialogComponent,
-  ConfirmDialogData
+  ConfirmDialogData,
+  ContentContainerComponent
 } from '@smartcafe/admin/shared/ui';
 import { ScLocalDatePipe } from '@smartcafe/admin/shared/utils';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -32,8 +31,7 @@ import { map } from 'rxjs/operators';
     MatChipsModule,
     MatTableModule,
     TranslateModule,
-    LoadingSpinnerComponent,
-    EmptyStateComponent,
+    ContentContainerComponent,
     ErrorMessageComponent,
     ScLocalDatePipe
   ],
@@ -50,6 +48,60 @@ export class MenuListComponent {
   readonly displayedColumns = ['name', 'status', 'created', 'actions'];
   readonly cafeId = toSignal(this.route.paramMap.pipe(map((params) => params.get('cafeId') ?? '')));
   protected readonly MenuState = MenuState;
+
+  // Action definitions to avoid duplication
+  protected getMenuActions(menu: MenuSummaryDto) {
+    const actions = [];
+
+    // State-specific actions
+    if (menu.state === MenuState.Draft) {
+      actions.push({
+        icon: 'publish',
+        label: 'menus.publish',
+        handler: () => this.onPublish(menu),
+        testId: 'publish-menu-button'
+      });
+    }
+    if (menu.state === MenuState.Published) {
+      actions.push({
+        icon: 'check_circle',
+        label: 'menus.activate',
+        handler: () => this.onActivate(menu),
+        testId: 'activate-menu-button'
+      });
+    }
+
+    // Common actions
+    actions.push(
+      {
+        icon: 'visibility',
+        label: 'menus.preview',
+        handler: () => this.onPreview(menu)
+      },
+      {
+        icon: 'edit',
+        label: 'common.edit',
+        handler: () => this.onEdit(menu)
+      },
+      {
+        icon: 'content_copy',
+        label: 'menus.clone',
+        handler: () => this.onClone(menu)
+      }
+    );
+
+    // Delete action (only if not active)
+    if (menu.state !== MenuState.Active) {
+      actions.push({
+        icon: 'delete',
+        label: 'common.delete',
+        handler: () => this.onDelete(menu),
+        class: 'btn-delete'
+      });
+    }
+
+    return actions;
+  }
 
   constructor() {
     effect(() => {

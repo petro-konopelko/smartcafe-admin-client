@@ -12,31 +12,31 @@ import { ConfirmDialogComponent, ConfirmDialogData } from './confirm-dialog.comp
   imports: [MatButtonModule],
   template: `
     <div style="padding: 20px;">
-      <button 
-        mat-raised-button 
-        color="primary" 
-        (click)="openDialog()">
+      <button
+        mat-raised-button
+        (click)="openDialog()"
+      >
         Open Dialog
       </button>
       <p style="margin-top: 16px; color: #666;">Click the button to see the dialog</p>
     </div>
-  `,
+  `
 })
 class DialogWrapperComponent {
   private dialog = inject(MatDialog);
-  
+
   dialogData = signal<ConfirmDialogData>({
     title: '',
     message: '',
     confirmText: 'Confirm',
     cancelText: 'Cancel',
-    isDangerous: false,
+    isDangerous: false
   });
 
   openDialog() {
     this.dialog.open(ConfirmDialogComponent, {
       data: this.dialogData(),
-      width: '400px',
+      width: '400px'
     });
   }
 }
@@ -47,12 +47,12 @@ const meta: Meta<DialogWrapperComponent> = {
   tags: ['autodocs'],
   decorators: [
     applicationConfig({
-      providers: [provideAnimationsAsync()],
+      providers: [provideAnimationsAsync()]
     }),
     moduleMetadata({
-      imports: [MatDialogModule, MatButtonModule, ConfirmDialogComponent],
-    }),
-  ],
+      imports: [MatDialogModule, MatButtonModule, ConfirmDialogComponent]
+    })
+  ]
 };
 
 export default meta;
@@ -66,10 +66,10 @@ export const Default: Story = {
         message: 'Are you sure you want to proceed?',
         confirmText: 'Confirm',
         cancelText: 'Cancel',
-        isDangerous: false,
-      }),
-    },
-  }),
+        isDangerous: false
+      })
+    }
+  })
 };
 
 export const DeleteCafe: Story = {
@@ -80,10 +80,10 @@ export const DeleteCafe: Story = {
         message: 'Are you sure you want to delete "Downtown Cafe"? This action cannot be undone.',
         confirmText: 'Delete',
         cancelText: 'Cancel',
-        isDangerous: true,
-      }),
-    },
-  }),
+        isDangerous: true
+      })
+    }
+  })
 };
 
 export const DeleteMenu: Story = {
@@ -91,13 +91,14 @@ export const DeleteMenu: Story = {
     props: {
       dialogData: signal<ConfirmDialogData>({
         title: 'Delete Menu',
-        message: 'Are you sure you want to delete "Summer Menu 2024"? This action cannot be undone.',
+        message:
+          'Are you sure you want to delete "Summer Menu 2024"? This action cannot be undone.',
         confirmText: 'Delete',
         cancelText: 'Cancel',
-        isDangerous: true,
-      }),
-    },
-  }),
+        isDangerous: true
+      })
+    }
+  })
 };
 
 export const PublishMenu: Story = {
@@ -108,10 +109,10 @@ export const PublishMenu: Story = {
         message: 'Are you sure you want to publish this menu? It will be visible to customers.',
         confirmText: 'Publish',
         cancelText: 'Cancel',
-        isDangerous: false,
-      }),
-    },
-  }),
+        isDangerous: false
+      })
+    }
+  })
 };
 
 export const ActivateMenu: Story = {
@@ -122,10 +123,10 @@ export const ActivateMenu: Story = {
         message: 'This will deactivate the current active menu. Do you want to continue?',
         confirmText: 'Activate',
         cancelText: 'Cancel',
-        isDangerous: false,
-      }),
-    },
-  }),
+        isDangerous: false
+      })
+    }
+  })
 };
 
 export const DiscardChanges: Story = {
@@ -136,8 +137,8 @@ export const DiscardChanges: Story = {
         message: 'You have unsaved changes. Are you sure you want to leave without saving?',
         confirmText: 'Discard',
         cancelText: 'Keep Editing',
-        isDangerous: true,
-      }),
-    },
-  }),
+        isDangerous: true
+      })
+    }
+  })
 };

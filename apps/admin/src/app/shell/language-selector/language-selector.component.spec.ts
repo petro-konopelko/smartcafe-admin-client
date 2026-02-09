@@ -54,7 +54,7 @@ describe('LanguageSelectorComponent', () => {
   });
 
   it('should reflect current locale from service', () => {
-    localeService.currentLocale = signal('uk-UA');
+    localeService.setLocale('uk-UA');
     fixture.detectChanges();
 
     const select = fixture.nativeElement.querySelector('mat-select');

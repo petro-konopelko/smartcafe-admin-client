@@ -1,13 +1,20 @@
 <div class="flex-row space-between mb-2">
   <div class="flex-row">
-    <button class="btn btn-icon action-primary" [routerLink]="['/cafes', cafeId(), 'menus']">
+    <button
+      class="btn btn-icon action-primary"
+      [routerLink]="['/cafes', cafeId(), 'menus']"
+    >
       <mat-icon>arrow_back</mat-icon>
     </button>
     <h1>{{ (isEditMode() ? 'menus.editTitle' : 'menus.createTitle') | translate }}</h1>
   </div>
   <div class="flex-row">
     @if (isEditMode()) {
-      <button class="btn btn-outlined" (click)="onPreview()" [disabled]="isSubmitting()">
+      <button
+        class="btn btn-outlined"
+        (click)="onPreview()"
+        [disabled]="isSubmitting()"
+      >
         <mat-icon>visibility</mat-icon>
         {{ 'menus.preview' | translate }}
       </button>
@@ -32,12 +39,15 @@
 
 @if (menuStore.error()) {
   <div class="error-card">
-    <mat-icon color="warn">error</mat-icon>
+    <mat-icon class="icon-error">error</mat-icon>
     <span>{{ menuStore.error() }}</span>
   </div>
 }
 
-<form [formGroup]="menuForm" class="menu-form">
+<form
+  [formGroup]="menuForm"
+  class="menu-form"
+>
   <!-- Menu Name & Description -->
   <div class="section-block">
     <div class="form-group">
@@ -77,7 +87,11 @@
     (cdkDropListDropped)="dropSection($event)"
   >
     @for (section of sections.controls; track $index; let sectionIndex = $index) {
-      <div [formGroupName]="sectionIndex" class="section-block" cdkDrag>
+      <div
+        [formGroupName]="sectionIndex"
+        class="section-block"
+        cdkDrag
+      >
         <sc-menu-section
           [sectionForm]="$any(section)"
           [sectionIndex]="sectionIndex"
@@ -96,7 +110,11 @@
     }
   </div>
 
-  <button class="btn btn-text add-section-button" type="button" (click)="addSection()">
+  <button
+    class="btn btn-text add-section-button"
+    type="button"
+    (click)="addSection()"
+  >
     <mat-icon>add</mat-icon>
     {{ 'menus.form.addSection' | translate }}
   </button>

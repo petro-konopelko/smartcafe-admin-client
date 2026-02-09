@@ -2,14 +2,6 @@
 <sc-toolbar />
 }
 
-<div class="app-container">
-  @if (!localeService.isReady() || isLoading()) {
-  <div class="global-loading">
-    <sc-loading-spinner />
-  </div>
-  } @if (localeService.isReady()) {
-  <main>
-    <router-outlet />
-  </main>
-  }
-</div>
+<main class="app-container">
+  <router-outlet />
+</main>

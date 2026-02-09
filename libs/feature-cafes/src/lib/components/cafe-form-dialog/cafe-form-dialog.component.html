@@ -1,7 +1,10 @@
 <h2 mat-dialog-title>{{ 'cafes.create' | translate }}</h2>
-<form [formGroup]="cafeForm" (ngSubmit)="onSubmit()">
-  <mat-dialog-content>
-    <mat-form-field class="full-width">
+<form
+  [formGroup]="cafeForm"
+  (ngSubmit)="onSubmit()"
+>
+  <mat-dialog-content class="form-field-container">
+    <mat-form-field>
       <mat-label>{{ 'cafes.name' | translate }}</mat-label>
       <input
         matInput
@@ -18,7 +21,7 @@
       }
     </mat-form-field>
 
-    <mat-form-field class="full-width">
+    <mat-form-field>
       <mat-label>{{ 'cafes.contactInfo' | translate }}</mat-label>
       <textarea
         matInput
@@ -34,13 +37,17 @@
     </mat-form-field>
   </mat-dialog-content>
 
-  <mat-dialog-actions align="end">
-    <button mat-button type="button" (click)="onCancel()" data-testid="cancel-button">
+  <mat-dialog-actions>
+    <button
+      matButton
+      type="button"
+      (click)="onCancel()"
+      data-testid="cancel-button"
+    >
       {{ 'common.cancel' | translate }}
     </button>
     <button
-      mat-raised-button
-      color="primary"
+      matButton="elevated"
       type="submit"
       [disabled]="!cafeForm.valid || isSubmitting()"
       data-testid="submit-button"

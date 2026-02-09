@@ -9,7 +9,7 @@ describe('ThemeService', () => {
     // Mock window.matchMedia
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
-      value: vi.fn().mockImplementation(query => ({
+      value: vi.fn().mockImplementation((query) => ({
         matches: false,
         media: query,
         onchange: null,
@@ -17,12 +17,12 @@ describe('ThemeService', () => {
         removeListener: vi.fn(),
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
+        dispatchEvent: vi.fn()
+      }))
     });
 
     TestBed.configureTestingModule({
-      providers: [ThemeService],
+      providers: [ThemeService]
     });
     service = TestBed.inject(ThemeService);
   });

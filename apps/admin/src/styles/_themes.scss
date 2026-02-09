@@ -3,6 +3,9 @@
 html {
   color-scheme: light;
 
+  // In M3, warn/error palette is embedded within the primary palette.
+  // The `theme-type` defaults to `color-scheme`, so dark mode automatically
+  // works when `color-scheme: dark` is set via the `.dark-mode` class.
   @include mat.theme(
     (
       color: mat.$azure-palette,
@@ -10,8 +13,12 @@ html {
       density: 0
     )
   );
-}
 
-.dark-mode {
-  color-scheme: dark;
+  --active-chip-color: #008b00;
+
+  &.dark-mode {
+    color-scheme: dark;
+
+    --active-chip-color: #41c300;
+  }
 }

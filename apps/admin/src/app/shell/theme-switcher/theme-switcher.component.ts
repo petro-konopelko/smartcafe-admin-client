@@ -3,47 +3,27 @@ import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { ThemeService } from '@smartcafe/admin/shared/data-access';
+import { ThemeService, Theme, LIGHT_THEME_NAME } from '../../services/theme.service';
 
 @Component({
   selector: 'sc-theme-switcher',
   imports: [MatIconButton, MatIcon, MatTooltip, TranslateModule],
-  template: `
-    <button
-      mat-icon-button
-      (click)="toggleTheme()"
-      [attr.aria-label]="
-        (themeService.currentTheme() === 'light'
-          ? 'app.theme.switchToDark'
-          : 'app.theme.switchToLight'
-        ) | translate
-      "
-      [matTooltip]="
-        (themeService.currentTheme() === 'light'
-          ? 'app.theme.switchToDark'
-          : 'app.theme.switchToLight'
-        ) | translate
-      "
-    >
-      <mat-icon>contrast</mat-icon>
-    </button>
-  `,
-  styles: [
-    `
-      :host {
-        display: inline-block;
-      }
-
-      button {
-        color: var(--md-on-surface);
-      }
-    `,
-  ],
+  templateUrl: './theme-switcher.component.html'
 })
 export class ThemeSwitcherComponent {
-  protected readonly themeService = inject(ThemeService);
+  private readonly themeService = inject(ThemeService);
 
-  toggleTheme(): void {
+  public toggleTheme(): void {
     this.themeService.toggleTheme();
+  }
+
+  public get currentTheme(): Theme {
+    return this.themeService.currentTheme();
+  }
+
+  public get label(): string {
+    return this.currentTheme === LIGHT_THEME_NAME
+      ? 'app.theme.switchToDark'
+      : 'app.theme.switchToLight';
   }
 }

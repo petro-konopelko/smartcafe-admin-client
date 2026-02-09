@@ -1,0 +1,18 @@
+@if (loading()) {
+  <div class="container-state">
+    <sc-loading-spinner
+      [size]="loadingSize()"
+      [message]="loadingMessage()"
+    />
+  </div>
+} @else if (empty()) {
+  <div class="container-state">
+    <sc-empty-state
+      [icon]="emptyIcon()"
+      [title]="emptyTitle()"
+      [message]="emptyMessage()"
+    />
+  </div>
+} @else {
+  <ng-content />
+}

@@ -25,3 +25,8 @@
     @content;
   }
 }
+
+@mixin chip-color($color) {
+  --mat-chip-outline-color: #{$color};
+  --mat-chip-label-text-color: #{$color};
+}
