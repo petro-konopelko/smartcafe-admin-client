@@ -1,41 +1,28 @@
-// Menu list uses global table styles from apps/admin/src/styles.scss
-// No additional styling needed
+// Menu list component - responsive layout
 
 .actions-column {
   text-align: right;
+  width: 200px;
 }
 
-mat-chip.draft {
-  background-color: #9e9e9e;
-  color: white;
+.actions-cell {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
-mat-chip.published {
-  background-color: #2196f3;
-  color: white;
+// Chip status colors
+.chip-draft {
+  background-color: #e3f2fd !important;
+  color: #0d47a1 !important;
 }
 
-mat-chip.active {
-  background-color: #4caf50;
-  color: white;
+.chip-published {
+  background-color: #fff4e5 !important;
+  color: #e65100 !important;
 }
 
-mat-card-actions {
-  margin: 0;
-  padding: 0.5rem;
-}
-
-@media (width <= 768px) {
-  .menu-list-container {
-    padding: 1rem;
-  }
-
-  .list-header h1 {
-    font-size: 1.5rem;
-  }
-
-  .header-actions {
-    width: 100%;
-    justify-content: space-between;
-  }
+.chip-active {
+  background-color: #e8f5e9 !important;
+  color: #1b5e20 !important;
 }

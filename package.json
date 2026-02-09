@@ -1,5 +1,5 @@
 {
-  "name": "smatcafe-admin-client",
+  "name": "smartcafe-admin-client",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -27,7 +27,7 @@
     "test-storybook": "nx test-storybook shared-ui"
   },
   "lint-staged": {
-    "*.{ts,html,scss,json,md}": [
+    "*.{ts,html,scss,json,md,mjs}": [
       "prettier --write"
     ],
     "*.ts": [

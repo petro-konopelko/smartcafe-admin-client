@@ -1,3 +1,5 @@
+@use '../../../../../../apps/admin/src/styles/mixins' as *;
+
 .section-header-row {
   display: flex;
   align-items: flex-start;
@@ -25,7 +27,7 @@
   grid-template-columns: 2fr 1.2fr 1.2fr;
   gap: 12px;
 
-  @media (width <= 768px) {
+  @include mobile-only {
     grid-template-columns: 1fr;
   }
 }
@@ -126,7 +128,7 @@
   }
 }
 
-@media (width <= 768px) {
+@include mobile-only {
   .section-header-row {
     flex-direction: column;
   }

@@ -3,26 +3,20 @@
   max-width: 800px;
   margin: 0 auto;
 
-  mat-card {
-    mat-card-content {
-      padding: 24px;
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
+    .full-width {
+      width: 100%;
+    }
 
-        .full-width {
-          width: 100%;
-        }
-
-        .form-actions {
-          display: flex;
-          justify-content: flex-end;
-          gap: 12px;
-          margin-top: 16px;
-        }
-      }
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 16px;
     }
   }
 }

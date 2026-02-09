@@ -1,5 +1,5 @@
-<mat-icon class="language-icon">language</mat-icon>
-<mat-form-field appearance="outline">
+<div class="language-container">
+  <mat-icon class="language-icon">language</mat-icon>
   <mat-select
     [value]="localeService.currentLocale()"
     (selectionChange)="onLanguageChange($event.value)"
@@ -8,4 +8,4 @@
     <mat-option value="en-US">English</mat-option>
     <mat-option value="uk-UA">Українська</mat-option>
   </mat-select>
-</mat-form-field>
+</div>

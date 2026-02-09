@@ -5,6 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatTableModule } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { MenuStore } from '../../store/menu.store';
@@ -14,7 +16,7 @@ import {
   EmptyStateComponent,
   ErrorMessageComponent,
   ConfirmDialogComponent,
-  ConfirmDialogData,
+  ConfirmDialogData
 } from '@smartcafe/admin/shared/ui';
 import { ScLocalDatePipe } from '@smartcafe/admin/shared/utils';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -27,15 +29,17 @@ import { map } from 'rxjs/operators';
     MatIconModule,
     MatMenuModule,
     MatTooltipModule,
+    MatChipsModule,
+    MatTableModule,
     TranslateModule,
     LoadingSpinnerComponent,
     EmptyStateComponent,
     ErrorMessageComponent,
-    ScLocalDatePipe,
+    ScLocalDatePipe
   ],
   templateUrl: './menu-list.component.html',
   styleUrl: './menu-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MenuListComponent {
   protected readonly menuStore = inject(MenuStore);
@@ -43,6 +47,7 @@ export class MenuListComponent {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
+  readonly displayedColumns = ['name', 'status', 'created', 'actions'];
   readonly cafeId = toSignal(this.route.paramMap.pipe(map((params) => params.get('cafeId') ?? '')));
   protected readonly MenuState = MenuState;
 
@@ -86,7 +91,7 @@ export class MenuListComponent {
   protected async onPublish(menu: MenuSummaryDto): Promise<void> {
     const confirmed = await this.confirm(
       'Publish Menu',
-      `Publish "${menu.name}"? It will be available for activation.`,
+      `Publish "${menu.name}"? It will be available for activation.`
     );
 
     if (confirmed) {
@@ -101,7 +106,7 @@ export class MenuListComponent {
     const confirmed = await this.confirm(
       'Activate Menu',
       `Activate "${menu.name}"? The current active menu will be deactivated.`,
-      false,
+      false
     );
 
     if (confirmed) {
@@ -127,7 +132,7 @@ export class MenuListComponent {
     const confirmed = await this.confirm(
       'Delete Menu',
       `Delete "${menu.name}"? This action cannot be undone.`,
-      true,
+      true
     );
 
     if (confirmed) {
@@ -142,7 +147,7 @@ export class MenuListComponent {
     const labels = {
       [MenuState.Draft]: 'menus.states.draft',
       [MenuState.Published]: 'menus.states.published',
-      [MenuState.Active]: 'menus.states.active',
+      [MenuState.Active]: 'menus.states.active'
     };
     return labels[state] || 'menus.states.draft';
   }
@@ -151,8 +156,8 @@ export class MenuListComponent {
     const dialogRef = this.dialog.open<ConfirmDialogComponent, ConfirmDialogData, boolean>(
       ConfirmDialogComponent,
       {
-        data: { title, message, isDangerous },
-      },
+        data: { title, message, isDangerous }
+      }
     );
     const result = await firstValueFrom(dialogRef.afterClosed());
     return result || false;

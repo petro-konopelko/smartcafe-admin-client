@@ -3,11 +3,11 @@ import { Injectable, signal, effect } from '@angular/core';
 export type Theme = 'light' | 'dark';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ThemeService {
   private readonly STORAGE_KEY = 'smartcafe-theme';
-  private readonly DARK_CLASS = 'dark-theme';
+  private readonly DARK_CLASS = 'dark-mode';
 
   readonly currentTheme = signal<Theme>(this.loadTheme());
 
