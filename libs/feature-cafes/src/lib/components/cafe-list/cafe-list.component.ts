@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTableModule } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { CafeStore } from '../../store/cafe.store';
@@ -13,7 +14,7 @@ import {
   EmptyStateComponent,
   ErrorMessageComponent,
   ConfirmDialogComponent,
-  ConfirmDialogData,
+  ConfirmDialogData
 } from '@smartcafe/admin/shared/ui';
 import { ScLocalDatePipe } from '@smartcafe/admin/shared/utils';
 
@@ -23,21 +24,23 @@ import { ScLocalDatePipe } from '@smartcafe/admin/shared/utils';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
+    MatTableModule,
     TranslateModule,
     LoadingSpinnerComponent,
     EmptyStateComponent,
     ErrorMessageComponent,
-    ScLocalDatePipe,
+    ScLocalDatePipe
   ],
   templateUrl: './cafe-list.component.html',
   styleUrl: './cafe-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CafeListComponent {
   protected readonly cafeStore = inject(CafeStore);
   private readonly dialog = inject(MatDialog);
   private readonly router = inject(Router);
 
+  readonly displayedColumns = ['name', 'contact', 'created', 'actions'];
   readonly createCafe = output<void>();
 
   constructor() {
@@ -62,9 +65,9 @@ export class CafeListComponent {
           message: `Are you sure you want to delete "${cafe.name}"? This action cannot be undone.`,
           confirmText: 'Delete',
           cancelText: 'Cancel',
-          isDangerous: true,
-        },
-      },
+          isDangerous: true
+        }
+      }
     );
 
     const confirmed = await firstValueFrom(dialogRef.afterClosed());

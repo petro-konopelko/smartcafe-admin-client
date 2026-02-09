@@ -1,7 +1,9 @@
 {
   "app": {
-    "title": "SmartCafe Admin",
     "description": "Digital menu management system",
+    "navigation": {
+      "home": "Home"
+    },
     "theme": {
       "switchToDark": "Switch to dark theme",
       "switchToLight": "Switch to light theme"

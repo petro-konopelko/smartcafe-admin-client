@@ -1,0 +1,420 @@
+// Menu form page styles matching the design prototype
+// Uses global styles from apps/admin/src/styles.scss
+@use '../../../../../apps/admin/src/styles/mixins' as *;
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem;
+  color: var(--md-on-surface-variant);
+}
+
+.error-card {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: rgb(186 26 26 / 10%);
+  color: var(--md-error);
+  border: 1px solid var(--md-error);
+  border-radius: var(--radius-m);
+}
+
+.menu-form {
+  max-width: 100%;
+  margin: 0;
+}
+
+// Form groups with custom styling (non-Material)
+.form-group {
+  margin-bottom: 16px;
+
+  label {
+    display: block;
+    font-size: 12px;
+    color: var(--md-on-surface-variant);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  input[type='text'],
+  input[type='number'],
+  input[type='time'],
+  select,
+  .md-select,
+  textarea {
+    width: 100%;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--md-outline-variant);
+    border-radius: 8px;
+    background: var(--md-surface);
+    color: var(--md-on-surface);
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: var(--md-primary);
+      box-shadow: 0 0 0 1px var(--md-primary);
+    }
+
+    &:hover:not(:disabled) {
+      border-color: var(--md-on-surface);
+    }
+
+    &:disabled {
+      background: var(--md-surface-variant);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    &::placeholder {
+      color: var(--md-on-surface-variant);
+      opacity: 0.6;
+    }
+  }
+
+  select,
+  .md-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%235f6368' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 36px;
+  }
+
+  textarea {
+    height: auto;
+    padding: 8px 12px;
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  input[type='time'] {
+    &::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+      filter: invert(0.5);
+
+      .dark-theme & {
+        filter: invert(0.8);
+      }
+    }
+  }
+
+  .error-text {
+    color: var(--md-error);
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  &.flex-1 {
+    flex: 1;
+  }
+
+  &.flex-2 {
+    flex: 2;
+  }
+}
+
+// Section styling
+.sections-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.section-header-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.drag-handle-wrapper {
+  padding-top: 32px; // Align with input fields
+}
+
+.drag-handle {
+  color: var(--md-outline);
+  cursor: grab;
+  user-select: none;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.section-header-fields {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1.2fr;
+  gap: 12px;
+
+  @include mobile-only {
+    grid-template-columns: 1fr;
+  }
+}
+
+.section-actions {
+  display: flex;
+  gap: 4px;
+  padding-top: 24px; // Align with input fields
+
+  .btn-icon {
+    transition: transform 0.3s;
+
+    &.rotated {
+      transform: rotate(-90deg);
+    }
+  }
+}
+
+// Items container
+.items-container {
+  border-left: 2px solid var(--md-primary-container);
+  padding-left: 20px;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+// Item card styling (matching the prototype)
+.item-card {
+  background: var(--md-surface);
+  border: 1px solid var(--md-outline-variant);
+  border-radius: var(--radius-m);
+  padding: 20px;
+  transition: all 0.2s;
+
+  &:hover {
+    box-shadow: var(--shadow-1);
+  }
+}
+
+.item-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--md-outline-variant);
+
+  .drag-handle {
+    padding: 0;
+    color: var(--md-on-surface-variant);
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  .item-title {
+    flex: 1;
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--md-on-surface);
+  }
+}
+
+.item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+// Item fields grid (matching the prototype layout)
+.item-fields-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr 1fr;
+  gap: 12px;
+  align-items: start;
+
+  @include mobile-only {
+    // Note: includes tablet too
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @include mobile-only {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group {
+    margin-bottom: 0;
+  }
+}
+
+.item-details-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: start;
+  margin-top: 12px;
+
+  @include mobile-only {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group {
+    margin-bottom: 0;
+  }
+}
+
+// Image upload button
+.image-upload-btn {
+  height: 100px;
+  min-width: 160px;
+  border: 2px dashed var(--md-outline-variant);
+  border-radius: var(--radius-s);
+  background: var(--md-surface);
+  color: var(--md-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 16px;
+
+  &:hover {
+    border-color: var(--md-primary);
+    background: rgb(11 87 208 / 4%);
+  }
+}
+
+// Ingredients section
+.ingredients-section {
+  margin-top: 16px;
+  padding: 20px;
+  background: var(--md-surface);
+  border: 1px solid var(--md-outline-variant);
+  border-radius: var(--radius-s);
+}
+
+.ingredients-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+
+  .ingredients-label {
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--md-on-surface);
+  }
+}
+
+.ingredient-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 16px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  @include mobile-only {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .form-group {
+    margin-bottom: 0;
+
+    input[type='text'] {
+      background: white;
+
+      .dark-theme & {
+        background: var(--md-surface);
+      }
+    }
+  }
+}
+
+.ingredient-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--md-on-surface);
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background 0.2s;
+  user-select: none;
+
+  &:hover {
+    background: rgb(0 0 0 / 4%);
+
+    .dark-theme & {
+      background: rgb(255 255 255 / 4%);
+    }
+  }
+
+  .md-checkbox {
+    margin: 0;
+  }
+}
+
+// Buttons
+.add-item-button,
+.add-section-button {
+  width: 100%;
+  margin-top: 12px;
+  color: var(--md-primary);
+  font-weight: 500;
+}
+
+.add-section-button {
+  margin-bottom: 24px;
+}
+
+// Drag and drop styles
+.cdk-drag-preview {
+  box-shadow: var(--shadow-2);
+  opacity: 0.9;
+  background: var(--md-surface);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.3;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+// Responsive adjustments
+@include mobile-only {
+  .section-header-row {
+    flex-direction: column;
+  }
+
+  .drag-handle-wrapper,
+  .section-actions {
+    padding-top: 0;
+  }
+
+  .section-header-fields {
+    flex-direction: column;
+  }
+
+  .items-container {
+    padding-left: 12px;
+  }
+}

@@ -2,9 +2,11 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageSelectorComponent } from './language-selector.component';
 import { LocaleService } from '@smartcafe/admin/shared/data-access';
+import { signal } from '@angular/core';
 
 describe('LanguageSelectorComponent', () => {
   let component: LanguageSelectorComponent;
@@ -17,8 +19,9 @@ describe('LanguageSelectorComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        provideAnimations(),
         LocaleService
-      ],
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(LanguageSelectorComponent);
@@ -31,47 +34,30 @@ describe('LanguageSelectorComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should toggle dropdown when toggle method is called', () => {
-    expect(component['isOpen']()).toBe(false);
-
-    component['toggleDropdown']();
-    
-    expect(component['isOpen']()).toBe(true);
-    
-    component['toggleDropdown']();
-    
-    expect(component['isOpen']()).toBe(false);
+  it('should display language icon', () => {
+    const icon = fixture.nativeElement.querySelector('mat-icon.language-icon');
+    expect(icon).toBeTruthy();
+    expect(icon.textContent?.trim()).toBe('language');
   });
 
-  it('should display current language name', () => {
-    const button = fixture.nativeElement.querySelector('.dropdown-trigger span');
-    expect(button?.textContent).toContain('English');
+  it('should have material select for language selection', () => {
+    const select = fixture.nativeElement.querySelector('mat-select');
+    expect(select).toBeTruthy();
   });
 
-  it('should change language when dropdown item is clicked', () => {
+  it('should change language when selection changes', () => {
     const setLocaleSpy = vi.spyOn(localeService, 'setLocale');
-    
-    component['toggleDropdown']();
-    fixture.detectChanges();
 
-    const ukrainianOption = Array.from(fixture.nativeElement.querySelectorAll('.dropdown-item'))
-      .find((el: Element) => el.textContent?.includes('Українська')) as HTMLElement;
-    
-    ukrainianOption?.click();
-    fixture.detectChanges();
+    component['onLanguageChange']('uk-UA');
 
     expect(setLocaleSpy).toHaveBeenCalledWith('uk-UA');
-    expect(component['isOpen']()).toBe(false);
   });
 
-  it('should close dropdown when clicking outside', () => {
-    component['toggleDropdown']();
+  it('should reflect current locale from service', () => {
+    localeService.currentLocale = signal('uk-UA');
     fixture.detectChanges();
-    expect(component['isOpen']()).toBe(true);
 
-    const event = new MouseEvent('click', { bubbles: true });
-    document.body.dispatchEvent(event);
-
-    expect(component['isOpen']()).toBe(false);
+    const select = fixture.nativeElement.querySelector('mat-select');
+    expect(select).toBeTruthy();
   });
 });

@@ -1,7 +1,9 @@
 {
   "app": {
-    "title": "SmartCafe Адмін",
     "description": "Система управління цифровим меню",
+    "navigation": {
+      "home": "Головна"
+    },
     "theme": {
       "switchToDark": "Перемкнути на темну тему",
       "switchToLight": "Перемкнути на світлу тему"

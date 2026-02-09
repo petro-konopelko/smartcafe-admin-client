@@ -1,3 +1,5 @@
+@use '../../../../../../apps/admin/src/styles/mixins' as *;
+
 .item-card {
   background: var(--app-surface);
   border: 1px solid var(--app-outline-variant);
@@ -53,7 +55,8 @@
     padding-top: 20px;
   }
 
-  @media (width <= 1024px) {
+  @include mobile-only {
+    // Note: includes tablet too
     flex-wrap: wrap;
 
     .flex-1,
@@ -62,7 +65,7 @@
     }
   }
 
-  @media (width <= 768px) {
+  @include mobile-only {
     flex-direction: column;
 
     .flex-1,
@@ -95,7 +98,7 @@
     }
   }
 
-  @media (width <= 768px) {
+  @include mobile-only {
     grid-template-columns: 1fr;
   }
 }
@@ -141,19 +144,6 @@
     border-color: var(--app-primary);
     background: rgb(11 87 208 / 4%);
   }
-
-  mat-icon {
-    color: var(--app-primary);
-    font-size: 40px;
-    width: 40px;
-    height: 40px;
-  }
-
-  .upload-text {
-    font-size: 14px;
-    color: var(--app-primary);
-    font-weight: 500;
-  }
 }
 
 .image-preview-container {
@@ -190,12 +180,6 @@
     &:hover {
       background: #d32f2f;
       transform: scale(1.1);
-    }
-
-    mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
     }
   }
 }
@@ -266,13 +250,6 @@
     &:hover {
       transform: scale(1.2);
     }
-
-    mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-      color: var(--app-on-primary-container);
-    }
   }
 }
 
@@ -292,12 +269,6 @@
 
   &:hover {
     background: transparent;
-  }
-
-  mat-icon {
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
   }
 }
 
