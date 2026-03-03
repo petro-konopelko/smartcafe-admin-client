@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>{{ 'menus.cloneDialog.title' | translate }}</h2>
+
+<mat-dialog-content>
+  <p class="clone-description">
+    {{ 'menus.cloneDialog.description' | translate: { name: data.menuName } }}
+  </p>
+
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onClone()"
+  >
+    <mat-form-field
+      appearance="outline"
+      class="full-width"
+    >
+      <mat-label>{{ 'menus.cloneDialog.newName' | translate }}</mat-label>
+      <input
+        matInput
+        formControlName="newName"
+        [placeholder]="'menus.cloneDialog.newNamePlaceholder' | translate"
+        data-testid="clone-name-input"
+        cdkFocusInitial
+      />
+      @if (form.get('newName')?.hasError('required') && form.get('newName')?.touched) {
+        <mat-error>{{ 'common.required' | translate }}</mat-error>
+      } @else if (form.get('newName')?.hasError('maxlength')) {
+        <mat-error>{{ 'common.maxLength' | translate: { max: 200 } }}</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button
+    matButton
+    type="button"
+    (click)="onCancel()"
+    data-testid="cancel-clone-button"
+  >
+    {{ 'common.cancel' | translate }}
+  </button>
+  <button
+    matButton="elevated"
+    type="button"
+    (click)="onClone()"
+    [disabled]="form.invalid || isSubmitting()"
+    data-testid="confirm-clone-button"
+  >
+    {{ 'menus.cloneDialog.confirm' | translate }}
+  </button>
+</mat-dialog-actions>

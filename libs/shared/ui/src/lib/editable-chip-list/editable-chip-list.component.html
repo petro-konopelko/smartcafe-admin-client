@@ -1,0 +1,75 @@
+@if (label()) {
+  <label class="chip-list-label">{{ label() }}</label>
+}
+
+<div
+  class="chip-list-container"
+  role="list"
+  [attr.aria-label]="label() || 'Chip list'"
+>
+  @for (chip of chips(); track $index) {
+    <div
+      class="chip"
+      role="listitem"
+      [class.checked]="chip.checked"
+      [attr.data-testid]="'chip-' + $index"
+    >
+      <mat-checkbox
+        class="chip-checkbox"
+        [checked]="chip.checked"
+        [disabled]="isDisabled()"
+        (change)="toggleChecked($index)"
+        [matTooltip]="checkboxTooltip()"
+        [attr.aria-label]="(checkboxTooltip() || 'Toggle') + ' ' + chip.text"
+        [attr.data-testid]="'check-chip-' + $index"
+      />
+      <input
+        class="chip-text-input"
+        [value]="chip.text"
+        [disabled]="isDisabled()"
+        (blur)="updateChipText($index, $event)"
+        (keydown)="handleChipKeydown($event)"
+        [attr.aria-label]="chip.text"
+        [attr.data-testid]="'text-chip-' + $index"
+      />
+      <button
+        matIconButton
+        class="chip-action-btn remove-btn"
+        (click)="removeChip($index)"
+        [disabled]="isDisabled()"
+        [matTooltip]="removeTooltip()"
+        [attr.aria-label]="removeTooltip() + ' ' + chip.text"
+        [attr.data-testid]="'remove-chip-' + $index"
+      >
+        <mat-icon class="chip-action-icon icon-error">close</mat-icon>
+      </button>
+    </div>
+  }
+
+  @if (!isDisabled()) {
+    <div
+      class="add-chip-container"
+      data-testid="add-chip-container"
+    >
+      <input
+        #addInput
+        class="add-chip-input"
+        [formControl]="addInputControl"
+        [placeholder]="placeholder()"
+        (keydown)="handleAddKeydown($event)"
+        [attr.aria-label]="placeholder()"
+        data-testid="add-chip-input"
+      />
+      <button
+        type="button"
+        class="chip-action-btn add-btn"
+        (click)="addChip()"
+        [disabled]="!addInputControl.value?.trim()"
+        [attr.aria-label]="addButtonLabel()"
+        data-testid="add-chip-button"
+      >
+        <mat-icon class="chip-action-icon">add</mat-icon>
+      </button>
+    </div>
+  }
+</div>

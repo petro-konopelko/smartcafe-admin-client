@@ -4,7 +4,6 @@ import { firstValueFrom } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,7 +11,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MenuStore } from '../../store/menu.store';
 import { MenuState, MenuSummaryDto } from '../../models';
 import {
-  ErrorMessageComponent,
   ConfirmDialogComponent,
   ConfirmDialogData,
   ContentContainerComponent
@@ -20,26 +18,29 @@ import {
 import { ScLocalDatePipe } from '@smartcafe/admin/shared/utils';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
+import {
+  MenuCloneDialogComponent,
+  MenuCloneDialogData,
+  MenuCloneDialogResult
+} from '../menu-clone-dialog/menu-clone-dialog.component';
 
 @Component({
-  selector: 'sc-menu-list',
+  selector: 'sc-menu-page',
   imports: [
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
-    MatTooltipModule,
     MatChipsModule,
     MatTableModule,
     TranslateModule,
     ContentContainerComponent,
-    ErrorMessageComponent,
     ScLocalDatePipe
   ],
-  templateUrl: './menu-list.component.html',
-  styleUrl: './menu-list.component.scss',
+  templateUrl: './menu-page.component.html',
+  styleUrl: './menu-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MenuListComponent {
+export class MenuPageComponent {
   protected readonly menuStore = inject(MenuStore);
   private readonly dialog = inject(MatDialog);
   private readonly router = inject(Router);
@@ -48,60 +49,6 @@ export class MenuListComponent {
   readonly displayedColumns = ['name', 'status', 'created', 'actions'];
   readonly cafeId = toSignal(this.route.paramMap.pipe(map((params) => params.get('cafeId') ?? '')));
   protected readonly MenuState = MenuState;
-
-  // Action definitions to avoid duplication
-  protected getMenuActions(menu: MenuSummaryDto) {
-    const actions = [];
-
-    // State-specific actions
-    if (menu.state === MenuState.Draft) {
-      actions.push({
-        icon: 'publish',
-        label: 'menus.publish',
-        handler: () => this.onPublish(menu),
-        testId: 'publish-menu-button'
-      });
-    }
-    if (menu.state === MenuState.Published) {
-      actions.push({
-        icon: 'check_circle',
-        label: 'menus.activate',
-        handler: () => this.onActivate(menu),
-        testId: 'activate-menu-button'
-      });
-    }
-
-    // Common actions
-    actions.push(
-      {
-        icon: 'visibility',
-        label: 'menus.preview',
-        handler: () => this.onPreview(menu)
-      },
-      {
-        icon: 'edit',
-        label: 'common.edit',
-        handler: () => this.onEdit(menu)
-      },
-      {
-        icon: 'content_copy',
-        label: 'menus.clone',
-        handler: () => this.onClone(menu)
-      }
-    );
-
-    // Delete action (only if not active)
-    if (menu.state !== MenuState.Active) {
-      actions.push({
-        icon: 'delete',
-        label: 'common.delete',
-        handler: () => this.onDelete(menu),
-        class: 'btn-delete'
-      });
-    }
-
-    return actions;
-  }
 
   constructor() {
     effect(() => {
@@ -170,12 +117,16 @@ export class MenuListComponent {
   }
 
   protected async onClone(menu: MenuSummaryDto): Promise<void> {
-    // TODO: Implement clone dialog with name input
-    const newName = prompt('Enter name for cloned menu:', `${menu.name} (Copy)`);
-    if (newName) {
+    const dialogRef = this.dialog.open<
+      MenuCloneDialogComponent,
+      MenuCloneDialogData,
+      MenuCloneDialogResult
+    >(MenuCloneDialogComponent, { data: { menuName: menu.name } });
+    const result = await firstValueFrom(dialogRef.afterClosed());
+    if (result?.newName) {
       const cafeId = this.cafeId();
       if (cafeId) {
-        await this.menuStore.cloneMenu(cafeId, menu.menuId, newName);
+        await this.menuStore.cloneMenu(cafeId, menu.menuId, result.newName);
       }
     }
   }
@@ -197,11 +148,11 @@ export class MenuListComponent {
 
   protected getStateLabel(state: MenuState): string {
     const labels = {
-      [MenuState.Draft]: 'menus.states.draft',
+      [MenuState.New]: 'menus.states.new',
       [MenuState.Published]: 'menus.states.published',
       [MenuState.Active]: 'menus.states.active'
     };
-    return labels[state] || 'menus.states.draft';
+    return labels[state] || 'menus.states.new';
   }
 
   private async confirm(title: string, message: string, isDangerous = false): Promise<boolean> {

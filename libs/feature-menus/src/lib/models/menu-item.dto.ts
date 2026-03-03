@@ -3,10 +3,10 @@ import { MenuItemImageDto } from './menu-item-image.dto';
 import { IngredientDto } from './ingredient.dto';
 
 export interface MenuItemDto {
-  id: string | null;
+  id?: string | null;
   name: string;
-  description: string | null;
+  description?: string | null;
   price: PriceDto;
-  image: MenuItemImageDto | null;
+  image?: MenuItemImageDto | null;
   ingredients: IngredientDto[];
 }

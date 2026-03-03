@@ -8,7 +8,7 @@ export default defineConfig(() => ({
   root: __dirname,
   cacheDir: '../../node_modules/.vite/libs/feature-menus',
   plugins: [
-    angular({ tsconfig: 'tsconfig.lib.json' }), 
+    angular({ tsconfig: 'tsconfig.spec.json' }), 
     nxViteTsPaths(), 
     nxCopyAssetsPlugin(['*.md'])
   ],

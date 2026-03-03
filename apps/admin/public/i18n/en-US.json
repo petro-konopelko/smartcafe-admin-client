@@ -23,6 +23,8 @@
     "actions": "Actions",
     "created": "Created",
     "status": "Status",
+    "expand": "Expand",
+    "collapse": "Collapse",
     "required": "This field is required",
     "min": "Minimum value is {{min}}",
     "maxLength": "Maximum length is {{max}} characters"
@@ -70,13 +72,29 @@
       "discount": "Discount",
       "addItem": "Add Item",
       "image": "Image",
+      "imagePreviewAlt": "Uploaded image preview",
+      "itemThumbnailAlt": "Menu item thumbnail",
+      "noImage": "No image",
       "uploadImage": "Upload Image",
-      "addIngredient": "Add Ingredient"
+      "addIngredient": "Add Ingredient",
+      "ingredientName": "Ingredient name",
+      "finalPrice": "Final Price",
+      "currency": "Currency",
+      "unitItemShort": "item",
+      "unit100gShort": "100g",
+      "excludable": "Can be excluded"
     },
     "states": {
-      "draft": "Draft",
+      "new": "New",
       "published": "Published",
       "active": "Active"
+    },
+    "cloneDialog": {
+      "title": "Clone Menu",
+      "description": "Creating a copy of \"{{name}}\". Enter a name for the new menu.",
+      "newName": "New Menu Name",
+      "newNamePlaceholder": "Enter menu name",
+      "confirm": "Clone"
     }
   },
   "form": {

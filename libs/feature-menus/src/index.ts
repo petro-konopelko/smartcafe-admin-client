@@ -1,10 +1,10 @@
 // Components
-export * from './lib/components/menu-form-page/menu-form-page.component';
-export * from './lib/components/menu-section/menu-section.component';
-export * from './lib/components/menu-item/menu-item.component';
+export * from './lib/components/menu-page/menu-page.component';
+export * from './lib/components/menu-edit-page/menu-edit-page.component';
+export * from './lib/components/menu-edit-page/menu-edit-section/menu-edit-section.component';
+export * from './lib/components/menu-edit-page/menu-edit-section/menu-edit-item/menu-edit-item.component';
 export * from './lib/components/menu-preview-page/menu-preview-page.component';
-export * from './lib/components/menu-list/menu-list.component';
-export * from './lib/components/menu-form/menu-form.component';
+export * from './lib/components/menu-clone-dialog/menu-clone-dialog.component';
 
 // Routes
 export * from './lib/menu.routes';

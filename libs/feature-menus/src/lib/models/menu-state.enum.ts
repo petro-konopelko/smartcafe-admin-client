@@ -1,5 +1,5 @@
 export enum MenuState {
-  Draft = 0,
+  New = 0,
   Published = 1,
-  Active = 2,
+  Active = 2
 }

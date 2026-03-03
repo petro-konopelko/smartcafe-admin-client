@@ -6,7 +6,6 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageSelectorComponent } from './language-selector.component';
 import { LocaleService } from '@smartcafe/admin/shared/data-access';
-import { signal } from '@angular/core';
 
 describe('LanguageSelectorComponent', () => {
   let component: LanguageSelectorComponent;
@@ -35,14 +34,14 @@ describe('LanguageSelectorComponent', () => {
   });
 
   it('should display language icon', () => {
-    const icon = fixture.nativeElement.querySelector('mat-icon.language-icon');
+    const icon = fixture.nativeElement.querySelector('mat-icon');
     expect(icon).toBeTruthy();
     expect(icon.textContent?.trim()).toBe('language');
   });
 
-  it('should have material select for language selection', () => {
-    const select = fixture.nativeElement.querySelector('mat-select');
-    expect(select).toBeTruthy();
+  it('should have menu trigger button for language selection', () => {
+    const triggerButton = fixture.nativeElement.querySelector('.language-container > button');
+    expect(triggerButton).toBeTruthy();
   });
 
   it('should change language when selection changes', () => {
@@ -57,7 +56,8 @@ describe('LanguageSelectorComponent', () => {
     localeService.setLocale('uk-UA');
     fixture.detectChanges();
 
-    const select = fixture.nativeElement.querySelector('mat-select');
-    expect(select).toBeTruthy();
+    const triggerButton = fixture.nativeElement.querySelector('.language-container > button');
+    expect(triggerButton).toBeTruthy();
+    expect(triggerButton.textContent).toContain('Українська');
   });
 });

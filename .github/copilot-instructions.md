@@ -1,6 +1,7 @@
 # Angular Application - Development Best Practices
 
 ## Overview
+
 These instructions define coding standards, best practices, and architectural patterns for modern Angular applications (Angular 20+). These guidelines ensure maintainability, performance, accessibility, and code quality across any Angular project.
 
 ---
@@ -16,6 +17,7 @@ These instructions define coding standards, best practices, and architectural pa
 ## TypeScript Best Practices
 
 ### Strict Typing
+
 ```typescript
 // ✅ Good - Strict typing
 function processMenu(menu: MenuDto): string {
@@ -37,6 +39,7 @@ function parseResponse(response: unknown): MenuDto {
 ```
 
 ### Type Inference
+
 ```typescript
 // ✅ Good - Let TypeScript infer obvious types
 const cafeName = 'SmartCafe Downtown';
@@ -47,11 +50,13 @@ const cafeName: string = 'SmartCafe Downtown';
 ```
 
 ### Configuration
+
 - Enable strict mode in `tsconfig.json`
 - Use `"strict": true` and all strict flags
 - Configure path aliases for clean imports
 
 ### Avoid Magic Values
+
 ```typescript
 // ❌ Bad - Magic strings and numbers
 if (user.role === 'admin') {
@@ -77,7 +82,7 @@ if (user.role === USER_ROLES.ADMIN) {
 export class CafeCardComponent {
   private readonly MAX_RETRIES = 3;
   private readonly API_TIMEOUT_MS = 5000;
-  
+
   readonly CARD_STATES = {
     LOADING: 'loading',
     SUCCESS: 'success',
@@ -115,6 +120,7 @@ export class CafeCardComponent {}
 ```
 
 **Component Prefix Convention:**
+
 - **Use consistent prefix** for all application components (e.g., `app-`, `company-`, or project-specific like `sc-` for SmartCafe)
 - **Use same prefix** for directives and pipes
 - **Example with `app-` prefix**: `app-user-card`, `app-data-list`, `appAutoFocus`, `appSafeHtml`
@@ -133,19 +139,19 @@ import { Component, signal, computed, input, output } from '@angular/core';
 export class MenuItemComponent {
   // ✅ Use input() function
   menuItem = input.required<MenuItemDto>();
-  
+
   // ✅ Use output() function
   itemSelected = output<MenuItemDto>();
-  
+
   // ✅ Use signal for local state
   isExpanded = signal(false);
-  
+
   // ✅ Use computed for derived state
   displayPrice = computed(() => {
     const item = this.menuItem();
     return `${item.price.amount} ${item.price.unit}`;
   });
-  
+
   // ✅ Use update or set, NOT mutate
   toggle() {
     this.isExpanded.update(value => !value);
@@ -163,7 +169,7 @@ export class MenuItemComponent {
 // ✅ Always use OnPush
 @Component({
   selector: 'sc-menu-list',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
   // ...
 })
 export class MenuListComponent {}
@@ -179,13 +185,14 @@ import { ApplicationConfig, provideExperimentalZonelessChangeDetection } from '@
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideExperimentalZonelessChangeDetection(), // ✅ Zoneless mode
+    provideExperimentalZonelessChangeDetection() // ✅ Zoneless mode
     // ... other providers
   ]
 };
 ```
 
 **Benefits:**
+
 - **~30-40KB smaller bundle** (no Zone.js)
 - **Better performance** (no monkey-patching)
 - **More predictable** (explicit change detection)
@@ -203,21 +210,21 @@ export class DataListComponent {
   // ✅ Signals work automatically
   items = signal<Item[]>([]);
   loading = signal(false);
-  
+
   // ✅ Computed updates automatically
   itemCount = computed(() => this.items().length);
-  
+
   // ✅ Event handlers trigger change detection automatically
   handleClick() {
-    this.items.update(items => [...items, newItem]);
+    this.items.update((items) => [...items, newItem]);
   }
-  
+
   // ❌ Avoid: Async operations in components
   async loadData() {
     const data = await this.service.getData(); // ⚠️ Async logic should be in store
     this.data = data; // Wrong place for async operations
   }
-  
+
   // ✅ Correct: Use store for async operations, component stays synchronous
   ngOnInit() {
     this.dataStore.loadData(); // No async/await in component!
@@ -226,12 +233,14 @@ export class DataListComponent {
 ```
 
 **What Works Automatically in Zoneless:**
+
 - ✅ Signal updates (`set`, `update`)
 - ✅ Event handlers (`(click)`, `(input)`, etc.)
 - ✅ Async pipe
 - ✅ Input changes
 
 **What Requires Manual Handling:**
+
 - ⚠️ `setTimeout`/`setInterval` callbacks → Use signals to update state
 - ⚠️ Third-party callbacks → Wrap in signal updates
 - ⚠️ HTTP without signals → Use `toSignal()` or update signals in `.subscribe()`
@@ -313,6 +322,7 @@ export class MenuCardComponent {
 ## Component Guidelines
 
 ### Single Responsibility
+
 ```typescript
 // ✅ Good - Focused component
 @Component({
@@ -332,6 +342,7 @@ export class CafeListItemComponent {
 ```
 
 ### Template Size
+
 ```typescript
 // ✅ Good - Inline template for small components
 @Component({
@@ -370,18 +381,18 @@ import { inject } from '@angular/core';
 
 @Component({
   selector: 'sc-cafe-form',
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule]
   // ...
 })
 export class CafeFormComponent {
   private fb = inject(FormBuilder);
-  
+
   // ✅ Use Reactive Forms
   cafeForm = this.fb.group({
     name: ['', [Validators.required, Validators.maxLength(100)]],
     contactInfo: ['', [Validators.maxLength(200)]]
   });
-  
+
   onSubmit() {
     if (this.cafeForm.valid) {
       const value = this.cafeForm.value as CreateCafeRequest;
@@ -402,28 +413,22 @@ export class CafeFormComponent {
 ```html
 <!-- ✅ Good - Use @if, @for, @switch -->
 @if (isLoading()) {
-  <sc-loading-spinner />
+<sc-loading-spinner />
 } @else if (error()) {
-  <sc-error-message [error]="error()" />
+<sc-error-message [error]="error()" />
 } @else {
-  <div class="menu-list">
-    @for (menu of menus(); track menu.id) {
-      <sc-menu-card [menu]="menu" />
-    }
-  </div>
-}
-
-@switch (menuState()) {
-  @case ('new') {
-    <span class="badge new">New</span>
+<div class="menu-list">
+  @for (menu of menus(); track menu.id) {
+  <sc-menu-card [menu]="menu" />
   }
-  @case ('published') {
-    <span class="badge published">Published</span>
-  }
-  @case ('active') {
-    <span class="badge active">Active</span>
-  }
-}
+</div>
+} @switch (menuState()) { @case ('new') {
+<span class="badge new">New</span>
+} @case ('published') {
+<span class="badge published">Published</span>
+} @case ('active') {
+<span class="badge active">Active</span>
+} }
 
 <!-- ❌ Bad - Old structural directives -->
 <div *ngIf="isLoading">...</div>
@@ -434,12 +439,12 @@ export class CafeFormComponent {
 
 ```html
 <!-- ✅ Good - Use class/style bindings -->
-<div 
+<div
   [class.active]="isActive()"
   [class.disabled]="isDisabled()"
   [style.color]="textColor()"
-  [style.font-size.px]="fontSize()">
-</div>
+  [style.font-size.px]="fontSize()"
+></div>
 
 <!-- ❌ Bad - Using ngClass/ngStyle -->
 <div [ngClass]="{'active': isActive}"></div>
@@ -487,7 +492,7 @@ import { HttpClient } from '@angular/common/http';
 export class CafeService {
   private http = inject(HttpClient);
   private apiUrl = inject(API_BASE_URL);
-  
+
   getCafes() {
     return this.http.get<ListCafesResponse>(`${this.apiUrl}/cafes`);
   }
@@ -551,9 +556,7 @@ export const CafeStore = signalStore(
     error: null
   }),
   withComputed((store) => ({
-    activeCafes: computed(() => 
-      store.cafes().filter(cafe => !cafe.isDeleted)
-    ),
+    activeCafes: computed(() => store.cafes().filter((cafe) => !cafe.isDeleted)),
     cafeCount: computed(() => store.cafes().length),
     hasError: computed(() => store.error() !== null)
   })),
@@ -565,27 +568,25 @@ export const CafeStore = signalStore(
         const cafes = await firstValueFrom(cafeService.getCafes());
         patchState(store, { cafes, loading: false });
       } catch (error) {
-        patchState(store, { 
-          error: 'Failed to load cafes', 
-          loading: false 
+        patchState(store, {
+          error: 'Failed to load cafes',
+          loading: false
         });
       }
     },
-    
+
     async createCafe(name: string, contactInfo: string) {
       patchState(store, { loading: true, error: null });
       try {
-        const newCafe = await firstValueFrom(
-          cafeService.createCafe({ name, contactInfo })
-        );
-        patchState(store, { 
+        const newCafe = await firstValueFrom(cafeService.createCafe({ name, contactInfo }));
+        patchState(store, {
           cafes: [...store.cafes(), newCafe],
-          loading: false 
+          loading: false
         });
       } catch (error) {
-        patchState(store, { 
-          error: 'Failed to create cafe', 
-          loading: false 
+        patchState(store, {
+          error: 'Failed to create cafe',
+          loading: false
         });
       }
     }
@@ -606,11 +607,11 @@ import { CafeStore } from '../store/cafe.store';
     @if (cafeStore.loading()) {
       <sc-loading-spinner />
     }
-    
+
     @if (cafeStore.error()) {
       <sc-error-message [message]="cafeStore.error()" />
     }
-    
+
     @for (cafe of cafeStore.cafes(); track cafe.id) {
       <sc-cafe-card [cafe]="cafe" />
     }
@@ -618,13 +619,13 @@ import { CafeStore } from '../store/cafe.store';
 })
 export class CafeListComponent {
   cafeStore = inject(CafeStore);
-  
+
   ngOnInit() {
     // ✅ Just call store method - no async/await in component!
     // Store handles async, updates signals, triggers UI updates automatically
     this.cafeStore.loadCafes();
   }
-  
+
   onCreateCafe(name: string, contactInfo: string) {
     // ✅ Component stays synchronous
     this.cafeStore.createCafe(name, contactInfo);
@@ -633,6 +634,7 @@ export class CafeListComponent {
 ```
 
 **Key Principles:**
+
 - ✅ **All async operations in store** (HTTP calls, timers, etc.)
 - ✅ **Components call store methods synchronously** (no async/await)
 - ✅ **Store updates signals** (loading, data, error)
@@ -664,6 +666,7 @@ const addCafe = (state: CafeState, cafe: CafeDto): CafeState => {
 **Prefer browser-native `Intl` API over Angular pipes for formatting dates, numbers, and currency.**
 
 **Benefits:**
+
 - ✅ **Smaller bundle size** (no need to import locale data)
 - ✅ **More flexible** (rich formatting options)
 - ✅ **Native performance** (browser-optimized)
@@ -680,13 +683,13 @@ import { LocaleService } from '../services/locale.service';
 })
 export class LocalDatePipe implements PipeTransform {
   private localeService = inject(LocaleService);
-  
+
   transform(value: Date | string, options?: Intl.DateTimeFormatOptions): string {
     if (!value) return '';
-    
+
     const date = value instanceof Date ? value : new Date(value);
     const locale = this.localeService.currentLocale();
-    
+
     return new Intl.DateTimeFormat(locale, options).format(date);
   }
 }
@@ -705,12 +708,12 @@ export class LocalDatePipe implements PipeTransform {
 })
 export class LocalCurrencyPipe implements PipeTransform {
   private localeService = inject(LocaleService);
-  
+
   transform(value: number, currency: string = 'USD'): string {
     if (value == null) return '';
-    
+
     const locale = this.localeService.currentLocale();
-    
+
     return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency
@@ -731,12 +734,12 @@ export class LocalCurrencyPipe implements PipeTransform {
 })
 export class LocalNumberPipe implements PipeTransform {
   private localeService = inject(LocaleService);
-  
+
   transform(value: number, options?: Intl.NumberFormatOptions): string {
     if (value == null) return '';
-    
+
     const locale = this.localeService.currentLocale();
-    
+
     return new Intl.NumberFormat(locale, options).format(value);
   }
 }
@@ -758,14 +761,14 @@ type SupportedLocale = 'en-US' | 'uk-UA'; // BCP 47 standard
 export class LocaleService {
   private readonly STORAGE_KEY = 'app-locale';
   private readonly DEFAULT_LOCALE: SupportedLocale = 'en-US';
-  
+
   currentLocale = signal<SupportedLocale>(this.loadLocale());
-  
+
   setLocale(locale: SupportedLocale): void {
     this.currentLocale.set(locale);
     localStorage.setItem(this.STORAGE_KEY, locale);
   }
-  
+
   private loadLocale(): SupportedLocale {
     const stored = localStorage.getItem(this.STORAGE_KEY) as SupportedLocale;
     return stored || this.DEFAULT_LOCALE;
@@ -786,7 +789,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   imports: [TranslateModule],
   template: `
     <h1>{{ 'greeting.welcome' | translate }}</h1>
-    <p>{{ 'greeting.message' | translate:{ name: userName() } }}</p>
+    <p>{{ 'greeting.message' | translate: { name: userName() } }}</p>
   `
 })
 export class GreetingComponent {
@@ -795,6 +798,7 @@ export class GreetingComponent {
 ```
 
 **Best Practices:**
+
 - ✅ Use **BCP 47 standard** locale codes (`en-US`, `uk-UA`, not `en`, `ua`)
 - ✅ Store locale preference in localStorage
 - ✅ Use signals for reactive locale changes
@@ -808,6 +812,7 @@ export class GreetingComponent {
 ## Responsive Design
 
 ### Mobile-First Approach
+
 **All components MUST be responsive and work seamlessly on mobile and desktop devices.**
 
 ```scss
@@ -816,17 +821,17 @@ export class GreetingComponent {
   display: grid;
   grid-template-columns: 1fr; // Mobile: 1 column
   gap: 1rem;
-  
+
   // Tablet: 2 columns
   @media (min-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   // Desktop: 3 columns
   @media (min-width: 1024px) {
     grid-template-columns: repeat(3, 1fr);
   }
-  
+
   // Large desktop: 4 columns
   @media (min-width: 1440px) {
     grid-template-columns: repeat(4, 1fr);
@@ -835,6 +840,7 @@ export class GreetingComponent {
 ```
 
 ### Breakpoints
+
 ```scss
 // src/styles/_variables.scss
 $breakpoints: (
@@ -846,53 +852,61 @@ $breakpoints: (
 ```
 
 ### Angular Material Breakpoints
+
 ```typescript
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { inject, signal } from '@angular/core';
 
 @Component({
-  selector: 'sc-cafe-grid',
+  selector: 'sc-cafe-grid'
   // ...
 })
 export class CafeGridComponent {
   private breakpointObserver = inject(BreakpointObserver);
-  
+
   isMobile = signal(false);
   isTablet = signal(false);
-  
+
   constructor() {
     this.breakpointObserver
       .observe([Breakpoints.Handset])
-      .subscribe(result => this.isMobile.set(result.matches));
-    
+      .subscribe((result) => this.isMobile.set(result.matches));
+
     this.breakpointObserver
       .observe([Breakpoints.Tablet])
-      .subscribe(result => this.isTablet.set(result.matches));
+      .subscribe((result) => this.isTablet.set(result.matches));
   }
 }
 ```
 
 ### Touch-Friendly Design
+
 - Minimum tap target size: **44x44px** (WCAG 2.1 AA)
 - Adequate spacing between interactive elements
 - Swipe gestures for mobile navigation
 - Pull-to-refresh for lists
 
 ### Responsive Images
+
 ```html
 <!-- Use NgOptimizedImage with responsive sizes -->
-<img 
+<img
   [ngSrc]="imageUrl()"
   [alt]="altText()"
   width="400"
   height="300"
-  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+/>
 ```
 
 ### Viewport Meta Tag
+
 ```html
 <!-- index.html -->
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+/>
 ```
 
 ---
@@ -900,6 +914,7 @@ export class CafeGridComponent {
 ## Accessibility (WCAG 2.1 AA)
 
 ### Requirements
+
 - **MUST** pass all AXE checks
 - **MUST** follow WCAG AA minimums
 - Focus management for dialogs and navigation
@@ -909,11 +924,12 @@ export class CafeGridComponent {
 
 ```html
 <!-- ✅ Good - Accessible button -->
-<button 
+<button
   type="button"
   [attr.aria-label]="'Delete ' + cafe().name"
   [attr.aria-disabled]="isDeleting()"
-  (click)="onDelete()">
+  (click)="onDelete()"
+>
   <mat-icon aria-hidden="true">delete</mat-icon>
   <span class="visually-hidden">Delete cafe</span>
 </button>
@@ -921,16 +937,20 @@ export class CafeGridComponent {
 <!-- ✅ Good - Accessible form -->
 <mat-form-field>
   <mat-label for="cafe-name">Cafe Name</mat-label>
-  <input 
-    matInput 
+  <input
+    matInput
     id="cafe-name"
     formControlName="name"
     [attr.aria-required]="true"
-    [attr.aria-invalid]="nameControl.invalid && nameControl.touched">
+    [attr.aria-invalid]="nameControl.invalid && nameControl.touched"
+  />
   @if (nameControl.hasError('required')) {
-    <mat-error id="name-error" role="alert">
-      Cafe name is required
-    </mat-error>
+  <mat-error
+    id="name-error"
+    role="alert"
+  >
+    Cafe name is required
+  </mat-error>
   }
 </mat-form-field>
 ```
@@ -941,12 +961,12 @@ export class CafeGridComponent {
 import { inject, effect, viewChild, ElementRef } from '@angular/core';
 
 @Component({
-  selector: 'sc-cafe-dialog',
+  selector: 'sc-cafe-dialog'
   // ...
 })
 export class CafeDialogComponent {
   private firstFocusableElement = viewChild<ElementRef>('firstInput');
-  
+
   constructor() {
     effect(() => {
       // Focus first input when dialog opens
@@ -961,6 +981,7 @@ export class CafeDialogComponent {
 ## Performance Optimization
 
 ### OnPush Change Detection
+
 ```typescript
 // ✅ Always use OnPush
 @Component({
@@ -969,6 +990,7 @@ export class CafeDialogComponent {
 ```
 
 ### TrackBy Functions
+
 ```typescript
 @Component({
   selector: 'sc-menu-list',
@@ -980,7 +1002,7 @@ export class CafeDialogComponent {
 })
 export class MenuListComponent {
   menus = input.required<MenuDto[]>();
-  
+
   trackByMenuId(index: number, menu: MenuDto): string {
     return menu.id;
   }
@@ -988,6 +1010,7 @@ export class MenuListComponent {
 ```
 
 ### Virtual Scrolling
+
 ```typescript
 import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 
@@ -995,7 +1018,10 @@ import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrollin
   selector: 'sc-cafe-grid',
   imports: [ScrollingModule],
   template: `
-    <cdk-virtual-scroll-viewport [itemSize]="120" class="cafe-list">
+    <cdk-virtual-scroll-viewport
+      [itemSize]="120"
+      class="cafe-list"
+    >
       @for (cafe of cafes(); track cafe.id) {
         <sc-cafe-card [cafe]="cafe" />
       }
@@ -1006,6 +1032,7 @@ export class CafeGridComponent {}
 ```
 
 ### Image Optimization
+
 ```typescript
 import { NgOptimizedImage } from '@angular/common';
 
@@ -1013,12 +1040,13 @@ import { NgOptimizedImage } from '@angular/common';
   selector: 'sc-menu-item-image',
   imports: [NgOptimizedImage],
   template: `
-    <img 
+    <img
       [ngSrc]="imageUrl()"
       [alt]="altText()"
       width="400"
       height="300"
-      priority="false">
+      priority="false"
+    />
   `
 })
 export class MenuItemImageComponent {
@@ -1032,7 +1060,9 @@ export class MenuItemImageComponent {
 ## Testing Requirements
 
 ### Testing Mandate
+
 **ALL application functionality MUST be covered with comprehensive tests:**
+
 - ✅ **Unit Tests**: Components, services, pipes, directives, validators
 - ✅ **Integration Tests**: Feature workflows, store interactions, API integration
 - ✅ **Minimum Coverage**: 80% code coverage
@@ -1059,6 +1089,7 @@ libs/feature-cafes/src/lib/
 ```
 
 **Naming Convention:**
+
 - Unit tests: `*.spec.ts`
 - E2E tests: `*.e2e-spec.ts`
 - Test helpers: `*.mock.ts` or `*.fake.ts`
@@ -1066,6 +1097,7 @@ libs/feature-cafes/src/lib/
 ### What to Test
 
 #### Components
+
 ```typescript
 // Test all aspects:
 - Component creation
@@ -1079,6 +1111,7 @@ libs/feature-cafes/src/lib/
 ```
 
 #### Services
+
 ```typescript
 // Test all methods:
 - API calls (HTTP methods, URLs, payloads)
@@ -1088,6 +1121,7 @@ libs/feature-cafes/src/lib/
 ```
 
 #### Stores (NgRx Signals)
+
 ```typescript
 // Test state management:
 - Initial state
@@ -1097,6 +1131,7 @@ libs/feature-cafes/src/lib/
 ```
 
 #### Forms
+
 ```typescript
 // Test validation:
 - Required fields
@@ -1153,7 +1188,7 @@ import { DataComponent } from './data.component';
 describe('DataComponent (Zoneless)', () => {
   let component: DataComponent;
   let fixture: ComponentFixture<DataComponent>;
-  
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DataComponent],
@@ -1161,16 +1196,16 @@ describe('DataComponent (Zoneless)', () => {
         provideExperimentalZonelessChangeDetection() // ✅ Zoneless in tests
       ]
     }).compileComponents();
-    
+
     fixture = TestBed.createComponent(DataComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-  
+
   it('should update UI when signal changes', () => {
     component.count.set(5);
     fixture.detectChanges(); // ✅ Manual change detection in tests
-    
+
     const element = fixture.nativeElement.querySelector('[data-testid="count"]');
     expect(element?.textContent).toBe('5');
   });
@@ -1180,6 +1215,7 @@ describe('DataComponent (Zoneless)', () => {
 ### Unit Test Examples
 
 #### Component Test
+
 ```typescript
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -1190,7 +1226,7 @@ import { CafeDto } from '../../../shared/models/api.models';
 describe('CafeCardComponent', () => {
   let component: CafeCardComponent;
   let fixture: ComponentFixture<CafeCardComponent>;
-  
+
   const mockCafe: CafeDto = {
     id: '123e4567-e89b-12d3-a456-426614174000',
     name: 'Test Cafe',
@@ -1198,40 +1234,40 @@ describe('CafeCardComponent', () => {
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: null
   };
-  
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CafeCardComponent]
     }).compileComponents();
-    
+
     fixture = TestBed.createComponent(CafeCardComponent);
     component = fixture.componentInstance;
-    
+
     // Set required inputs
     fixture.componentRef.setInput('cafe', mockCafe);
     fixture.detectChanges();
   });
-  
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  
+
   it('should display cafe name', () => {
     const compiled = fixture.nativeElement;
     const nameElement = compiled.querySelector('[data-testid="cafe-name"]');
     expect(nameElement?.textContent).toBe(mockCafe.name);
   });
-  
+
   it('should emit edit event when edit button clicked', () => {
     const editSpy = vi.fn();
     component.edit.subscribe(editSpy);
-    
+
     const editButton = fixture.nativeElement.querySelector('[data-testid="edit-button"]');
     editButton.click();
-    
+
     expect(editSpy).toHaveBeenCalledWith(mockCafe);
   });
-  
+
   it('should have correct ARIA labels', () => {
     const deleteButton = fixture.nativeElement.querySelector('[data-testid="delete-button"]');
     expect(deleteButton.getAttribute('aria-label')).toBe(`Delete ${mockCafe.name}`);
@@ -1240,6 +1276,7 @@ describe('CafeCardComponent', () => {
 ```
 
 #### Service Test
+
 ```typescript
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
@@ -1251,21 +1288,21 @@ describe('CafeApiService', () => {
   let service: CafeApiService;
   let httpMock: HttpTestingController;
   const baseUrl = 'http://localhost:5000/api/cafes';
-  
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [CafeApiService]
     });
-    
+
     service = TestBed.inject(CafeApiService);
     httpMock = TestBed.inject(HttpTestingController);
   });
-  
+
   afterEach(() => {
     httpMock.verify();
   });
-  
+
   it.each([
     {
       method: 'GET',
@@ -1281,21 +1318,24 @@ describe('CafeApiService', () => {
       requestBody: { name: 'New Cafe', contactInfo: 'contact@cafe.com' },
       mockResponse: { cafeId: '123' }
     }
-  ])('should $description when API call succeeds', ({ method, serviceMethod, requestBody, mockResponse }, done) => {
-    const args = requestBody ? [requestBody] : [];
-    service[serviceMethod](...args).subscribe(response => {
-      expect(response).toEqual(mockResponse);
-      done();
-    });
-    
-    const req = httpMock.expectOne(baseUrl);
-    expect(req.request.method).toBe(method);
-    if (requestBody) {
-      expect(req.request.body).toEqual(requestBody);
+  ])(
+    'should $description when API call succeeds',
+    ({ method, serviceMethod, requestBody, mockResponse }, done) => {
+      const args = requestBody ? [requestBody] : [];
+      service[serviceMethod](...args).subscribe((response) => {
+        expect(response).toEqual(mockResponse);
+        done();
+      });
+
+      const req = httpMock.expectOne(baseUrl);
+      expect(req.request.method).toBe(method);
+      if (requestBody) {
+        expect(req.request.body).toEqual(requestBody);
+      }
+      req.flush(mockResponse);
     }
-    req.flush(mockResponse);
-  });
-  
+  );
+
   it('should handle error when API call fails', (done) => {
     service.getCafes().subscribe({
       next: () => fail('Should have failed'),
@@ -1304,7 +1344,7 @@ describe('CafeApiService', () => {
         done();
       }
     });
-    
+
     const req = httpMock.expectOne(baseUrl);
     req.flush('Server error', { status: 500, statusText: 'Internal Server Error' });
   });
@@ -1312,6 +1352,7 @@ describe('CafeApiService', () => {
 ```
 
 #### Store Test
+
 ```typescript
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
@@ -1322,7 +1363,7 @@ import { CafeApiService } from '../services/cafe-api.service';
 describe('CafeStore', () => {
   let store: InstanceType<typeof CafeStore>;
   let cafeApiService: CafeApiService;
-  
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -1337,17 +1378,17 @@ describe('CafeStore', () => {
         }
       ]
     });
-    
+
     store = TestBed.inject(CafeStore);
     cafeApiService = TestBed.inject(CafeApiService);
   });
-  
+
   it('should have initial state when store is created', () => {
     expect(store.cafes()).toEqual([]);
     expect(store.loading()).toBe(false);
     expect(store.error()).toBeNull();
   });
-  
+
   it.each([
     {
       scenario: 'load cafes successfully when API returns data',
@@ -1363,20 +1404,20 @@ describe('CafeStore', () => {
     }
   ])('should $scenario', async ({ mockReturn, expectedCafes, expectedError }) => {
     vi.mocked(cafeApiService.getCafes).mockReturnValue(mockReturn());
-    
+
     await store.loadCafes();
-    
+
     expect(store.cafes()).toEqual(expectedCafes);
     expect(store.loading()).toBe(false);
     expect(store.error()).toBe(expectedError);
   });
-  
+
   it('should compute active cafes correctly', async () => {
     const mockCafes = [mockCafe, { ...mockCafe, id: '456', name: 'Cafe 2' }];
     vi.mocked(cafeApiService.getCafes).mockReturnValue(of({ cafes: mockCafes }));
-    
+
     await store.loadCafes();
-    
+
     expect(store.activeCafes()).toHaveLength(2);
     expect(store.cafeCount()).toBe(2);
   });
@@ -1384,6 +1425,7 @@ describe('CafeStore', () => {
 ```
 
 #### Form Validation Test
+
 ```typescript
 import { describe, it, expect, beforeEach } from 'vitest';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -1393,17 +1435,17 @@ import { CafeFormComponent } from './cafe-form.component';
 describe('CafeFormComponent', () => {
   let component: CafeFormComponent;
   let fixture: ComponentFixture<CafeFormComponent>;
-  
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CafeFormComponent, ReactiveFormsModule]
     }).compileComponents();
-    
+
     fixture = TestBed.createComponent(CafeFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-  
+
   it.each([
     { value: '', error: 'required', description: 'empty' },
     { value: 'a'.repeat(101), error: 'maxlength', description: 'exceeds max length' }
@@ -1411,31 +1453,31 @@ describe('CafeFormComponent', () => {
     const nameControl = component.cafeForm.get('name');
     nameControl?.setValue(value);
     if (error === 'required') nameControl?.markAsTouched();
-    
+
     expect(nameControl?.invalid).toBe(true);
     expect(nameControl?.hasError(error)).toBe(true);
   });
-  
+
   it('should mark form as valid when all fields have valid data', () => {
     component.cafeForm.patchValue({
       name: 'Valid Cafe Name',
       contactInfo: 'contact@cafe.com'
     });
-    
+
     expect(component.cafeForm.valid).toBe(true);
   });
-  
+
   it('should emit submit event when form is valid and submitted', () => {
     const submitSpy = vi.fn();
     component.formSubmit.subscribe(submitSpy);
-    
+
     component.cafeForm.patchValue({
       name: 'Test Cafe',
       contactInfo: 'test@cafe.com'
     });
-    
+
     component.onSubmit();
-    
+
     expect(submitSpy).toHaveBeenCalledWith({
       name: 'Test Cafe',
       contactInfo: 'test@cafe.com'
@@ -1447,6 +1489,7 @@ describe('CafeFormComponent', () => {
 ### Integration Test Examples
 
 #### Feature Workflow Test
+
 ```typescript
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -1461,7 +1504,7 @@ describe('Cafe Creation Workflow (Integration)', () => {
   let store: InstanceType<typeof CafeStore>;
   let cafeApiService: CafeApiService;
   let router: Router;
-  
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CafeGridPageComponent],
@@ -1480,33 +1523,38 @@ describe('Cafe Creation Workflow (Integration)', () => {
         }
       ]
     }).compileComponents();
-    
+
     fixture = TestBed.createComponent(CafeGridPageComponent);
     store = TestBed.inject(CafeStore);
     cafeApiService = TestBed.inject(CafeApiService);
     router = TestBed.inject(Router);
-    
+
     fixture.detectChanges();
   });
-  
+
   it('should complete full cafe creation workflow', async () => {
     // 1. Initial state - no cafes
     expect(store.cafes()).toEqual([]);
-    
+
     // 2. User creates a cafe
     const cafeId = '123';
     const newCafe = { name: 'New Cafe', contactInfo: 'new@cafe.com' };
-    const createdCafe = { ...newCafe, id: cafeId, createdAt: new Date().toISOString(), updatedAt: null };
-    
+    const createdCafe = {
+      ...newCafe,
+      id: cafeId,
+      createdAt: new Date().toISOString(),
+      updatedAt: null
+    };
+
     vi.mocked(cafeApiService.createCafe).mockReturnValue(of({ cafeId }));
     vi.mocked(cafeApiService.getCafes).mockReturnValue(of({ cafes: [createdCafe] }));
-    
+
     await store.createCafe(newCafe.name, newCafe.contactInfo);
-    
+
     // 3. Cafe appears in list
     expect(store.cafes()).toHaveLength(1);
     expect(store.cafes()[0].name).toBe(newCafe.name);
-    
+
     // 4. Navigate to cafe menus
     const expectedRoute = ['/cafes', cafeId, 'menus'];
     await router.navigate(expectedRoute);
@@ -1546,22 +1594,37 @@ export function createMockCafe(overrides?: Partial<CafeDto>): CafeDto {
 
 ```html
 <!-- Use data-testid for reliable element selection -->
-<div class="cafe-card" [attr.data-testid]="'cafe-card-' + cafe().id">
+<div
+  class="cafe-card"
+  [attr.data-testid]="'cafe-card-' + cafe().id"
+>
   <h2 data-testid="cafe-name">{{ cafe().name }}</h2>
-  <button data-testid="edit-button" (click)="onEdit()">Edit</button>
-  <button data-testid="delete-button" (click)="onDelete()">Delete</button>
+  <button
+    data-testid="edit-button"
+    (click)="onEdit()"
+  >
+    Edit
+  </button>
+  <button
+    data-testid="delete-button"
+    (click)="onDelete()"
+  >
+    Delete
+  </button>
 </div>
 ```
 
 ### Coverage Requirements
 
 **Minimum Coverage Thresholds:**
+
 - Statements: 80%
 - Branches: 80%
 - Functions: 80%
 - Lines: 80%
 
 **Run coverage report:**
+
 ```bash
 npm run test:coverage
 ```
@@ -1622,7 +1685,7 @@ test.describe('Cafe Management', () => {
     await page.getByLabel('Cafe Name').fill('New Cafe');
     await page.getByLabel('Contact Info').fill('contact@cafe.com');
     await page.getByRole('button', { name: 'Save' }).click();
-    
+
     await expect(page.getByText('Cafe created successfully')).toBeVisible();
     await expect(page.getByTestId('cafe-card')).toHaveCount(4);
   });
@@ -1679,25 +1742,25 @@ import AxeBuilder from '@axe-core/playwright';
 test.describe('Accessibility', () => {
   test('should not have any automatically detectable accessibility issues', async ({ page }) => {
     await page.goto('/cafes');
-    
+
     const accessibilityScanResults = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
       .analyze();
-    
+
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 
   test('should have proper focus management in dialog', async ({ page }) => {
     await page.goto('/cafes');
     await page.getByRole('button', { name: 'Add Cafe' }).click();
-    
+
     // First focusable element should be focused
     await expect(page.getByLabel('Cafe Name')).toBeFocused();
-    
+
     // Tab trapping
     await page.keyboard.press('Tab');
     await expect(page.getByLabel('Contact Info')).toBeFocused();
-    
+
     // Escape closes dialog
     await page.keyboard.press('Escape');
     await expect(page.getByRole('dialog')).not.toBeVisible();
@@ -1717,7 +1780,7 @@ it('should have no accessibility violations', async () => {
   const { container } = await render(CafeCardComponent, {
     componentInputs: { cafe: mockCafe }
   });
-  
+
   const results = await axe(container);
   expect(results).toHaveNoViolations();
 });
@@ -1726,6 +1789,7 @@ it('should have no accessibility violations', async () => {
 ### Testing Best Practices
 
 ✅ **DO:**
+
 - Test behavior, not implementation
 - Use descriptive test names following "should [what] when [condition]" pattern
 - Use `it.each` for tests with the same flow to avoid code duplication
@@ -1740,6 +1804,7 @@ it('should have no accessibility violations', async () => {
 - **Test responsive behavior** - Use Playwright viewport sizes
 
 ❌ **DON'T:**
+
 - Test private methods
 - Test framework internals
 - Duplicate code - use `it.each` instead
@@ -1772,16 +1837,16 @@ libs/shared/ui/src/lib/
 │   └── loading-spinner.component.spec.ts
 ```
 
-### Design Tokens (_variables.scss)
+### Design Tokens (\_variables.scss)
 
 ```scss
 // Colors (Material Design 3)
-$primary-color: #6750A4;
-$secondary-color: #625B71;
-$tertiary-color: #7D5260;
-$error-color: #B3261E;
-$success-color: #4CAF50;
-$warning-color: #FF9800;
+$primary-color: #6750a4;
+$secondary-color: #625b71;
+$tertiary-color: #7d5260;
+$error-color: #b3261e;
+$success-color: #4caf50;
+$warning-color: #ff9800;
 
 // Spacing scale (8px base)
 $spacing-xs: 4px;
@@ -1793,10 +1858,10 @@ $spacing-2xl: 48px;
 
 // Typography
 $font-family: 'Roboto', sans-serif;
-$font-size-sm: 0.875rem;   // 14px
-$font-size-md: 1rem;       // 16px
-$font-size-lg: 1.25rem;    // 20px
-$font-size-xl: 1.5rem;     // 24px
+$font-size-sm: 0.875rem; // 14px
+$font-size-md: 1rem; // 16px
+$font-size-lg: 1.25rem; // 20px
+$font-size-xl: 1.5rem; // 24px
 
 // Breakpoints
 $breakpoint-mobile: 0;
@@ -1814,7 +1879,7 @@ $z-popover: 1060;
 $z-tooltip: 1070;
 ```
 
-### Responsive Mixins (_responsive.scss)
+### Responsive Mixins (\_responsive.scss)
 
 ```scss
 @mixin mobile-only {
@@ -1859,6 +1924,9 @@ $z-tooltip: 1070;
 
 ### Component Styles Best Practices
 
+- 🚫 **Never use `::ng-deep` in any SCSS file.**
+- Use component host classes, CSS custom properties, global theme tokens, or documented Angular Material theming APIs instead.
+
 ```scss
 // ✅ Good - Use variables and mixins
 .cafe-card {
@@ -1885,7 +1953,7 @@ $z-tooltip: 1070;
 }
 ```
 
-### Material Theming (_themes.scss)
+### Material Theming (\_themes.scss)
 
 ```scss
 @use '@angular/material' as mat;
@@ -1896,26 +1964,30 @@ $primary-palette: mat.define-palette(mat.$indigo-palette);
 $accent-palette: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 $warn-palette: mat.define-palette(mat.$red-palette);
 
-$light-theme: mat.define-light-theme((
-  color: (
-    primary: $primary-palette,
-    accent: $accent-palette,
-    warn: $warn-palette,
-  ),
-  typography: mat.define-typography-config(),
-  density: 0,
-));
+$light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $primary-palette,
+      accent: $accent-palette,
+      warn: $warn-palette
+    ),
+    typography: mat.define-typography-config(),
+    density: 0
+  )
+);
 
 @include mat.all-component-themes($light-theme);
 
 // Dark theme
-$dark-theme: mat.define-dark-theme((
-  color: (
-    primary: $primary-palette,
-    accent: $accent-palette,
-    warn: $warn-palette,
+$dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $primary-palette,
+      accent: $accent-palette,
+      warn: $warn-palette
+    )
   )
-));
+);
 
 .dark-theme {
   @include mat.all-component-colors($dark-theme);
@@ -1957,13 +2029,14 @@ import { NgOptimizedImage } from '@angular/common';
   selector: 'sc-cafe-card',
   imports: [NgOptimizedImage],
   template: `
-    <img 
+    <img
       [ngSrc]="cafe().imageUrl"
       [alt]="cafe().name"
       width="300"
       height="200"
       priority
-      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+    />
   `
 })
 export class CafeCardComponent {}
@@ -1997,14 +2070,20 @@ export class ToolbarComponent {}
 @Component({
   selector: 'sc-cafe-icon',
   template: `
-    <img [src]="iconPath" [alt]="altText" class="icon">
+    <img
+      [src]="iconPath"
+      [alt]="altText"
+      class="icon"
+    />
   `,
-  styles: [`
-    .icon {
-      width: 24px;
-      height: 24px;
-    }
-  `]
+  styles: [
+    `
+      .icon {
+        width: 24px;
+        height: 24px;
+      }
+    `
+  ]
 })
 export class CafeIconComponent {
   iconPath = 'images/icons/cafe.svg';
@@ -2024,7 +2103,7 @@ export class CafeIconComponent {
 // ✅ Good - One class per file
 // cafe-card.component.ts
 @Component({
-  selector: 'sc-cafe-card',
+  selector: 'sc-cafe-card'
   // ...
 })
 export class CafeCardComponent {}
@@ -2049,9 +2128,15 @@ export interface CafeDto {
 
 // ❌ Bad - Multiple interfaces in one file
 // models.ts
-export interface CafeDto { /* ... */ }
-export interface MenuDto { /* ... */ }
-export interface MenuItemDto { /* ... */ }
+export interface CafeDto {
+  /* ... */
+}
+export interface MenuDto {
+  /* ... */
+}
+export interface MenuItemDto {
+  /* ... */
+}
 ```
 
 ### One Enum Per File
@@ -2067,9 +2152,15 @@ export enum MenuState {
 
 // ❌ Bad - Multiple enums in one file
 // enums.ts
-export enum MenuState { /* ... */ }
-export enum PriceUnit { /* ... */ }
-export enum ImageType { /* ... */ }
+export enum MenuState {
+  /* ... */
+}
+export enum PriceUnit {
+  /* ... */
+}
+export enum ImageType {
+  /* ... */
+}
 ```
 
 ### Multiple Constants Allowed
@@ -2130,6 +2221,7 @@ export * from './common.types';
 ```
 
 **Benefits:**
+
 - 📁 **Easier Navigation**: Find files by class/interface name
 - 🔍 **Better IDE Support**: Jump to definition works seamlessly
 - 🧩 **Clearer Dependencies**: Import statements show exact relationships
@@ -2141,12 +2233,10 @@ export * from './common.types';
 ## Code Quality Tools
 
 ### ESLint Configuration
+
 ```json
 {
-  "extends": [
-    "plugin:@angular-eslint/recommended",
-    "plugin:@typescript-eslint/recommended"
-  ],
+  "extends": ["plugin:@angular-eslint/recommended", "plugin:@typescript-eslint/recommended"],
   "rules": {
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/explicit-function-return-type": "warn",
@@ -2156,6 +2246,7 @@ export * from './common.types';
 ```
 
 ### Prettier
+
 ```json
 {
   "semi": true,
@@ -2167,6 +2258,7 @@ export * from './common.types';
 ```
 
 ### Husky Pre-commit
+
 ```bash
 # .husky/pre-commit
 npm run lint
@@ -2385,6 +2477,7 @@ import { CafeStore } from '@smartcafe/admin/feature-cafes'; // ❌ Internal to f
 5. **No circular dependencies** allowed (enforced by Nx)
 
 **Example valid dependencies:**
+
 ```
 admin
   ↓
@@ -2414,6 +2507,7 @@ shared/models, shared/ui, shared/data-access
 ## Git Commit Conventions
 
 Use Conventional Commits:
+
 ```
 feat(cafes): add cafe creation form
 fix(menus): resolve image upload issue
@@ -2477,6 +2571,7 @@ export const Large: Story = {
 ### Story Best Practices
 
 ✅ **DO:**
+
 - Write stories for all shared components in `libs/shared/ui/`
 - Use `argTypes` for interactive controls
 - Document all `@Input()` properties and `@Output()` events
@@ -2486,6 +2581,7 @@ export const Large: Story = {
 - Organize stories by domain: `Shared/UI/`, `Shared/Forms/`, etc.
 
 ❌ **DON'T:**
+
 - Skip stories for shared components
 - Write stories for feature-specific components (they stay in feature libs)
 - Duplicate component logic in stories
@@ -2538,7 +2634,7 @@ export const DeleteWarning: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const confirmButton = canvas.getByRole('button', { name: /delete/i });
-    
+
     // Verify button exists and has correct color
     expect(confirmButton).toBeInTheDocument();
     expect(confirmButton).toHaveClass('mat-warn');
@@ -2575,57 +2671,62 @@ npm run build-storybook
 - **Complex Logic**: Inline comments explaining why, not what
 - **Shared Components**: Storybook stories (mandatory)
 
-```typescript
+````typescript
 /**
  * Displays a cafe card with name, contact info, and action buttons.
- * 
+ *
  * @example
  * ```html
- * <sc-cafe-card 
- *   [cafe]="cafe" 
- *   (edit)="onEdit($event)" 
+ * <sc-cafe-card
+ *   [cafe]="cafe"
+ *   (edit)="onEdit($event)"
  *   (delete)="onDelete($event)" />
  * ```
  */
 @Component({
-  selector: 'sc-cafe-card',
+  selector: 'sc-cafe-card'
   // ...
 })
 export class CafeCardComponent {}
-```
+````
 
 ---
 
 ## Summary Checklist
 
 ### Core Angular
+
 - ✅ Use Angular 20+ with standalone components
 - ✅ Use signals, computed, input(), output()
 - ✅ **Use zoneless change detection** (provideExperimentalZonelessChangeDetection)
 - ✅ Use OnPush change detection everywhere
 - ✅ Use inject() instead of constructor injection
-- ✅ Use @if, @for, @switch (not *ngIf, *ngFor, *ngSwitch)
+- ✅ Use @if, @for, @switch (not *ngIf, *ngFor, \*ngSwitch)
 - ✅ Use class/style bindings (not ngClass/ngStyle)
 
 ### State Management
+
 - ✅ **Use signals for all state** (mandatory for zoneless)
 - ✅ **Keep async operations in stores, not components**
 - ✅ **Use NgRx Signal Store** for complex state
 - ✅ Use pure state transformations
 
 ### Forms & Data
+
 - ✅ Use Reactive Forms (not Template-driven)
 - ✅ Use NgOptimizedImage for images
 - ✅ Use trackBy for loops
 - ✅ Implement virtual scrolling for large lists
 
 ### Internationalization
+
 - ✅ **Use Intl API for formatting** (dates, numbers, currency)
 - ✅ **Use BCP 47 locale codes** (en-US, uk-UA)
 - ✅ **Don't use registerLocaleData** (bundle size optimization)
 - ✅ Use translation library for text content (ngx-translate or @angular/localize)
 
 ### Testing
+
 - ✅ **Write comprehensive unit tests for all components, services, stores**
 - ✅ **Write integration tests for feature workflows**
 - ✅ **Maintain minimum 80% code coverage**
@@ -2633,11 +2734,13 @@ export class CafeCardComponent {}
 - ✅ Use it.each for tests with same flow
 
 ### Accessibility & UX
+
 - ✅ Follow WCAG 2.1 AA accessibility standards
 - ✅ **Implement responsive design (mobile-first)**
 - ✅ **Auto-detect and apply system theme preference**
 
 ### Code Quality
+
 - ✅ Use strict TypeScript typing
 - ✅ Keep components small and focused
 - ✅ Document public APIs

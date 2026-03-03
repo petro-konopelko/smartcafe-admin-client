@@ -2,8 +2,9 @@ import { MenuState } from './menu-state.enum';
 import { SectionDto } from './section.dto';
 
 export interface MenuDto {
-  id: string;
+  id?: string;
   name: string;
+  description?: string;
   state: MenuState;
   sections: SectionDto[];
   createdAt: string;

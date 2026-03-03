@@ -1,13 +1,7 @@
 import { signalStore, withState, withMethods, withComputed, patchState } from '@ngrx/signals';
 import { computed, inject } from '@angular/core';
 import { MenuApiService } from '../services/menu-api.service';
-import {
-  MenuDto,
-  MenuSummaryDto,
-  CreateMenuRequest,
-  UpdateMenuRequest,
-  MenuState,
-} from '../models';
+import { MenuDto, MenuSummaryDto, CreateMenuRequest, MenuState } from '../models';
 import { firstValueFrom } from 'rxjs';
 
 interface MenuStoreState {
@@ -25,7 +19,7 @@ const initialState: MenuStoreState = {
   activeMenu: null,
   currentCafeId: null,
   loading: false,
-  error: null,
+  error: null
 };
 
 export const MenuStore = signalStore(
@@ -34,9 +28,11 @@ export const MenuStore = signalStore(
   withComputed(({ menus }) => ({
     menuCount: computed(() => menus().length),
     hasMenus: computed(() => menus().length > 0),
-    draftMenus: computed(() => menus().filter((m: MenuSummaryDto) => m.state === MenuState.Draft)),
-    publishedMenus: computed(() => menus().filter((m: MenuSummaryDto) => m.state === MenuState.Published)),
-    activeMenus: computed(() => menus().filter((m: MenuSummaryDto) => m.state === MenuState.Active)),
+    draftMenus: computed(() => menus().filter((m: MenuSummaryDto) => m.state === MenuState.New)),
+    publishedMenus: computed(() =>
+      menus().filter((m: MenuSummaryDto) => m.state === MenuState.Published)
+    ),
+    activeMenus: computed(() => menus().filter((m: MenuSummaryDto) => m.state === MenuState.Active))
   })),
   withMethods((store, menuApi = inject(MenuApiService)) => ({
     async loadMenus(cafeId: string): Promise<void> {
@@ -49,7 +45,7 @@ export const MenuStore = signalStore(
         console.error(`Failed to load menus for cafe ${cafeId}:`, error);
         patchState(store, {
           error: errorMessage,
-          loading: false,
+          loading: false
         });
       }
     },
@@ -64,7 +60,7 @@ export const MenuStore = signalStore(
         console.error(`Failed to load menu ${menuId} for cafe ${cafeId}:`, error);
         patchState(store, {
           error: errorMessage,
-          loading: false,
+          loading: false
         });
       }
     },
@@ -83,7 +79,7 @@ export const MenuStore = signalStore(
         console.info(`No active menu found for cafe ${cafeId}`, error);
         patchState(store, {
           activeMenu: null,
-          loading: false,
+          loading: false
         });
       }
     },
@@ -101,25 +97,25 @@ export const MenuStore = signalStore(
         console.error('Failed to create menu:', error);
         patchState(store, {
           error: errorMessage,
-          loading: false,
+          loading: false
         });
         return null;
       }
     },
 
-    async updateMenu(cafeId: string, menuId: string, request: UpdateMenuRequest): Promise<boolean> {
+    async updateMenu(cafeId: string, menuId: string, request: CreateMenuRequest): Promise<boolean> {
       patchState(store, { loading: true, error: null });
       try {
         await firstValueFrom(menuApi.updateMenu(cafeId, menuId, request));
         // Reload the menu and list
         const [menu, listResponse] = await Promise.all([
           firstValueFrom(menuApi.getMenu(cafeId, menuId)),
-          firstValueFrom(menuApi.listMenus(cafeId)),
+          firstValueFrom(menuApi.listMenus(cafeId))
         ]);
         patchState(store, {
           selectedMenu: menu,
           menus: listResponse.menus,
-          loading: false,
+          loading: false
         });
         return true;
       } catch (error) {
@@ -127,7 +123,7 @@ export const MenuStore = signalStore(
         console.error(`Failed to update menu ${menuId}:`, error);
         patchState(store, {
           error: errorMessage,
-          loading: false,
+          loading: false
         });
         return false;
       }
@@ -141,7 +137,7 @@ export const MenuStore = signalStore(
         patchState(store, {
           menus: store.menus().filter((m: MenuSummaryDto) => m.menuId !== menuId),
           selectedMenu: store.selectedMenu()?.id === menuId ? null : store.selectedMenu(),
-          loading: false,
+          loading: false
         });
         return true;
       } catch (error) {
@@ -149,7 +145,7 @@ export const MenuStore = signalStore(
         console.error(`Failed to delete menu ${menuId}:`, error);
         patchState(store, {
           error: errorMessage,
-          loading: false,
+          loading: false
         });
         return false;
       }
@@ -168,7 +164,7 @@ export const MenuStore = signalStore(
         console.error(`Failed to clone menu ${menuId}:`, error);
         patchState(store, {
           error: errorMessage,
-          loading: false,
+          loading: false
         });
         return null;
       }
@@ -181,12 +177,12 @@ export const MenuStore = signalStore(
         // Reload the menu and list
         const [menu, listResponse] = await Promise.all([
           firstValueFrom(menuApi.getMenu(cafeId, menuId)),
-          firstValueFrom(menuApi.listMenus(cafeId)),
+          firstValueFrom(menuApi.listMenus(cafeId))
         ]);
         patchState(store, {
           selectedMenu: menu,
           menus: listResponse.menus,
-          loading: false,
+          loading: false
         });
         return true;
       } catch (error) {
@@ -194,7 +190,7 @@ export const MenuStore = signalStore(
         console.error(`Failed to publish menu ${menuId}:`, error);
         patchState(store, {
           error: errorMessage,
-          loading: false,
+          loading: false
         });
         return false;
       }
@@ -208,13 +204,13 @@ export const MenuStore = signalStore(
         const [menu, activeMenu, listResponse] = await Promise.all([
           firstValueFrom(menuApi.getMenu(cafeId, menuId)),
           firstValueFrom(menuApi.getActiveMenu(cafeId)),
-          firstValueFrom(menuApi.listMenus(cafeId)),
+          firstValueFrom(menuApi.listMenus(cafeId))
         ]);
         patchState(store, {
           selectedMenu: menu,
           activeMenu,
           menus: listResponse.menus,
-          loading: false,
+          loading: false
         });
         return true;
       } catch (error) {
@@ -222,7 +218,7 @@ export const MenuStore = signalStore(
         console.error(`Failed to activate menu ${menuId}:`, error);
         patchState(store, {
           error: errorMessage,
-          loading: false,
+          loading: false
         });
         return false;
       }
@@ -234,6 +230,6 @@ export const MenuStore = signalStore(
 
     clearMenus(): void {
       patchState(store, initialState);
-    },
-  })),
+    }
+  }))
 );
