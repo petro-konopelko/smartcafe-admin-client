@@ -1,0 +1,223 @@
+<div
+  class="item-card"
+  [formGroup]="itemForm()"
+>
+  <!-- Row 1 -->
+  <div class="item-main-row">
+    <mat-icon
+      cdkDragHandle
+      class="drag-handle"
+      >drag_indicator</mat-icon
+    >
+
+    <div
+      class="item-thumbnail"
+      [attr.data-testid]="'item-thumbnail-' + sectionIndex() + '-' + itemIndex()"
+    >
+      @if (imagePreview()) {
+        <img
+          [src]="imagePreview()"
+          [attr.alt]="'menus.form.itemThumbnailAlt' | translate"
+          class="thumbnail-image"
+        />
+      } @else {
+        <div class="thumbnail-placeholder">
+          <mat-icon>image</mat-icon>
+        </div>
+      }
+    </div>
+
+    <mat-form-field
+      class="item-name-field"
+      subscriptSizing="dynamic"
+    >
+      <mat-label>{{ 'menus.form.itemName' | translate }}</mat-label>
+      <input
+        matInput
+        formControlName="name"
+        [attr.data-testid]="'item-name-' + sectionIndex() + '-' + itemIndex()"
+      />
+      <mat-hint class="item-description-preview">{{ descriptionPreview() }}</mat-hint>
+      @if (itemForm().get('name')?.hasError('required') && itemForm().get('name')?.touched) {
+        <mat-error>{{ 'common.required' | translate }}</mat-error>
+      }
+    </mat-form-field>
+
+    <sc-price-summary
+      class="price-summary"
+      [originalPrice]="originalPrice()"
+      [finalPrice]="calculatedPrice().amount"
+      [discountPercent]="discountPercent()"
+      [currencySymbol]="currencySymbol()"
+      [unitLabel]="
+        itemForm().get('priceUnit')?.value === PriceUnit.Per100Grams
+          ? ('menus.form.unit100gShort' | translate)
+          : ('menus.form.unitItemShort' | translate)
+      "
+      [attr.data-testid]="'item-price-summary-' + sectionIndex() + '-' + itemIndex()"
+    />
+
+    <div class="item-actions">
+      <button
+        matIconButton
+        type="button"
+        (click)="removeItem.emit()"
+        [matTooltip]="'common.delete' | translate"
+        [attr.aria-label]="'common.delete' | translate"
+        [attr.data-testid]="'delete-item-' + sectionIndex() + '-' + itemIndex()"
+      >
+        <mat-icon class="icon-error">delete</mat-icon>
+      </button>
+      <button
+        matIconButton
+        type="button"
+        (click)="toggleCollapse()"
+        [matTooltip]="(isCollapsed() ? 'common.expand' : 'common.collapse') | translate"
+        [attr.aria-label]="(isCollapsed() ? 'common.expand' : 'common.collapse') | translate"
+      >
+        <mat-icon
+          class="expand-icon"
+          [class.collapsed]="isCollapsed()"
+          >expand_more</mat-icon
+        >
+      </button>
+    </div>
+  </div>
+
+  <!-- Collapsible content -->
+  @if (!isCollapsed()) {
+    <!-- Row 2 -->
+    <div class="item-pricing-row">
+      <mat-form-field class="item-price-field">
+        <mat-label>{{ 'menus.form.price' | translate }}</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="priceAmount"
+          min="0"
+          step="0.01"
+          [attr.data-testid]="'item-price-' + sectionIndex() + '-' + itemIndex()"
+        />
+        @if (
+          itemForm().get('priceAmount')?.hasError('required') &&
+          itemForm().get('priceAmount')?.touched
+        ) {
+          <mat-error>{{ 'common.required' | translate }}</mat-error>
+        }
+        @if (itemForm().get('priceAmount')?.hasError('min')) {
+          <mat-error>{{ 'common.min' | translate: { min: 0 } }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="item-unit-field">
+        <mat-label>{{ 'menus.form.unit' | translate }}</mat-label>
+        <mat-select
+          formControlName="priceUnit"
+          [attr.data-testid]="'item-unit-' + sectionIndex() + '-' + itemIndex()"
+        >
+          <mat-option [value]="PriceUnit.PerItem">{{
+            'menus.form.perItem' | translate
+          }}</mat-option>
+          <mat-option [value]="PriceUnit.Per100Grams">{{
+            'menus.form.per100g' | translate
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="item-currency-field">
+        <mat-label>{{ 'menus.form.currency' | translate }}</mat-label>
+        <mat-select
+          formControlName="priceCurrency"
+          [attr.data-testid]="'item-currency-' + sectionIndex() + '-' + itemIndex()"
+        >
+          @for (currency of currencies(); track currency) {
+            <mat-option [value]="currency">{{ currency }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="item-discount-field">
+        <mat-label>{{ 'menus.form.discount' | translate }} %</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="priceDiscount"
+          min="0"
+          max="100"
+          [attr.data-testid]="'item-discount-' + sectionIndex() + '-' + itemIndex()"
+        />
+      </mat-form-field>
+
+      <mat-form-field class="item-final-price-field">
+        <mat-label>{{ 'menus.form.finalPrice' | translate }}</mat-label>
+        <input
+          matInput
+          readonly
+          [value]="calculatedPrice().amount | number: '1.2-2'"
+          tabindex="-1"
+        />
+      </mat-form-field>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="item-details-row">
+      <mat-form-field class="item-description-field">
+        <mat-label>{{ 'menus.form.description' | translate }}</mat-label>
+        <textarea
+          matInput
+          formControlName="description"
+          rows="3"
+          [attr.data-testid]="'item-description-' + sectionIndex() + '-' + itemIndex()"
+        ></textarea>
+      </mat-form-field>
+
+      <div class="image-upload-wrapper">
+        @if (imagePreview()) {
+          <div class="image-preview-container">
+            <img
+              [src]="imagePreview()"
+              [attr.alt]="'menus.form.imagePreviewAlt' | translate"
+              class="image-preview"
+            />
+            <button
+              matIconButton
+              type="button"
+              class="remove-image-btn"
+              (click)="removeImage()"
+              [matTooltip]="'common.delete' | translate"
+              [attr.aria-label]="'common.delete' | translate"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        } @else {
+          <label
+            class="image-upload-box"
+            [attr.for]="'image-upload-' + sectionIndex() + '-' + itemIndex()"
+          >
+            <mat-icon>add_photo_alternate</mat-icon>
+            <span class="upload-text">{{ 'menus.form.uploadImage' | translate }}</span>
+          </label>
+          <input
+            type="file"
+            [id]="'image-upload-' + sectionIndex() + '-' + itemIndex()"
+            accept="image/*"
+            (change)="handleImageUpload($event)"
+            class="file-input-hidden"
+          />
+        }
+      </div>
+    </div>
+
+    <!-- Row 4 -->
+    <div class="ingredients-row">
+      <sc-editable-chip-list
+        formControlName="ingredients"
+        [placeholder]="'menus.form.addIngredient' | translate"
+        [removeTooltip]="'common.delete' | translate"
+        [checkboxTooltip]="'menus.form.excludable' | translate"
+        [attr.data-testid]="'ingredients-' + sectionIndex() + '-' + itemIndex()"
+      />
+    </div>
+  }
+</div>

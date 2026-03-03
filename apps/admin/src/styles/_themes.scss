@@ -22,3 +22,8 @@ html {
     --active-chip-color: #41c300;
   }
 }
+
+// Compact density for form-heavy views (density scale: 0 to -5)
+.dense-form-fields {
+  @include mat.form-field-density(-3);
+}

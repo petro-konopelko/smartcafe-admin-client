@@ -38,11 +38,11 @@ main {
   @include chip-color(var(--active-chip-color));
 }
 
-/* Standalone mat-icon colors */
-.icon-primary {
-  --mat-icon-color: var(--mat-sys-primary);
-}
-
 .icon-error {
   --mat-icon-color: var(--mat-sys-error);
+  --mat-menu-item-icon-color: var(--mat-sys-error);
+}
+
+.ng-invalid .mat-form-field-outline {
+  border-color: var(--mat-sys-error) !important;
 }

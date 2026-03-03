@@ -2,15 +2,15 @@
 <mat-dialog-content>
   <p>{{ data.message }}</p>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
+<mat-dialog-actions>
   <button
-    mat-button
+    matButton
     (click)="onCancel()"
   >
     {{ data.cancelText || 'Cancel' }}
   </button>
   <button
-    mat-raised-button
+    matButton="elevated"
     [class.btn-danger]="data.isDangerous"
     (click)="onConfirm()"
   >

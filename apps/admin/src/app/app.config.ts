@@ -4,13 +4,14 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 import { routes } from './app.routes';
 import {
   errorInterceptor,
   loadingInterceptor,
   retryInterceptor,
-  API_URL,
+  API_URL
 } from '@smartcafe/admin/shared/data-access';
 import { environment } from '../environments/environment';
 
@@ -23,11 +24,15 @@ export const appConfig: ApplicationConfig = {
     provideTranslateService({
       loader: provideTranslateHttpLoader({
         prefix: '/i18n/',
-        suffix: '.json',
+        suffix: '.json'
       }),
       fallbackLang: 'en-US',
-      lang: 'en-US',
+      lang: 'en-US'
     }),
     { provide: API_URL, useValue: environment.apiUrl },
-  ],
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: { appearance: 'outline' }
+    }
+  ]
 };

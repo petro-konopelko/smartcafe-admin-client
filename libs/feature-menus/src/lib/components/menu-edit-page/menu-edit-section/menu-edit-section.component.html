@@ -1,0 +1,112 @@
+<!-- Section Container -->
+<div
+  class="section-card"
+  [formGroup]="sectionForm()"
+>
+  <!-- Section Header -->
+  <div class="section-header">
+    <mat-icon
+      cdkDragHandle
+      class="drag-handle"
+      >drag_indicator</mat-icon
+    >
+
+    <div class="section-header-fields">
+      <mat-form-field class="section-name-field">
+        <mat-label>{{ 'menus.form.sectionName' | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="name"
+          [attr.data-testid]="'section-name-' + sectionIndex()"
+        />
+        @if (
+          sectionForm().get('name')?.hasError('required') && sectionForm().get('name')?.touched
+        ) {
+          <mat-error>{{ 'common.required' | translate }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="section-time-field">
+        <mat-label>{{ 'menus.form.availableFrom' | translate }}</mat-label>
+        <input
+          matInput
+          type="time"
+          formControlName="availableFrom"
+          [attr.data-testid]="'available-from-' + sectionIndex()"
+        />
+      </mat-form-field>
+
+      <mat-form-field class="section-time-field">
+        <mat-label>{{ 'menus.form.availableTo' | translate }}</mat-label>
+        <input
+          matInput
+          type="time"
+          formControlName="availableTo"
+          [attr.data-testid]="'available-to-' + sectionIndex()"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="section-actions">
+      <button
+        matIconButton
+        type="button"
+        (click)="removeSection.emit()"
+        [matTooltip]="'common.delete' | translate"
+        [attr.data-testid]="'delete-section-' + sectionIndex()"
+      >
+        <mat-icon class="icon-error">delete</mat-icon>
+      </button>
+      <button
+        matIconButton
+        type="button"
+        (click)="toggleExpand.emit()"
+        [matTooltip]="isExpanded() ? 'Collapse' : 'Expand'"
+        [attr.data-testid]="'toggle-section-' + sectionIndex()"
+      >
+        <mat-icon
+          class="expand-icon"
+          [class.collapsed]="!isExpanded()"
+          >expand_more</mat-icon
+        >
+      </button>
+    </div>
+  </div>
+
+  <!-- Items Container (expandable) -->
+  @if (isExpanded()) {
+    <div
+      class="items-container"
+      formArrayName="items"
+      cdkDropList
+      (cdkDropListDropped)="dropItem.emit($event)"
+    >
+      @for (item of items.controls; track $index; let itemIndex = $index) {
+        <div cdkDrag>
+          <div
+            class="item-drag-placeholder"
+            *cdkDragPlaceholder
+          ></div>
+          <sc-menu-edit-item
+            [itemForm]="$any(item)"
+            [itemIndex]="itemIndex"
+            [sectionIndex]="sectionIndex()"
+            [currencies]="currencies()"
+            (removeItem)="removeItem.emit(itemIndex)"
+          />
+        </div>
+      }
+
+      <button
+        matButton
+        type="button"
+        (click)="addItem.emit()"
+        class="add-item-button"
+        [attr.data-testid]="'add-item-' + sectionIndex()"
+      >
+        <mat-icon>add</mat-icon>
+        {{ 'menus.form.addItem' | translate }}
+      </button>
+    </div>
+  }
+</div>

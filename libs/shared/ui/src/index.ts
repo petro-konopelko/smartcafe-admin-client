@@ -3,3 +3,5 @@ export * from './lib/error-message/error-message.component';
 export * from './lib/empty-state/empty-state.component';
 export * from './lib/confirm-dialog/confirm-dialog.component';
 export * from './lib/content-container/content-container.component';
+export * from './lib/editable-chip-list/editable-chip-list.component';
+export * from './lib/price-summary/price-summary.component';

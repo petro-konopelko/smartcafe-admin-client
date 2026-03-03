@@ -23,6 +23,8 @@
     "actions": "Дії",
     "created": "Створено",
     "status": "Статус",
+    "expand": "Розгорнути",
+    "collapse": "Згорнути",
     "required": "Це поле обов'язкове",
     "min": "Мінімальне значення {{min}}",
     "maxLength": "Максимальна довжина {{max}} символів"
@@ -70,13 +72,29 @@
       "discount": "Знижка",
       "addItem": "Додати позицію",
       "image": "Зображення",
+      "imagePreviewAlt": "Попередній перегляд завантаженого зображення",
+      "itemThumbnailAlt": "Мініатюра позиції меню",
+      "noImage": "Немає зображення",
       "uploadImage": "Завантажити зображення",
-      "addIngredient": "Додати інгредієнт"
+      "addIngredient": "Додати інгредієнт",
+      "ingredientName": "Назва інгредієнта",
+      "finalPrice": "Фін. ціна",
+      "currency": "Валюта",
+      "unitItemShort": "од.",
+      "unit100gShort": "100г",
+      "excludable": "Можна виключити"
     },
     "states": {
-      "draft": "Чернетка",
+      "new": "Нове",
       "published": "Опубліковано",
       "active": "Активне"
+    },
+    "cloneDialog": {
+      "title": "Клонувати меню",
+      "description": "Створення копії \"{{name}}\". Введіть назву для нового меню.",
+      "newName": "Нова назва меню",
+      "newNamePlaceholder": "Введіть назву меню",
+      "confirm": "Клонувати"
     }
   },
   "form": {

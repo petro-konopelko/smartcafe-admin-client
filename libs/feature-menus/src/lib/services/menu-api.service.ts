@@ -5,16 +5,15 @@ import { API_URL } from '@smartcafe/admin/shared/data-access';
 import {
   MenuDto,
   CreateMenuRequest,
-  UpdateMenuRequest,
   CreateMenuResponse,
   ListMenusResponse,
   CloneMenuRequest,
   PublishMenuResponse,
-  UploadImageResponse,
+  UploadImageResponse
 } from '../models';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class MenuApiService {
   private http = inject(HttpClient);
@@ -37,7 +36,7 @@ export class MenuApiService {
     return this.http.post<CreateMenuResponse>(`${this.baseUrl}/cafes/${cafeId}/menus`, request);
   }
 
-  updateMenu(cafeId: string, menuId: string, request: UpdateMenuRequest): Observable<void> {
+  updateMenu(cafeId: string, menuId: string, request: CreateMenuRequest): Observable<void> {
     return this.http.put<void>(`${this.baseUrl}/cafes/${cafeId}/menus/${menuId}`, request);
   }
 
@@ -48,18 +47,18 @@ export class MenuApiService {
   cloneMenu(
     cafeId: string,
     menuId: string,
-    request: CloneMenuRequest,
+    request: CloneMenuRequest
   ): Observable<CreateMenuResponse> {
     return this.http.post<CreateMenuResponse>(
       `${this.baseUrl}/cafes/${cafeId}/menus/${menuId}/clone`,
-      request,
+      request
     );
   }
 
   publishMenu(cafeId: string, menuId: string): Observable<PublishMenuResponse> {
     return this.http.post<PublishMenuResponse>(
       `${this.baseUrl}/cafes/${cafeId}/menus/${menuId}/publish`,
-      {},
+      {}
     );
   }
 

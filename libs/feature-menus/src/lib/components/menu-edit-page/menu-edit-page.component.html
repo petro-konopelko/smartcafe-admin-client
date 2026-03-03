@@ -1,0 +1,116 @@
+<div class="page-header">
+  <div class="page-header-left">
+    <button
+      matIconButton
+      [routerLink]="['/cafes', cafeId(), 'menus']"
+      [matTooltip]="'common.back' | translate"
+      data-testid="back-button"
+    >
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>{{ (isEditMode() ? 'menus.editTitle' : 'menus.createTitle') | translate }}</h1>
+  </div>
+  <div class="page-header-actions">
+    @if (isEditMode()) {
+      <button
+        matButton
+        (click)="onPreview()"
+        [disabled]="isSubmitting()"
+        data-testid="preview-button"
+      >
+        <mat-icon>visibility</mat-icon>
+        {{ 'menus.preview' | translate }}
+      </button>
+    }
+    <button
+      matButton="elevated"
+      (click)="onSubmit()"
+      [disabled]="isFormInvalid() || isSubmitting()"
+      data-testid="save-button"
+    >
+      <mat-icon>save</mat-icon>
+      {{ 'common.save' | translate }}
+    </button>
+  </div>
+</div>
+
+<sc-content-container [loading]="menuStore.loading()">
+  <form
+    [formGroup]="menuForm"
+    class="menu-form"
+  >
+    <!-- Menu Name & Description -->
+    <div class="menu-info-fields">
+      <mat-form-field class="menu-name-field">
+        <mat-label>{{ 'menus.form.name' | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="name"
+          [placeholder]="'menus.form.namePlaceholder' | translate"
+          data-testid="menu-name-input"
+        />
+        @if (menuForm.get('name')?.hasError('required') && menuForm.get('name')?.touched) {
+          <mat-error>{{ 'common.required' | translate }}</mat-error>
+        }
+        @if (menuForm.get('name')?.hasError('maxlength')) {
+          <mat-error>{{ 'common.maxLength' | translate: { max: 200 } }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="menu-description-field">
+        <mat-label>{{ 'menus.form.description' | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="description"
+          [placeholder]="'menus.form.descriptionPlaceholder' | translate"
+          data-testid="menu-description-input"
+        />
+        @if (menuForm.get('description')?.hasError('maxlength')) {
+          <mat-error>{{ 'common.maxLength' | translate: { max: 500 } }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Sections -->
+    <div
+      class="sections-container"
+      formArrayName="sections"
+      cdkDropList
+      (cdkDropListDropped)="dropSection($event)"
+    >
+      @for (section of sections.controls; track $index; let sectionIndex = $index) {
+        <div
+          [formGroupName]="sectionIndex"
+          cdkDrag
+        >
+          <div
+            class="section-drag-placeholder"
+            *cdkDragPlaceholder
+          ></div>
+          <sc-menu-edit-section
+            [sectionForm]="$any(section)"
+            [sectionIndex]="sectionIndex"
+            [isExpanded]="isSectionExpanded(sectionIndex)"
+            [currencies]="currencies"
+            (removeSection)="removeSection(sectionIndex)"
+            (toggleExpand)="toggleSection(sectionIndex)"
+            (addItem)="addItem(sectionIndex)"
+            (removeItem)="removeItem(sectionIndex, $event)"
+            (dropItem)="dropItem($event, sectionIndex)"
+          />
+        </div>
+      }
+    </div>
+
+    <button
+      matButton
+      type="button"
+      (click)="addSection()"
+      class="add-section-button"
+      data-testid="add-section-button"
+    >
+      <mat-icon>add</mat-icon>
+      {{ 'menus.form.addSection' | translate }}
+    </button>
+  </form>
+</sc-content-container>

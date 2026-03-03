@@ -1,0 +1,49 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+}
+
+.summary-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.summary-bottom {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  justify-content: center;
+}
+
+.start-price {
+  text-decoration: line-through;
+  opacity: 0.65;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.discount-badge {
+  background: var(--mat-sys-error);
+  color: var(--mat-sys-on-error);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.final-price {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.currency-unit {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+}

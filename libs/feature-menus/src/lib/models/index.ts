@@ -12,5 +12,4 @@ export * from './price-unit.enum';
 export * from './price.dto';
 export * from './publish-menu-response.dto';
 export * from './section.dto';
-export * from './update-menu-request.dto';
 export * from './upload-image-response.dto';
