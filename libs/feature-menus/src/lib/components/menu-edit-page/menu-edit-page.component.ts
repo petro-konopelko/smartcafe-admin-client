@@ -117,6 +117,7 @@ export class MenuEditPageComponent {
       menu.sections.forEach((section, index) => {
         const sectionGroup = this.createSectionGroup();
         sectionGroup.patchValue({
+          id: section.id ?? null,
           name: section.name,
           availableFrom: section.availableFrom,
           availableTo: section.availableTo
@@ -126,6 +127,7 @@ export class MenuEditPageComponent {
         section.items.forEach((item) => {
           const itemGroup = this.createItemGroup();
           itemGroup.patchValue({
+            id: item.id ?? null,
             name: item.name,
             description: item.description,
             priceAmount: item.price.amount,
@@ -166,6 +168,7 @@ export class MenuEditPageComponent {
 
   protected createSectionGroup(): FormGroup {
     return this.fb.group({
+      id: [null as string | null],
       name: ['', [Validators.required, Validators.maxLength(200)]],
       availableFrom: [''],
       availableTo: [''],
@@ -175,6 +178,7 @@ export class MenuEditPageComponent {
 
   protected createItemGroup(): FormGroup {
     return this.fb.group({
+      id: [null as string | null],
       name: ['', [Validators.required, Validators.maxLength(200)]],
       description: ['', Validators.maxLength(1000)],
       priceAmount: [0, [Validators.required, Validators.min(0)]],
@@ -261,6 +265,7 @@ export class MenuEditPageComponent {
       const formValue = this.menuForm.value;
 
       interface FormSection {
+        id?: string | null;
         name: string;
         availableFrom?: string;
         availableTo?: string;
@@ -268,6 +273,7 @@ export class MenuEditPageComponent {
       }
 
       interface FormItem {
+        id?: string | null;
         name: string;
         description?: string;
         priceAmount: number;
@@ -279,10 +285,12 @@ export class MenuEditPageComponent {
       const menuData = {
         name: formValue.name,
         sections: formValue.sections.map((section: FormSection) => ({
+          id: section.id ?? null,
           name: section.name,
           availableFrom: section.availableFrom || null,
           availableTo: section.availableTo || null,
           items: section.items.map((item: FormItem) => ({
+            id: item.id ?? null,
             name: item.name,
             description: item.description || null,
             price: {
