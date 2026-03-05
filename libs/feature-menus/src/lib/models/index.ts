@@ -3,6 +3,8 @@ export * from './create-menu-request.dto';
 export * from './create-menu-response.dto';
 export * from './ingredient.dto';
 export * from './list-menus-response.dto';
+export * from './menu-form-item.model';
+export * from './menu-form-section.model';
 export * from './menu-item-image.dto';
 export * from './menu-item.dto';
 export * from './menu-state.enum';

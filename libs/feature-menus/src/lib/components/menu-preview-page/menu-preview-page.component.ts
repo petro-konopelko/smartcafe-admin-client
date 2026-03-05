@@ -1,12 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ChangeDetectionStrategy, inject, effect, untracked } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDividerModule } from '@angular/material/divider';
 import { TranslateModule } from '@ngx-translate/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
@@ -16,20 +11,12 @@ import { PriceUnit } from '../../models';
 
 @Component({
   selector: 'sc-menu-preview-page',
-  imports: [
-    CommonModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatCardModule,
-    MatChipsModule,
-    MatDividerModule,
-    TranslateModule
-  ],
+  imports: [MatButtonModule, MatIconModule, TranslateModule],
   templateUrl: './menu-preview-page.component.html',
-  styleUrl: './menu-preview-page.component.scss'
+  styleUrl: './menu-preview-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MenuPreviewPageComponent implements OnInit {
+export class MenuPreviewPageComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   protected readonly menuStore = inject(MenuStore);
@@ -44,12 +31,16 @@ export class MenuPreviewPageComponent implements OnInit {
 
   protected readonly PriceUnit = PriceUnit;
 
-  ngOnInit(): void {
-    const cafeId = this.cafeId();
-    const menuId = this.menuId();
-    if (cafeId && menuId) {
-      this.menuStore.loadMenu(cafeId, menuId);
-    }
+  constructor() {
+    effect(() => {
+      const cafeId = this.cafeId();
+      const menuId = this.menuId();
+      if (cafeId && menuId) {
+        untracked(() => {
+          this.menuStore.selectMenu(cafeId, menuId);
+        });
+      }
+    });
   }
 
   protected getFormattedPrice(price: {

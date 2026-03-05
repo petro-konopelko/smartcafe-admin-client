@@ -3,15 +3,15 @@ import { LocaleService } from '@smartcafe/admin/shared/data-access';
 
 @Pipe({
   name: 'scLocalCurrency',
-  pure: false,
+  pure: false
 })
 export class ScLocalCurrencyPipe implements PipeTransform {
-  private localeService = inject(LocaleService);
+  private readonly localeService = inject(LocaleService);
 
   transform(
     value: number | null | undefined,
     currency?: string,
-    options?: Intl.NumberFormatOptions,
+    options?: Intl.NumberFormatOptions
   ): string {
     if (value === null || value === undefined) {
       return '';
@@ -22,12 +22,12 @@ export class ScLocalCurrencyPipe implements PipeTransform {
       style: 'currency',
       currency: currencyCode,
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
+      maximumFractionDigits: 2
     };
 
     return new Intl.NumberFormat(this.localeService.currentLocale(), {
       ...defaultOptions,
-      ...options,
+      ...options
     }).format(value);
   }
 }

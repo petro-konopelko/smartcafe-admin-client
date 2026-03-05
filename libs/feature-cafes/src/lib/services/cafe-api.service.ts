@@ -2,19 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_URL } from '@smartcafe/admin/shared/data-access';
-import {
-  CafeDto,
-  CreateCafeRequest,
-  CreateCafeResponse,
-  ListCafesResponse,
-} from '../models';
+import { CafeDto, CreateCafeRequest, CreateCafeResponse, ListCafesResponse } from '../models';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class CafeApiService {
-  private http = inject(HttpClient);
-  private apiUrl = inject(API_URL);
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = inject(API_URL);
   private readonly baseUrl = `${this.apiUrl}/cafes`;
 
   listCafes(): Observable<ListCafesResponse> {

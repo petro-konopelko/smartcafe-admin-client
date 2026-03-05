@@ -29,7 +29,7 @@ describe('shared models', () => {
       }
     };
 
-    expect(validationProblem.errors.name[0]).toBe('Name is required');
+    expect(validationProblem.errors['name'][0]).toBe('Name is required');
     expect(Object.keys(validationProblem.errors).length).toBe(2);
   });
 });

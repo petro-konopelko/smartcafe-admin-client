@@ -20,7 +20,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { map, startWith } from 'rxjs/operators';
 import { MenuStore } from '../../store/menu.store';
 import { ContentContainerComponent, ChipItem } from '@smartcafe/admin/shared/ui';
-import { PriceUnit } from '../../models';
+import { PriceUnit, MenuFormSection, MenuFormItem } from '../../models';
 import { MenuEditSectionComponent } from './menu-edit-section/menu-edit-section.component';
 
 @Component({
@@ -102,7 +102,7 @@ export class MenuEditPageComponent {
   }
 
   private async loadMenu(cafeId: string, menuId: string): Promise<void> {
-    await this.menuStore.loadMenu(cafeId, menuId);
+    await this.menuStore.selectMenu(cafeId, menuId);
     const menu = this.menuStore.selectedMenu();
     if (menu) {
       this.menuForm.patchValue({
@@ -264,32 +264,14 @@ export class MenuEditPageComponent {
     try {
       const formValue = this.menuForm.value;
 
-      interface FormSection {
-        id?: string | null;
-        name: string;
-        availableFrom?: string;
-        availableTo?: string;
-        items: FormItem[];
-      }
-
-      interface FormItem {
-        id?: string | null;
-        name: string;
-        description?: string;
-        priceAmount: number;
-        priceUnit: string;
-        discountPercent?: number;
-        ingredients: ChipItem[];
-      }
-
       const menuData = {
         name: formValue.name,
-        sections: formValue.sections.map((section: FormSection) => ({
+        sections: formValue.sections.map((section: MenuFormSection) => ({
           id: section.id ?? null,
           name: section.name,
           availableFrom: section.availableFrom || null,
           availableTo: section.availableTo || null,
-          items: section.items.map((item: FormItem) => ({
+          items: section.items.map((item: MenuFormItem) => ({
             id: item.id ?? null,
             name: item.name,
             description: item.description || null,
@@ -330,7 +312,7 @@ export class MenuEditPageComponent {
     }
   }
 
-  protected async onPreview(): Promise<void> {
+  protected onPreview(): void {
     const cafeId = this.cafeId();
     const menuId = this.menuId();
     if (cafeId && menuId) {

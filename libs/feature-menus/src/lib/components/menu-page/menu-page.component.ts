@@ -7,7 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MenuStore } from '../../store/menu.store';
 import { MenuState, MenuSummaryDto } from '../../models';
 import {
@@ -45,6 +45,7 @@ export class MenuPageComponent {
   private readonly dialog = inject(MatDialog);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly translate = inject(TranslateService);
 
   readonly displayedColumns = ['name', 'status', 'created', 'actions'];
   readonly cafeId = toSignal(this.route.paramMap.pipe(map((params) => params.get('cafeId') ?? '')));
@@ -89,8 +90,8 @@ export class MenuPageComponent {
 
   protected async onPublish(menu: MenuSummaryDto): Promise<void> {
     const confirmed = await this.confirm(
-      'Publish Menu',
-      `Publish "${menu.name}"? It will be available for activation.`
+      this.translate.instant('menus.confirm.publishTitle'),
+      this.translate.instant('menus.confirm.publishMessage', { name: menu.name })
     );
 
     if (confirmed) {
@@ -103,8 +104,8 @@ export class MenuPageComponent {
 
   protected async onActivate(menu: MenuSummaryDto): Promise<void> {
     const confirmed = await this.confirm(
-      'Activate Menu',
-      `Activate "${menu.name}"? The current active menu will be deactivated.`,
+      this.translate.instant('menus.confirm.activateTitle'),
+      this.translate.instant('menus.confirm.activateMessage', { name: menu.name }),
       false
     );
 
@@ -133,8 +134,8 @@ export class MenuPageComponent {
 
   protected async onDelete(menu: MenuSummaryDto): Promise<void> {
     const confirmed = await this.confirm(
-      'Delete Menu',
-      `Delete "${menu.name}"? This action cannot be undone.`,
+      this.translate.instant('menus.confirm.deleteTitle'),
+      this.translate.instant('menus.confirm.deleteMessage', { name: menu.name }),
       true
     );
 

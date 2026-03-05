@@ -16,32 +16,31 @@ import {
   providedIn: 'root'
 })
 export class MenuApiService {
-  private http = inject(HttpClient);
-  private apiUrl = inject(API_URL);
-  private readonly baseUrl = this.apiUrl;
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = inject(API_URL);
 
   listMenus(cafeId: string): Observable<ListMenusResponse> {
-    return this.http.get<ListMenusResponse>(`${this.baseUrl}/cafes/${cafeId}/menus`);
+    return this.http.get<ListMenusResponse>(`${this.apiUrl}/cafes/${cafeId}/menus`);
   }
 
   getMenu(cafeId: string, menuId: string): Observable<MenuDto> {
-    return this.http.get<MenuDto>(`${this.baseUrl}/cafes/${cafeId}/menus/${menuId}`);
+    return this.http.get<MenuDto>(`${this.apiUrl}/cafes/${cafeId}/menus/${menuId}`);
   }
 
   getActiveMenu(cafeId: string): Observable<MenuDto> {
-    return this.http.get<MenuDto>(`${this.baseUrl}/cafes/${cafeId}/menus/active`);
+    return this.http.get<MenuDto>(`${this.apiUrl}/cafes/${cafeId}/menus/active`);
   }
 
   createMenu(cafeId: string, request: CreateMenuRequest): Observable<CreateMenuResponse> {
-    return this.http.post<CreateMenuResponse>(`${this.baseUrl}/cafes/${cafeId}/menus`, request);
+    return this.http.post<CreateMenuResponse>(`${this.apiUrl}/cafes/${cafeId}/menus`, request);
   }
 
   updateMenu(cafeId: string, menuId: string, request: CreateMenuRequest): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/cafes/${cafeId}/menus/${menuId}`, request);
+    return this.http.put<void>(`${this.apiUrl}/cafes/${cafeId}/menus/${menuId}`, request);
   }
 
   deleteMenu(cafeId: string, menuId: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/cafes/${cafeId}/menus/${menuId}`);
+    return this.http.delete<void>(`${this.apiUrl}/cafes/${cafeId}/menus/${menuId}`);
   }
 
   cloneMenu(
@@ -50,25 +49,25 @@ export class MenuApiService {
     request: CloneMenuRequest
   ): Observable<CreateMenuResponse> {
     return this.http.post<CreateMenuResponse>(
-      `${this.baseUrl}/cafes/${cafeId}/menus/${menuId}/clone`,
+      `${this.apiUrl}/cafes/${cafeId}/menus/${menuId}/clone`,
       request
     );
   }
 
   publishMenu(cafeId: string, menuId: string): Observable<PublishMenuResponse> {
     return this.http.post<PublishMenuResponse>(
-      `${this.baseUrl}/cafes/${cafeId}/menus/${menuId}/publish`,
+      `${this.apiUrl}/cafes/${cafeId}/menus/${menuId}/publish`,
       {}
     );
   }
 
   activateMenu(cafeId: string, menuId: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/cafes/${cafeId}/menus/${menuId}/activate`, {});
+    return this.http.post<void>(`${this.apiUrl}/cafes/${cafeId}/menus/${menuId}/activate`, {});
   }
 
   uploadImage(file: File): Observable<UploadImageResponse> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post<UploadImageResponse>(`${this.baseUrl}/images/upload`, formData);
+    return this.http.post<UploadImageResponse>(`${this.apiUrl}/images/upload`, formData);
   }
 }
