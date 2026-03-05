@@ -53,7 +53,7 @@
                   <p class="item-description">{{ item.description }}</p>
                 }
                 <div class="item-price">
-                  @if (item.price.discount > 0) {
+                  @if (item.price.discountPercent > 0) {
                     <span class="discounted-price">{{ getFormattedPrice(item.price) }}</span>
                   } @else {
                     <span class="price">{{ getFormattedPrice(item.price) }}</span>

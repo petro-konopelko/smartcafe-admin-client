@@ -4,5 +4,5 @@ export interface PriceDto {
   amount: number;
   currency: string;
   unit: PriceUnit;
-  discount: number;
+  discountPercent: number;
 }

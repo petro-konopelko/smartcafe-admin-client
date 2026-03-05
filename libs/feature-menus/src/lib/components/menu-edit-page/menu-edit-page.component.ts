@@ -23,7 +23,6 @@ import { LocaleService, LOCALE_CURRENCY_MAP } from '@smartcafe/admin/shared/data
 import { ContentContainerComponent, ChipItem } from '@smartcafe/admin/shared/ui';
 import { PriceUnit } from '../../models';
 import { MenuEditSectionComponent } from './menu-edit-section/menu-edit-section.component';
-import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'sc-menu-edit-page',
@@ -38,8 +37,7 @@ import { JsonPipe } from '@angular/common';
     DragDropModule,
     TranslateModule,
     ContentContainerComponent,
-    MenuEditSectionComponent,
-    JsonPipe
+    MenuEditSectionComponent
   ],
   templateUrl: './menu-edit-page.component.html',
   styleUrl: './menu-edit-page.component.scss',
@@ -139,7 +137,7 @@ export class MenuEditPageComponent {
             priceAmount: item.price.amount,
             priceCurrency: item.price.currency,
             priceUnit: item.price.unit,
-            priceDiscount: item.price.discount
+            discountPercent: item.price.discountPercent
           });
 
           itemGroup.get('ingredients')?.setValue(
@@ -189,7 +187,7 @@ export class MenuEditPageComponent {
       priceAmount: [0, [Validators.required, Validators.min(0)]],
       priceCurrency: [this.defaultCurrency(), Validators.required],
       priceUnit: [PriceUnit.PerItem, Validators.required],
-      priceDiscount: [0, [Validators.min(0), Validators.max(100)]],
+      discountPercent: [0, [Validators.min(0), Validators.max(100)]],
       ingredients: [[] as ChipItem[]]
     });
   }
@@ -283,7 +281,7 @@ export class MenuEditPageComponent {
         priceAmount: number;
         priceCurrency: string;
         priceUnit: string;
-        priceDiscount?: number;
+        discountPercent?: number;
         ingredients: ChipItem[];
       }
 
@@ -300,7 +298,7 @@ export class MenuEditPageComponent {
               amount: item.priceAmount,
               currency: item.priceCurrency,
               unit: item.priceUnit,
-              discount: item.priceDiscount || 0
+              discountPercent: item.discountPercent || 0
             },
             image: null,
             ingredients: (item.ingredients as ChipItem[]).map((chip: ChipItem) => ({
