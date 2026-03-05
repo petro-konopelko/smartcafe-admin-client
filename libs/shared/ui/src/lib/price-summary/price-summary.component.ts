@@ -12,7 +12,6 @@ export class PriceSummaryComponent {
   readonly originalPrice = input<number>(0);
   readonly finalPrice = input<number>(0);
   readonly discountPercent = input<number>(0);
-  readonly currencySymbol = input<string>('');
   readonly unitLabel = input<string>('');
 
   readonly normalizedDiscount = computed(() => {

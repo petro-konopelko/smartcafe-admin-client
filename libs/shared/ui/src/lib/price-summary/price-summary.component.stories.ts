@@ -18,10 +18,6 @@ const meta: Meta<PriceSummaryComponent> = {
       control: 'number',
       description: 'Discount percentage'
     },
-    currencySymbol: {
-      control: 'text',
-      description: 'Currency symbol prefix'
-    },
     unitLabel: {
       control: 'text',
       description: 'Unit label suffix'
@@ -37,7 +33,6 @@ export const WithDiscount: Story = {
     originalPrice: 12.5,
     finalPrice: 10,
     discountPercent: 20,
-    currencySymbol: '$',
     unitLabel: 'item'
   }
 };
@@ -47,7 +42,6 @@ export const WithoutDiscount: Story = {
     originalPrice: 10,
     finalPrice: 10,
     discountPercent: 0,
-    currencySymbol: '$',
     unitLabel: 'item'
   }
 };

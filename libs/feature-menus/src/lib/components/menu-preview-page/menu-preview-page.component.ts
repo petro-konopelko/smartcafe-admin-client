@@ -54,13 +54,10 @@ export class MenuPreviewPageComponent implements OnInit {
 
   protected getFormattedPrice(price: {
     amount: number;
-    currency: string;
     unit: PriceUnit;
     discountPercent: number;
   }): string {
     const formatter = new Intl.NumberFormat(this.localeService.currentLocale(), {
-      style: 'currency',
-      currency: price.currency,
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     });
@@ -71,13 +68,10 @@ export class MenuPreviewPageComponent implements OnInit {
 
   protected getOriginalPrice(price: {
     amount: number;
-    currency: string;
     unit: PriceUnit;
     discountPercent: number;
   }): string {
     const formatter = new Intl.NumberFormat(this.localeService.currentLocale(), {
-      style: 'currency',
-      currency: price.currency,
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     });

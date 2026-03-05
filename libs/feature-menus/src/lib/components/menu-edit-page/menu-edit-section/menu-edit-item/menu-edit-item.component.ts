@@ -50,7 +50,6 @@ export class MenuEditItemComponent {
   sectionIndex = input.required<number>();
 
   removeItem = output<void>();
-  currencies = input<string[]>(['USD', 'UAH', 'EUR', 'GBP']);
 
   readonly PriceUnit = PriceUnit;
   private readonly destroyRef = inject(DestroyRef);
@@ -62,7 +61,6 @@ export class MenuEditItemComponent {
   private readonly priceInfo = signal({
     price: 0,
     discountPercent: 0,
-    currency: 'USD',
     unit: PriceUnit.PerItem,
     description: ''
   });
@@ -81,7 +79,7 @@ export class MenuEditItemComponent {
   calculatedPrice = computed(() => {
     const vals = this.priceInfo();
     const final = vals.price - (vals.price * vals.discountPercent) / 100;
-    return { amount: final, currency: vals.currency };
+    return { amount: final };
   });
 
   constructor() {
@@ -95,7 +93,6 @@ export class MenuEditItemComponent {
         this.priceInfo.set({
           price: form.get('priceAmount')?.value || 0,
           discountPercent: form.get('discountPercent')?.value || 0,
-          currency: form.get('priceCurrency')?.value || 'USD',
           unit: form.get('priceUnit')?.value ?? PriceUnit.PerItem,
           description: form.get('description')?.value || ''
         });
@@ -109,24 +106,6 @@ export class MenuEditItemComponent {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(() => extractValues());
     });
-  }
-
-  currencySymbol(): string {
-    const currency = this.priceInfo().currency;
-    if (currency === 'USD') {
-      return '$';
-    }
-    if (currency === 'EUR') {
-      return '€';
-    }
-    if (currency === 'GBP') {
-      return '£';
-    }
-    if (currency === 'UAH') {
-      return '₴';
-    }
-
-    return `${currency} `;
   }
 
   toggleCollapse(): void {

@@ -48,7 +48,6 @@
       [originalPrice]="originalPrice()"
       [finalPrice]="calculatedPrice().amount"
       [discountPercent]="discountPercent()"
-      [currencySymbol]="currencySymbol()"
       [unitLabel]="
         itemForm().get('priceUnit')?.value === PriceUnit.Per100Grams
           ? ('menus.form.unit100gShort' | translate)
@@ -121,18 +120,6 @@
           <mat-option [value]="PriceUnit.Per100Grams">{{
             'menus.form.per100g' | translate
           }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field class="item-currency-field">
-        <mat-label>{{ 'menus.form.currency' | translate }}</mat-label>
-        <mat-select
-          formControlName="priceCurrency"
-          [attr.data-testid]="'item-currency-' + sectionIndex() + '-' + itemIndex()"
-        >
-          @for (currency of currencies(); track currency) {
-            <mat-option [value]="currency">{{ currency }}</mat-option>
-          }
         </mat-select>
       </mat-form-field>
 
