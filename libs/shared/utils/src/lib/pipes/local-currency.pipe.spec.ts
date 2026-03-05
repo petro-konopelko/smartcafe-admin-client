@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
+import { TestBed } from '@angular/core/testing';
 import { ScLocalCurrencyPipe } from './local-currency.pipe';
 import { LocaleService, DEFAULT_LOCALE } from '@smartcafe/admin/shared/data-access';
 import { signal } from '@angular/core';
@@ -10,13 +11,13 @@ describe('ScLocalCurrencyPipe', () => {
   beforeEach(() => {
     mockLocaleService = {
       currentLocale: signal(DEFAULT_LOCALE),
-      getCurrency: () => 'USD',
+      getCurrency: () => 'USD'
     };
-    pipe = new ScLocalCurrencyPipe();
-    Object.defineProperty(pipe, 'localeService', {
-      value: mockLocaleService,
-      writable: true,
+    TestBed.configureTestingModule({
+      providers: [{ provide: LocaleService, useValue: mockLocaleService }]
     });
+
+    pipe = TestBed.runInInjectionContext(() => new ScLocalCurrencyPipe());
   });
 
   it('should create an instance', () => {

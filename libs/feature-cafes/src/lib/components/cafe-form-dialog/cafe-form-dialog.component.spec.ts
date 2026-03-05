@@ -1,9 +1,8 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
+import { signal } from '@angular/core';
 import { CafeFormDialogComponent } from './cafe-form-dialog.component';
 import { CafeStore } from '../../store/cafe.store';
 
@@ -11,18 +10,25 @@ describe('CafeFormDialogComponent', () => {
   let component: CafeFormDialogComponent;
   let fixture: ComponentFixture<CafeFormDialogComponent>;
   let mockDialogRef: Partial<MatDialogRef<CafeFormDialogComponent>>;
+  let mockCafeStore: {
+    loading: ReturnType<typeof signal<boolean>>;
+    createCafe: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(async () => {
     mockDialogRef = {
       close: vi.fn()
     };
 
+    mockCafeStore = {
+      loading: signal(false),
+      createCafe: vi.fn()
+    };
+
     await TestBed.configureTestingModule({
       imports: [CafeFormDialogComponent, MatDialogModule, TranslateModule.forRoot()],
       providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        CafeStore,
+        { provide: CafeStore, useValue: mockCafeStore },
         { provide: MatDialogRef, useValue: mockDialogRef }
       ]
     }).compileComponents();
@@ -61,5 +67,20 @@ describe('CafeFormDialogComponent', () => {
   it('should not submit when form is invalid', async () => {
     await component['onSubmit']();
     expect(mockDialogRef.close).not.toHaveBeenCalled();
+  });
+
+  it('should close dialog with result when form is valid', async () => {
+    const createdCafeId = 'new-cafe-id';
+    mockCafeStore.createCafe.mockResolvedValue(createdCafeId);
+
+    component['cafeForm'].patchValue({
+      name: 'New Cafe',
+      contactInfo: 'new@cafe.com'
+    });
+
+    await component['onSubmit']();
+
+    expect(mockCafeStore.createCafe).toHaveBeenCalledTimes(1);
+    expect(mockDialogRef.close).toHaveBeenCalledWith(createdCafeId);
   });
 });

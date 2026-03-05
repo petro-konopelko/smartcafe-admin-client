@@ -8,7 +8,6 @@ import { ConfirmDialogComponent, ConfirmDialogData } from './confirm-dialog.comp
 
 @Component({
   selector: 'sc-dialog-wrapper',
-  standalone: true,
   imports: [MatButtonModule],
   template: `
     <div style="padding: 20px;">

@@ -2,6 +2,8 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { firstValueFrom } from 'rxjs';
+import { API_URL } from '@smartcafe/admin/shared/data-access';
 
 import { CafeApiService } from './cafe-api.service';
 import { CreateCafeRequest, CafeDto, ListCafesResponse } from '../models';
@@ -16,7 +18,7 @@ describe('CafeApiService', () => {
     name: 'Test Cafe',
     contactInfo: 'test@cafe.com',
     createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: null,
+    updatedAt: null
   };
 
   beforeEach(() => {
@@ -25,7 +27,8 @@ describe('CafeApiService', () => {
         CafeApiService,
         provideHttpClient(),
         provideHttpClientTesting(),
-      ],
+        { provide: API_URL, useValue: '/api' }
+      ]
     });
 
     service = TestBed.inject(CafeApiService);
@@ -39,16 +42,16 @@ describe('CafeApiService', () => {
   describe('listCafes', () => {
     it('should fetch all cafes', async () => {
       const mockResponse: ListCafesResponse = {
-        cafes: [mockCafe],
+        cafes: [mockCafe]
       };
 
-      const result = await new Promise<ListCafesResponse>((resolve) => {
-        service.listCafes().subscribe(resolve);
-      });
+      const resultPromise = firstValueFrom(service.listCafes());
 
       const req = httpMock.expectOne(baseUrl);
       expect(req.request.method).toBe('GET');
       req.flush(mockResponse);
+
+      const result = await resultPromise;
 
       expect(result).toEqual(mockResponse);
       expect(result.cafes.length).toBe(1);
@@ -61,7 +64,7 @@ describe('CafeApiService', () => {
           error: (error) => {
             expect(error.status).toBe(500);
             resolve();
-          },
+          }
         });
       });
 
@@ -76,13 +79,13 @@ describe('CafeApiService', () => {
     it('should fetch cafe by id', async () => {
       const cafeId = mockCafe.id;
 
-      const result = await new Promise<CafeDto>((resolve) => {
-        service.getCafe(cafeId).subscribe(resolve);
-      });
+      const resultPromise = firstValueFrom(service.getCafe(cafeId));
 
       const req = httpMock.expectOne(`${baseUrl}/${cafeId}`);
       expect(req.request.method).toBe('GET');
       req.flush(mockCafe);
+
+      const result = await resultPromise;
 
       expect(result).toEqual(mockCafe);
       expect(result.id).toBe(cafeId);
@@ -97,7 +100,7 @@ describe('CafeApiService', () => {
           error: (error) => {
             expect(error.status).toBe(404);
             resolve();
-          },
+          }
         });
       });
 
@@ -112,18 +115,18 @@ describe('CafeApiService', () => {
     it('should create a cafe', async () => {
       const request: CreateCafeRequest = {
         name: 'New Cafe',
-        contactInfo: 'new@cafe.com',
+        contactInfo: 'new@cafe.com'
       };
       const mockResponse = { cafeId: '123e4567-e89b-12d3-a456-426614174001' };
 
-      const result = await new Promise<{ cafeId: string }>((resolve) => {
-        service.createCafe(request).subscribe(resolve);
-      });
+      const resultPromise = firstValueFrom(service.createCafe(request));
 
       const req = httpMock.expectOne(baseUrl);
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(request);
       req.flush(mockResponse);
+
+      const result = await resultPromise;
 
       expect(result).toEqual(mockResponse);
     });
@@ -131,7 +134,7 @@ describe('CafeApiService', () => {
     it('should handle validation error', async () => {
       const request: CreateCafeRequest = {
         name: '',
-        contactInfo: 'test@cafe.com',
+        contactInfo: 'test@cafe.com'
       };
 
       const promise = new Promise<void>((resolve, reject) => {
@@ -140,7 +143,7 @@ describe('CafeApiService', () => {
           error: (error) => {
             expect(error.status).toBe(400);
             resolve();
-          },
+          }
         });
       });
 
@@ -155,15 +158,15 @@ describe('CafeApiService', () => {
     it('should delete a cafe', async () => {
       const cafeId = mockCafe.id;
 
-      const result = await new Promise<void>((resolve) => {
-        service.deleteCafe(cafeId).subscribe(() => resolve());
-      });
+      const resultPromise = firstValueFrom(service.deleteCafe(cafeId));
 
       const req = httpMock.expectOne(`${baseUrl}/${cafeId}`);
       expect(req.request.method).toBe('DELETE');
       req.flush(null);
 
-      expect(result).toBeUndefined();
+      const result = await resultPromise;
+
+      expect(result).toBeNull();
     });
 
     it('should handle error when deletion fails', async () => {
@@ -175,7 +178,7 @@ describe('CafeApiService', () => {
           error: (error) => {
             expect(error.status).toBe(500);
             resolve();
-          },
+          }
         });
       });
 

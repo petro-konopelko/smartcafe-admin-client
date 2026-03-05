@@ -88,7 +88,7 @@
             *cdkDragPlaceholder
           ></div>
           <sc-menu-edit-section
-            [sectionForm]="$any(section)"
+            [sectionForm]="section"
             [sectionIndex]="sectionIndex"
             [isExpanded]="isSectionExpanded(sectionIndex)"
             (removeSection)="removeSection(sectionIndex)"
