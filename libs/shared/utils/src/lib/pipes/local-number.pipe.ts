@@ -3,10 +3,10 @@ import { LocaleService } from '@smartcafe/admin/shared/data-access';
 
 @Pipe({
   name: 'scLocalNumber',
-  pure: false,
+  pure: false
 })
 export class ScLocalNumberPipe implements PipeTransform {
-  private localeService = inject(LocaleService);
+  private readonly localeService = inject(LocaleService);
 
   transform(value: number | null | undefined, options?: Intl.NumberFormatOptions): string {
     if (value === null || value === undefined) {

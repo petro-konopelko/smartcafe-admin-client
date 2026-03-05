@@ -94,6 +94,17 @@
       "newName": "New Menu Name",
       "newNamePlaceholder": "Enter menu name",
       "confirm": "Clone"
+    },
+    "confirm": {
+      "publishTitle": "Publish Menu",
+      "publishMessage": "Publish \"{{name}}\"? It will be available for activation.",
+      "activateTitle": "Activate Menu",
+      "activateMessage": "Activate \"{{name}}\"? The current active menu will be deactivated.",
+      "deleteTitle": "Delete Menu",
+      "deleteMessage": "Delete \"{{name}}\"? This action cannot be undone."
+    },
+    "preview": {
+      "backToEdit": "Back to Edit"
     }
   },
   "form": {

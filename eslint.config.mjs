@@ -59,18 +59,6 @@ export default defineConfig(
             {
               sourceTag: 'scope:menus',
               onlyDependOnLibsWithTags: ['scope:menus', 'scope:shared']
-            },
-            {
-              sourceTag: 'scope:shop',
-              onlyDependOnLibsWithTags: ['scope:shop', 'scope:shared']
-            },
-            {
-              sourceTag: 'scope:api',
-              onlyDependOnLibsWithTags: ['scope:api', 'scope:shared']
-            },
-            {
-              sourceTag: 'type:data',
-              onlyDependOnLibsWithTags: ['type:data']
             }
           ]
         }

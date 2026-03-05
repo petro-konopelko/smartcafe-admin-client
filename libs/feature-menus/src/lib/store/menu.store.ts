@@ -65,11 +65,6 @@ export const MenuStore = signalStore(
       }
     },
 
-    async loadMenu(cafeId: string, menuId: string): Promise<void> {
-      // Alias for selectMenu for backwards compatibility
-      await this.selectMenu(cafeId, menuId);
-    },
-
     async loadActiveMenu(cafeId: string): Promise<void> {
       patchState(store, { loading: true, error: null });
       try {

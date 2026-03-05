@@ -3,10 +3,10 @@ import { LocaleService } from '@smartcafe/admin/shared/data-access';
 
 @Pipe({
   name: 'scLocalDate',
-  pure: false,
+  pure: false
 })
 export class ScLocalDatePipe implements PipeTransform {
-  private localeService = inject(LocaleService);
+  private readonly localeService = inject(LocaleService);
 
   transform(value: string | Date | null | undefined, options?: Intl.DateTimeFormatOptions): string {
     if (!value) {
@@ -17,12 +17,12 @@ export class ScLocalDatePipe implements PipeTransform {
     const defaultOptions: Intl.DateTimeFormatOptions = {
       year: 'numeric',
       month: 'short',
-      day: 'numeric',
+      day: 'numeric'
     };
 
     return new Intl.DateTimeFormat(
       this.localeService.currentLocale(),
-      options || defaultOptions,
+      options || defaultOptions
     ).format(date);
   }
 }
