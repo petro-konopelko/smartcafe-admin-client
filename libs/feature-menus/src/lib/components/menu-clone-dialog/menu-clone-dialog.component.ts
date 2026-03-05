@@ -35,7 +35,7 @@ export class MenuCloneDialogComponent {
 
   protected readonly isSubmitting = signal(false);
 
-  protected readonly form = this.fb.group({
+  protected readonly form = this.fb.nonNullable.group({
     newName: [`${this.data.menuName} (Copy)`, [Validators.required, Validators.maxLength(200)]]
   });
 
@@ -46,7 +46,7 @@ export class MenuCloneDialogComponent {
     }
 
     const result: MenuCloneDialogResult = {
-      newName: this.form.value.newName!
+      newName: this.form.getRawValue().newName
     };
 
     this.dialogRef.close(result);

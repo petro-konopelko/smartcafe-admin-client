@@ -158,12 +158,12 @@ export class MenuEditPageComponent {
     }
   }
 
-  get sections(): FormArray {
-    return this.menuForm.get('sections') as FormArray;
+  get sections(): FormArray<FormGroup> {
+    return this.menuForm.get('sections') as FormArray<FormGroup>;
   }
 
-  protected getSectionItems(sectionIndex: number): FormArray {
-    return this.sections.at(sectionIndex).get('items') as FormArray;
+  protected getSectionItems(sectionIndex: number): FormArray<FormGroup> {
+    return this.sections.at(sectionIndex).get('items') as FormArray<FormGroup>;
   }
 
   protected createSectionGroup(): FormGroup {

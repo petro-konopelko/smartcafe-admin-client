@@ -1,6 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { TranslateModule } from '@ngx-translate/core';
 import {
   LOCALES_KEY_VALUES,
