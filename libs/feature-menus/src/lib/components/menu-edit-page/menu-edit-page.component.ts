@@ -19,7 +19,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map, startWith } from 'rxjs/operators';
 import { MenuStore } from '../../store/menu.store';
-import { LocaleService, LOCALE_CURRENCY_MAP } from '@smartcafe/admin/shared/data-access';
 import { ContentContainerComponent, ChipItem } from '@smartcafe/admin/shared/ui';
 import { PriceUnit } from '../../models';
 import { MenuEditSectionComponent } from './menu-edit-section/menu-edit-section.component';
@@ -49,7 +48,6 @@ export class MenuEditPageComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   protected readonly menuStore = inject(MenuStore);
-  protected readonly localeService = inject(LocaleService);
 
   protected readonly cafeId = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('cafeId') ?? ''))
@@ -60,12 +58,8 @@ export class MenuEditPageComponent {
 
   protected readonly isEditMode = computed(() => !!this.menuId());
   protected readonly isSubmitting = signal(false);
-  protected readonly defaultCurrency = computed(
-    () => LOCALE_CURRENCY_MAP[this.localeService.currentLocale()]
-  );
 
   protected readonly PriceUnit = PriceUnit;
-  protected readonly currencies = ['USD', 'UAH', 'EUR', 'GBP'];
 
   protected menuForm: FormGroup;
   protected readonly isFormInvalid;
@@ -135,7 +129,6 @@ export class MenuEditPageComponent {
             name: item.name,
             description: item.description,
             priceAmount: item.price.amount,
-            priceCurrency: item.price.currency,
             priceUnit: item.price.unit,
             discountPercent: item.price.discountPercent
           });
@@ -185,7 +178,6 @@ export class MenuEditPageComponent {
       name: ['', [Validators.required, Validators.maxLength(200)]],
       description: ['', Validators.maxLength(1000)],
       priceAmount: [0, [Validators.required, Validators.min(0)]],
-      priceCurrency: [this.defaultCurrency(), Validators.required],
       priceUnit: [PriceUnit.PerItem, Validators.required],
       discountPercent: [0, [Validators.min(0), Validators.max(100)]],
       ingredients: [[] as ChipItem[]]
@@ -279,7 +271,6 @@ export class MenuEditPageComponent {
         name: string;
         description?: string;
         priceAmount: number;
-        priceCurrency: string;
         priceUnit: string;
         discountPercent?: number;
         ingredients: ChipItem[];
@@ -296,7 +287,6 @@ export class MenuEditPageComponent {
             description: item.description || null,
             price: {
               amount: item.priceAmount,
-              currency: item.priceCurrency,
               unit: item.priceUnit,
               discountPercent: item.discountPercent || 0
             },

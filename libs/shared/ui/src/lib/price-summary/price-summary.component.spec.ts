@@ -17,20 +17,18 @@ describe('PriceSummaryComponent', () => {
     fixture.componentRef.setInput('originalPrice', 10);
     fixture.componentRef.setInput('finalPrice', 10);
     fixture.componentRef.setInput('discountPercent', 0);
-    fixture.componentRef.setInput('currencySymbol', '$');
     fixture.componentRef.setInput('unitLabel', 'item');
     fixture.detectChanges();
 
     const host = fixture.nativeElement as HTMLElement;
     expect(host.querySelector('.summary-top')).toBeNull();
-    expect(host.querySelector('.final-price')?.textContent).toContain('$10.00');
+    expect(host.querySelector('.final-price')?.textContent).toContain('10.00');
   });
 
   it('should show discount info when discount is greater than zero', () => {
     fixture.componentRef.setInput('originalPrice', 10);
     fixture.componentRef.setInput('finalPrice', 8);
     fixture.componentRef.setInput('discountPercent', 20);
-    fixture.componentRef.setInput('currencySymbol', '$');
     fixture.componentRef.setInput('unitLabel', 'item');
     fixture.detectChanges();
 

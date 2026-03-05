@@ -1,12 +1,12 @@
 @if (hasDiscount()) {
   <div class="summary-top">
-    <span class="start-price">{{ currencySymbol() }}{{ originalPrice() | number: '1.2-2' }}</span>
+    <span class="start-price">{{ originalPrice() | number: '1.2-2' }}</span>
     <span class="discount-badge">-{{ normalizedDiscount() }}%</span>
   </div>
 }
 
 <div class="summary-bottom">
-  <span class="final-price">{{ currencySymbol() }}{{ finalPrice() | number: '1.2-2' }}</span>
+  <span class="final-price">{{ finalPrice() | number: '1.2-2' }}</span>
   @if (unitLabel()) {
     <span class="currency-unit">/ {{ unitLabel() }}</span>
   }

@@ -79,7 +79,6 @@
       "addIngredient": "Add Ingredient",
       "ingredientName": "Ingredient name",
       "finalPrice": "Final Price",
-      "currency": "Currency",
       "unitItemShort": "item",
       "unit100gShort": "100g",
       "excludable": "Can be excluded"

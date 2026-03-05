@@ -30,7 +30,6 @@ export class MenuEditSectionComponent {
   sectionForm = input.required<FormGroup>();
   sectionIndex = input.required<number>();
   isExpanded = input.required<boolean>();
-  currencies = input<string[]>(['USD', 'UAH', 'EUR', 'GBP']);
 
   removeSection = output<void>();
   toggleExpand = output<void>();
