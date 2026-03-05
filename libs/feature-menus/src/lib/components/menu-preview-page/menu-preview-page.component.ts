@@ -24,10 +24,10 @@ import { PriceUnit } from '../../models';
     MatCardModule,
     MatChipsModule,
     MatDividerModule,
-    TranslateModule,
+    TranslateModule
   ],
   templateUrl: './menu-preview-page.component.html',
-  styleUrl: './menu-preview-page.component.scss',
+  styleUrl: './menu-preview-page.component.scss'
 })
 export class MenuPreviewPageComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
@@ -56,16 +56,16 @@ export class MenuPreviewPageComponent implements OnInit {
     amount: number;
     currency: string;
     unit: PriceUnit;
-    discount: number;
+    discountPercent: number;
   }): string {
     const formatter = new Intl.NumberFormat(this.localeService.currentLocale(), {
       style: 'currency',
       currency: price.currency,
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
+      maximumFractionDigits: 2
     });
 
-    const finalPrice = price.amount * (1 - price.discount / 100);
+    const finalPrice = price.amount * (1 - price.discountPercent / 100);
     return formatter.format(finalPrice);
   }
 
@@ -73,13 +73,13 @@ export class MenuPreviewPageComponent implements OnInit {
     amount: number;
     currency: string;
     unit: PriceUnit;
-    discount: number;
+    discountPercent: number;
   }): string {
     const formatter = new Intl.NumberFormat(this.localeService.currentLocale(), {
       style: 'currency',
       currency: price.currency,
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
+      maximumFractionDigits: 2
     });
 
     return formatter.format(price.amount);

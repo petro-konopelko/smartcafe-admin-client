@@ -61,7 +61,7 @@ export class MenuEditItemComponent {
 
   private readonly priceInfo = signal({
     price: 0,
-    discount: 0,
+    discountPercent: 0,
     currency: 'USD',
     unit: PriceUnit.PerItem,
     description: ''
@@ -74,13 +74,13 @@ export class MenuEditItemComponent {
   originalPrice = computed(() => this.priceInfo().price || 0);
 
   discountPercent = computed(() => {
-    const discount = Number(this.priceInfo().discount) || 0;
+    const discount = Number(this.priceInfo().discountPercent) || 0;
     return Math.max(0, Math.min(100, Math.round(discount)));
   });
 
   calculatedPrice = computed(() => {
     const vals = this.priceInfo();
-    const final = vals.price - (vals.price * vals.discount) / 100;
+    const final = vals.price - (vals.price * vals.discountPercent) / 100;
     return { amount: final, currency: vals.currency };
   });
 
@@ -94,7 +94,7 @@ export class MenuEditItemComponent {
       const extractValues = (): void => {
         this.priceInfo.set({
           price: form.get('priceAmount')?.value || 0,
-          discount: form.get('priceDiscount')?.value || 0,
+          discountPercent: form.get('discountPercent')?.value || 0,
           currency: form.get('priceCurrency')?.value || 'USD',
           unit: form.get('priceUnit')?.value ?? PriceUnit.PerItem,
           description: form.get('description')?.value || ''
