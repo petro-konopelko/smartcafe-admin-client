@@ -22,7 +22,7 @@
         @if (
           sectionForm().get('name')?.hasError('required') && sectionForm().get('name')?.touched
         ) {
-          <mat-error>{{ 'common.required' | translate }}</mat-error>
+          <mat-error>{{ 'common.validation.required' | translate }}</mat-error>
         }
       </mat-form-field>
 
@@ -52,7 +52,7 @@
         matIconButton
         type="button"
         (click)="removeSection.emit()"
-        [matTooltip]="'common.delete' | translate"
+        [matTooltip]="'common.actions.delete' | translate"
         [attr.data-testid]="'delete-section-' + sectionIndex()"
       >
         <mat-icon class="icon-error">delete</mat-icon>
@@ -61,7 +61,11 @@
         matIconButton
         type="button"
         (click)="toggleExpand.emit()"
-        [matTooltip]="isExpanded() ? 'Collapse' : 'Expand'"
+        [matTooltip]="
+          isExpanded()
+            ? ('common.actions.collapse' | translate)
+            : ('common.actions.expand' | translate)
+        "
         [attr.data-testid]="'toggle-section-' + sectionIndex()"
       >
         <mat-icon

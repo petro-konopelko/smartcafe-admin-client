@@ -3,19 +3,19 @@
   <button
     matButton="elevated"
     (click)="onCreateCafe()"
-    [attr.aria-label]="'cafes.create' | translate"
+    [attr.aria-label]="'cafes.createTitle' | translate"
     data-testid="create-cafe-button"
   >
     <mat-icon>add</mat-icon>
-    {{ 'cafes.create' | translate }}
+    {{ 'cafes.createTitle' | translate }}
   </button>
 </div>
 
 <sc-content-container
   [loading]="cafeStore.loading()"
   [empty]="!cafeStore.hasCafes()"
-  [emptyTitle]="'cafes.noCafes' | translate"
-  [emptyMessage]="'cafes.createFirst' | translate"
+  [emptyTitle]="'cafes.empty.title' | translate"
+  [emptyMessage]="'cafes.empty.description' | translate"
   emptyIcon="store"
 >
   <div class="table-container">
@@ -63,12 +63,12 @@
           mat-header-cell
           *matHeaderCellDef
         >
-          {{ 'common.created' | translate }}
+          {{ 'common.labels.created' | translate }}
         </th>
         <td
           mat-cell
           *matCellDef="let cafe"
-          [attr.data-label]="'common.created' | translate"
+          [attr.data-label]="'common.labels.created' | translate"
         >
           {{ cafe.createdAt | scLocalDate }}
         </td>
@@ -81,7 +81,7 @@
           *matHeaderCellDef
           class="actions-column"
         >
-          {{ 'common.actions' | translate }}
+          {{ 'common.labels.actions' | translate }}
         </th>
         <td
           mat-cell
@@ -92,8 +92,8 @@
             <button
               matIconButton
               (click)="onViewMenus(cafe)"
-              [attr.aria-label]="'common.view' | translate"
-              [matTooltip]="'common.view' | translate"
+              [attr.aria-label]="'common.actions.view' | translate"
+              [matTooltip]="'common.actions.view' | translate"
               data-testid="view-menus-button"
             >
               <mat-icon>restaurant_menu</mat-icon>
@@ -101,8 +101,8 @@
             <button
               matIconButton
               (click)="onDeleteCafe(cafe)"
-              [attr.aria-label]="'cafes.delete' | translate"
-              [matTooltip]="'cafes.delete' | translate"
+              [attr.aria-label]="'cafes.deleteTitle' | translate"
+              [matTooltip]="'cafes.deleteTitle' | translate"
               data-testid="delete-cafe-button"
             >
               <mat-icon class="icon-error">delete</mat-icon>

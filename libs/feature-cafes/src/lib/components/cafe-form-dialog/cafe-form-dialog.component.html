@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>{{ 'cafes.create' | translate }}</h2>
+<h2 mat-dialog-title>{{ 'cafes.createTitle' | translate }}</h2>
 <form
   [formGroup]="cafeForm"
   (ngSubmit)="onSubmit()"
@@ -9,15 +9,15 @@
       <input
         matInput
         formControlName="name"
-        [placeholder]="'form.namePlaceholder' | translate"
+        [placeholder]="'cafes.form.namePlaceholder' | translate"
         required
         data-testid="cafe-name-input"
       />
       @if (cafeForm.get('name')?.hasError('required') && cafeForm.get('name')?.touched) {
-        <mat-error>{{ 'form.required' | translate }}</mat-error>
+        <mat-error>{{ 'common.validation.required' | translate }}</mat-error>
       }
       @if (cafeForm.get('name')?.hasError('maxlength')) {
-        <mat-error>{{ 'form.maxLength' | translate: { max: 100 } }}</mat-error>
+        <mat-error>{{ 'common.validation.maxLength' | translate: { max: 100 } }}</mat-error>
       }
     </mat-form-field>
 
@@ -26,13 +26,13 @@
       <textarea
         matInput
         formControlName="contactInfo"
-        [placeholder]="'form.contactPlaceholder' | translate"
+        [placeholder]="'cafes.form.contactPlaceholder' | translate"
         rows="3"
         data-testid="cafe-contact-input"
       >
       </textarea>
       @if (cafeForm.get('contactInfo')?.hasError('maxlength')) {
-        <mat-error>{{ 'form.maxLength' | translate: { max: 500 } }}</mat-error>
+        <mat-error>{{ 'common.validation.maxLength' | translate: { max: 500 } }}</mat-error>
       }
     </mat-form-field>
   </mat-dialog-content>
@@ -44,7 +44,7 @@
       (click)="onCancel()"
       data-testid="cancel-button"
     >
-      {{ 'common.cancel' | translate }}
+      {{ 'common.actions.cancel' | translate }}
     </button>
     <button
       matButton="elevated"
@@ -52,7 +52,7 @@
       [disabled]="!cafeForm.valid || isSubmitting()"
       data-testid="submit-button"
     >
-      {{ 'common.create' | translate }}
+      {{ 'common.actions.create' | translate }}
     </button>
   </mat-dialog-actions>
 </form>

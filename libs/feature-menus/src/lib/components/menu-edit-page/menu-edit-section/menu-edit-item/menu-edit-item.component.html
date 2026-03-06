@@ -39,7 +39,7 @@
       />
       <mat-hint class="item-description-preview">{{ descriptionPreview() }}</mat-hint>
       @if (itemForm().get('name')?.hasError('required') && itemForm().get('name')?.touched) {
-        <mat-error>{{ 'common.required' | translate }}</mat-error>
+        <mat-error>{{ 'common.validation.required' | translate }}</mat-error>
       }
     </mat-form-field>
 
@@ -61,8 +61,8 @@
         matIconButton
         type="button"
         (click)="removeItem.emit()"
-        [matTooltip]="'common.delete' | translate"
-        [attr.aria-label]="'common.delete' | translate"
+        [matTooltip]="'common.actions.delete' | translate"
+        [attr.aria-label]="'common.actions.delete' | translate"
         [attr.data-testid]="'delete-item-' + sectionIndex() + '-' + itemIndex()"
       >
         <mat-icon class="icon-error">delete</mat-icon>
@@ -71,8 +71,12 @@
         matIconButton
         type="button"
         (click)="toggleCollapse()"
-        [matTooltip]="(isCollapsed() ? 'common.expand' : 'common.collapse') | translate"
-        [attr.aria-label]="(isCollapsed() ? 'common.expand' : 'common.collapse') | translate"
+        [matTooltip]="
+          (isCollapsed() ? 'common.actions.expand' : 'common.actions.collapse') | translate
+        "
+        [attr.aria-label]="
+          (isCollapsed() ? 'common.actions.expand' : 'common.actions.collapse') | translate
+        "
       >
         <mat-icon
           class="expand-icon"
@@ -101,10 +105,10 @@
           itemForm().get('priceAmount')?.hasError('required') &&
           itemForm().get('priceAmount')?.touched
         ) {
-          <mat-error>{{ 'common.required' | translate }}</mat-error>
+          <mat-error>{{ 'common.validation.required' | translate }}</mat-error>
         }
         @if (itemForm().get('priceAmount')?.hasError('min')) {
-          <mat-error>{{ 'common.min' | translate: { min: 0 } }}</mat-error>
+          <mat-error>{{ 'common.validation.min' | translate: { min: 0 } }}</mat-error>
         }
       </mat-form-field>
 
@@ -171,8 +175,8 @@
               type="button"
               class="remove-image-btn"
               (click)="removeImage()"
-              [matTooltip]="'common.delete' | translate"
-              [attr.aria-label]="'common.delete' | translate"
+              [matTooltip]="'common.actions.delete' | translate"
+              [attr.aria-label]="'common.actions.delete' | translate"
             >
               <mat-icon>close</mat-icon>
             </button>
@@ -201,7 +205,7 @@
       <sc-editable-chip-list
         formControlName="ingredients"
         [placeholder]="'menus.form.addIngredient' | translate"
-        [removeTooltip]="'common.delete' | translate"
+        [removeTooltip]="'common.actions.delete' | translate"
         [checkboxTooltip]="'menus.form.excludable' | translate"
         [attr.data-testid]="'ingredients-' + sectionIndex() + '-' + itemIndex()"
       />
