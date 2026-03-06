@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -9,6 +10,7 @@ import { setupMatchMediaMock } from '../test-setup';
 describe('AppComponent', () => {
   beforeEach(async () => {
     setupMatchMediaMock();
+    TestBed.resetTestingModule();
 
     await TestBed.configureTestingModule({
       imports: [AppComponent, TranslateModule.forRoot()],

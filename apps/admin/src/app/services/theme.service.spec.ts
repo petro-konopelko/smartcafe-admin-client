@@ -8,6 +8,7 @@ describe('ThemeService', () => {
 
   beforeEach(() => {
     setupMatchMediaMock();
+    TestBed.resetTestingModule();
 
     TestBed.configureTestingModule({
       providers: [ThemeService]
