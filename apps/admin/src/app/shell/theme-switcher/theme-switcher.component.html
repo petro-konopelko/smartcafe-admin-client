@@ -1,8 +1,8 @@
 <button
   matIconButton
   (click)="toggleTheme()"
-  [attr.aria-label]="label | translate"
-  [matTooltip]="label | translate"
+  [attr.aria-label]="label() | translate"
+  [matTooltip]="label() | translate"
 >
   <mat-icon>contrast</mat-icon>
 </button>

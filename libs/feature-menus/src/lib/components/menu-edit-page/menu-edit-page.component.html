@@ -19,7 +19,7 @@
         data-testid="preview-button"
       >
         <mat-icon>visibility</mat-icon>
-        {{ 'menus.preview' | translate }}
+        {{ 'common.preview' | translate }}
       </button>
     }
     <button
@@ -78,7 +78,7 @@
       cdkDropList
       (cdkDropListDropped)="dropSection($event)"
     >
-      @for (section of sections.controls; track $index; let sectionIndex = $index) {
+      @for (section of sections.controls; track section; let sectionIndex = $index) {
         <div
           [formGroupName]="sectionIndex"
           cdkDrag

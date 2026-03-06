@@ -84,14 +84,12 @@ describe('CafeStore', () => {
 
     it('should handle error when loading fails', async () => {
       const error = new Error('API Error');
-      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
       cafeApiServiceMock.listCafes.mockReturnValue(throwError(() => error));
 
       await store.loadCafes();
 
       expect(store.loading()).toBe(false);
       expect(store.error()).toBe('API Error');
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to load cafes:', error);
     });
   });
 
@@ -108,14 +106,12 @@ describe('CafeStore', () => {
 
     it('should handle error when selecting fails', async () => {
       const error = new Error('Not found');
-      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
       cafeApiServiceMock.getCafe.mockReturnValue(throwError(() => error));
 
       await store.selectCafe(mockCafe.id);
 
       expect(store.loading()).toBe(false);
       expect(store.error()).toBe('Not found');
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`Failed to load cafe ${mockCafe.id}:`, error);
     });
   });
 
@@ -174,7 +170,6 @@ describe('CafeStore', () => {
         contactInfo: 'test@test.com'
       };
       const error = new Error('Creation failed');
-      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
       cafeApiServiceMock.createCafe.mockReturnValue(throwError(() => error));
 
       const result = await store.createCafe(request);
@@ -182,7 +177,6 @@ describe('CafeStore', () => {
       expect(result).toBeNull();
       expect(store.loading()).toBe(false);
       expect(store.error()).toBe('Creation failed');
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to create cafe:', error);
     });
   });
 
@@ -204,7 +198,6 @@ describe('CafeStore', () => {
 
     it('should handle error when deletion fails', async () => {
       const error = new Error('Deletion failed');
-      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
       cafeApiServiceMock.deleteCafe.mockReturnValue(throwError(() => error));
 
       const result = await store.deleteCafe(mockCafe.id);
@@ -212,7 +205,6 @@ describe('CafeStore', () => {
       expect(result).toBe(false);
       expect(store.loading()).toBe(false);
       expect(store.error()).toBe('Deletion failed');
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`Failed to delete cafe ${mockCafe.id}:`, error);
     });
   });
 

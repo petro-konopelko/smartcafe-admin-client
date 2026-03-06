@@ -8,7 +8,7 @@ import {
   untracked
 } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,9 +19,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map, startWith } from 'rxjs/operators';
 import { MenuStore } from '../../store/menu.store';
-import { ContentContainerComponent, ChipItem } from '@smartcafe/admin/shared/ui';
-import { PriceUnit, MenuFormSection, MenuFormItem } from '../../models';
+import { ContentContainerComponent } from '@smartcafe/admin/shared/ui';
+import { PriceUnit } from '../../models';
 import { MenuEditSectionComponent } from './menu-edit-section/menu-edit-section.component';
+import { MenuFormBuilderService } from '../../services/menu-form-builder.service';
 
 @Component({
   selector: 'sc-menu-edit-page',
@@ -44,7 +45,7 @@ import { MenuEditSectionComponent } from './menu-edit-section/menu-edit-section.
   host: { class: 'dense-form-fields' }
 })
 export class MenuEditPageComponent {
-  private readonly fb = inject(FormBuilder);
+  private readonly formBuilder = inject(MenuFormBuilderService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   protected readonly menuStore = inject(MenuStore);
@@ -68,11 +69,7 @@ export class MenuEditPageComponent {
   private expandedSectionsSet = signal(new Set<number>());
 
   constructor() {
-    this.menuForm = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(200)]],
-      description: ['', [Validators.maxLength(500)]],
-      sections: this.fb.array([])
-    });
+    this.menuForm = this.formBuilder.createMenuForm();
 
     this.isFormInvalid = toSignal(
       this.menuForm.statusChanges.pipe(
@@ -105,56 +102,8 @@ export class MenuEditPageComponent {
     await this.menuStore.selectMenu(cafeId, menuId);
     const menu = this.menuStore.selectedMenu();
     if (menu) {
-      this.menuForm.patchValue({
-        name: menu.name,
-        description: ''
-      });
-
-      // Clear existing sections and populate from loaded menu
-      this.sections.clear();
-      this.expandedSectionsSet.set(new Set<number>());
-
-      menu.sections.forEach((section, index) => {
-        const sectionGroup = this.createSectionGroup();
-        sectionGroup.patchValue({
-          id: section.id ?? null,
-          name: section.name,
-          availableFrom: section.availableFrom,
-          availableTo: section.availableTo
-        });
-
-        const itemsArray = sectionGroup.get('items') as FormArray;
-        section.items.forEach((item) => {
-          const itemGroup = this.createItemGroup();
-          itemGroup.patchValue({
-            id: item.id ?? null,
-            name: item.name,
-            description: item.description,
-            priceAmount: item.price.amount,
-            priceUnit: item.price.unit,
-            discountPercent: item.price.discountPercent
-          });
-
-          itemGroup.get('ingredients')?.setValue(
-            item.ingredients.map(
-              (ingredient) =>
-                ({
-                  text: ingredient.name,
-                  checked: ingredient.isExcludable
-                }) as ChipItem
-            )
-          );
-
-          itemsArray.push(itemGroup);
-        });
-
-        this.sections.push(sectionGroup);
-        // Expand all loaded sections by default
-        this.expandedSectionsSet.update((set) => {
-          set.add(index);
-          return new Set(set);
-        });
-      });
+      const expandedIndices = this.formBuilder.populateFormFromMenu(this.menuForm, menu);
+      this.expandedSectionsSet.set(expandedIndices);
     }
   }
 
@@ -166,30 +115,8 @@ export class MenuEditPageComponent {
     return this.sections.at(sectionIndex).get('items') as FormArray<FormGroup>;
   }
 
-  protected createSectionGroup(): FormGroup {
-    return this.fb.group({
-      id: [null as string | null],
-      name: ['', [Validators.required, Validators.maxLength(200)]],
-      availableFrom: [''],
-      availableTo: [''],
-      items: this.fb.array([])
-    });
-  }
-
-  protected createItemGroup(): FormGroup {
-    return this.fb.group({
-      id: [null as string | null],
-      name: ['', [Validators.required, Validators.maxLength(200)]],
-      description: ['', Validators.maxLength(1000)],
-      priceAmount: [0, [Validators.required, Validators.min(0)]],
-      priceUnit: [PriceUnit.PerItem, Validators.required],
-      discountPercent: [0, [Validators.min(0), Validators.max(100)]],
-      ingredients: [[] as ChipItem[]]
-    });
-  }
-
   protected addSection(): void {
-    const section = this.createSectionGroup();
+    const section = this.formBuilder.createSectionGroup();
     this.sections.push(section);
     // Expand new section by default
     const newIndex = this.sections.length - 1;
@@ -231,7 +158,7 @@ export class MenuEditPageComponent {
   }
 
   protected addItem(sectionIndex: number): void {
-    const item = this.createItemGroup();
+    const item = this.formBuilder.createItemGroup();
     this.getSectionItems(sectionIndex).push(item);
   }
 
@@ -262,32 +189,7 @@ export class MenuEditPageComponent {
     this.isSubmitting.set(true);
 
     try {
-      const formValue = this.menuForm.value;
-
-      const menuData = {
-        name: formValue.name,
-        sections: formValue.sections.map((section: MenuFormSection) => ({
-          id: section.id ?? null,
-          name: section.name,
-          availableFrom: section.availableFrom || null,
-          availableTo: section.availableTo || null,
-          items: section.items.map((item: MenuFormItem) => ({
-            id: item.id ?? null,
-            name: item.name,
-            description: item.description || null,
-            price: {
-              amount: item.priceAmount,
-              unit: item.priceUnit,
-              discountPercent: item.discountPercent || 0
-            },
-            image: null,
-            ingredients: (item.ingredients as ChipItem[]).map((chip: ChipItem) => ({
-              name: chip.text,
-              isExcludable: chip.checked
-            }))
-          }))
-        }))
-      };
+      const menuData = this.formBuilder.buildMenuRequest(this.menuForm.value);
 
       if (this.isEditMode()) {
         const menuId = this.menuId();

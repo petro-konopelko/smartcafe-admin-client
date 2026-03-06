@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter, ActivatedRoute } from '@angular/router';
+import { provideRouter, ActivatedRoute, Router } from '@angular/router';
 import { signal } from '@angular/core';
 import { of } from 'rxjs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -73,6 +73,113 @@ describe('MenuEditPageComponent', () => {
     component['menuForm'].get('name')?.setValue('Test Menu');
     expect(component['menuForm'].get('name')?.valid).toBe(true);
   });
+
+  describe('section management', () => {
+    it('should add a new section', () => {
+      const initialCount = component['sections'].length;
+      component['addSection']();
+      expect(component['sections'].length).toBe(initialCount + 1);
+    });
+
+    it('should expand newly added section', () => {
+      component['addSection']();
+      const newIndex = component['sections'].length - 1;
+      expect(component['isSectionExpanded'](newIndex)).toBe(true);
+    });
+
+    it('should remove a section at given index', () => {
+      component['addSection']();
+      const countAfterAdd = component['sections'].length;
+      component['removeSection'](0);
+      expect(component['sections'].length).toBe(countAfterAdd - 1);
+    });
+
+    it('should toggle section expanded state', () => {
+      const index = 0;
+      const initialState = component['isSectionExpanded'](index);
+      component['toggleSection'](index);
+      expect(component['isSectionExpanded'](index)).toBe(!initialState);
+    });
+
+    it('should collapse expanded section on toggle', () => {
+      const index = 0;
+      expect(component['isSectionExpanded'](index)).toBe(true);
+      component['toggleSection'](index);
+      expect(component['isSectionExpanded'](index)).toBe(false);
+    });
+  });
+
+  describe('item management', () => {
+    it('should add an item to a section', () => {
+      const sectionIndex = 0;
+      const initialCount = component['getSectionItems'](sectionIndex).length;
+      component['addItem'](sectionIndex);
+      expect(component['getSectionItems'](sectionIndex).length).toBe(initialCount + 1);
+    });
+
+    it('should remove an item from a section', () => {
+      const sectionIndex = 0;
+      component['addItem'](sectionIndex);
+      const countAfterAdd = component['getSectionItems'](sectionIndex).length;
+      component['removeItem'](sectionIndex, 0);
+      expect(component['getSectionItems'](sectionIndex).length).toBe(countAfterAdd - 1);
+    });
+  });
+
+  describe('onSubmit (create mode)', () => {
+    it('should not submit when form is invalid', async () => {
+      component['menuForm'].get('name')?.setValue('');
+      component['menuForm'].markAllAsTouched();
+
+      await component['onSubmit']();
+
+      expect(mockMenuStore.createMenu).not.toHaveBeenCalled();
+    });
+
+    it('should call createMenu on valid submit', async () => {
+      component['menuForm'].get('name')?.setValue('New Menu');
+      // Fill in the auto-added section's required name field
+      component['sections'].at(0).get('name')?.setValue('Section 1');
+
+      await component['onSubmit']();
+
+      expect(mockMenuStore.createMenu).toHaveBeenCalledWith(
+        TEST_CAFE_ID,
+        expect.objectContaining({ name: 'New Menu' })
+      );
+    });
+
+    it('should set isSubmitting during submit', async () => {
+      component['menuForm'].get('name')?.setValue('New Menu');
+      expect(component['isSubmitting']()).toBe(false);
+
+      const submitPromise = component['onSubmit']();
+      // isSubmitting is reset in finally block after await
+      await submitPromise;
+
+      expect(component['isSubmitting']()).toBe(false);
+    });
+
+    it('should not submit when already submitting', async () => {
+      component['menuForm'].get('name')?.setValue('New Menu');
+      component['isSubmitting'].set(true);
+
+      await component['onSubmit']();
+
+      expect(mockMenuStore.createMenu).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('onCancel', () => {
+    it('should navigate back to menus list', () => {
+      const router = TestBed.inject(Router);
+      const navigateSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
+
+      component['onCancel']();
+
+      expect(navigateSpy).toHaveBeenCalledWith(['/cafes', TEST_CAFE_ID, 'menus']);
+    });
+  });
 });
 
 describe('MenuEditPageComponent (edit mode)', () => {
@@ -138,5 +245,33 @@ describe('MenuEditPageComponent (edit mode)', () => {
 
   it('should load menu data on init in edit mode', () => {
     expect(mockMenuStore.selectMenu).toHaveBeenCalled();
+  });
+
+  it('should call updateMenu on submit in edit mode', async () => {
+    component['menuForm'].get('name')?.setValue('Updated Menu');
+    await fixture.whenStable();
+
+    await component['onSubmit']();
+
+    expect(mockMenuStore.updateMenu).toHaveBeenCalledWith(
+      TEST_CAFE_ID,
+      'menu-456',
+      expect.objectContaining({ name: 'Updated Menu' })
+    );
+  });
+
+  it('should navigate to preview in edit mode', () => {
+    const router = TestBed.inject(Router);
+    const navigateSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
+
+    component['onPreview']();
+
+    expect(navigateSpy).toHaveBeenCalledWith([
+      '/cafes',
+      TEST_CAFE_ID,
+      'menus',
+      'menu-456',
+      'preview'
+    ]);
   });
 });
