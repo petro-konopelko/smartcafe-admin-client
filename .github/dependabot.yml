@@ -1,0 +1,75 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: friday
+    open-pull-requests-limit: 10
+    groups:
+      angular:
+        patterns:
+          - '@angular/*'
+          - '@angular-devkit/*'
+          - '@angular-eslint/*'
+          - '@schematics/angular'
+          - 'angular-eslint'
+      nx:
+        patterns:
+          - 'nx'
+          - '@nx/*'
+      ngrx:
+        patterns:
+          - '@ngrx/*'
+      ngx-translate:
+        patterns:
+          - '@ngx-translate/*'
+      eslint:
+        patterns:
+          - 'eslint'
+          - 'eslint-*'
+          - '@eslint/*'
+          - 'typescript-eslint'
+      stylelint:
+        patterns:
+          - 'stylelint'
+          - 'stylelint-*'
+      storybook:
+        patterns:
+          - 'storybook'
+          - '@storybook/*'
+          - '@analogjs/storybook-angular'
+          - 'eslint-plugin-storybook'
+      analogjs:
+        patterns:
+          - '@analogjs/*'
+        exclude-patterns:
+          - '@analogjs/storybook-angular'
+      vitest:
+        patterns:
+          - 'vitest'
+          - '@vitest/*'
+      swc:
+        patterns:
+          - '@swc/*'
+          - '@swc-node/*'
+      playwright:
+        patterns:
+          - '@playwright/*'
+      typescript:
+        patterns:
+          - 'typescript'
+          - 'tslib'
+          - 'ts-node'
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: friday
+    open-pull-requests-limit: 5
+    groups:
+      github-actions:
+        patterns:
+          - '*'
