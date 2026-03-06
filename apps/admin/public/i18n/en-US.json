@@ -12,50 +12,55 @@
     }
   },
   "common": {
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "loading": "Loading...",
-    "error": "Error",
-    "back": "Back",
-    "actions": "Actions",
-    "created": "Created",
-    "status": "Status",
-    "publish": "Publish",
-    "activate": "Activate",
-    "preview": "Preview",
-    "clone": "Clone",
-    "view": "View",
-    "expand": "Expand",
-    "collapse": "Collapse",
-    "required": "This field is required",
-    "min": "Minimum value is {{min}}",
-    "maxLength": "Maximum length is {{max}} characters"
+    "actions": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "edit": "Edit",
+      "create": "Create",
+      "back": "Back",
+      "publish": "Publish",
+      "activate": "Activate",
+      "preview": "Preview",
+      "clone": "Clone",
+      "view": "View",
+      "expand": "Expand",
+      "collapse": "Collapse"
+    },
+    "labels": {
+      "actions": "Actions",
+      "status": "Status",
+      "created": "Created",
+      "loading": "Loading...",
+      "error": "Error"
+    },
+    "validation": {
+      "required": "This field is required",
+      "min": "Minimum value is {{min}}",
+      "maxLength": "Maximum length is {{max}} characters"
+    }
   },
   "cafes": {
     "title": "My Cafes",
-    "create": "New Cafe",
-    "delete": "Delete Cafe",
+    "createTitle": "New Cafe",
+    "deleteTitle": "Delete Cafe",
     "name": "Name",
     "contact": "Contact",
     "contactInfo": "Contact Information",
-    "noCafes": "No cafes found",
-    "createFirst": "Create your first cafe to get started"
+    "form": {
+      "namePlaceholder": "Enter name",
+      "contactPlaceholder": "Enter contact information"
+    },
+    "empty": {
+      "title": "No cafes found",
+      "description": "Create your first cafe to get started"
+    }
   },
   "menus": {
     "title": "Menus",
     "createTitle": "Create Menu",
     "editTitle": "Edit Menu",
-    "create": "Create Menu",
-    "delete": "Delete Menu",
-
     "name": "Menu Name",
-    "noMenus": "No menus found",
-    "createFirst": "Create your first menu to get started",
-    "loading": "Loading menu...",
-    "errorTitle": "Error",
     "form": {
       "name": "Menu Name",
       "namePlaceholder": "Enter menu name",
@@ -106,12 +111,10 @@
     },
     "preview": {
       "backToEdit": "Back to Edit"
+    },
+    "empty": {
+      "title": "No menus found",
+      "description": "Create your first menu to get started"
     }
-  },
-  "form": {
-    "required": "This field is required",
-    "maxLength": "Maximum length is {{max}} characters",
-    "namePlaceholder": "Enter name",
-    "contactPlaceholder": "Enter contact information"
   }
 }

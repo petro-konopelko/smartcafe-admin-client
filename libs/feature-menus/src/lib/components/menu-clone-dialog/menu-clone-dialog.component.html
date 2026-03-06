@@ -22,9 +22,9 @@
         cdkFocusInitial
       />
       @if (form.get('newName')?.hasError('required') && form.get('newName')?.touched) {
-        <mat-error>{{ 'common.required' | translate }}</mat-error>
+        <mat-error>{{ 'common.validation.required' | translate }}</mat-error>
       } @else if (form.get('newName')?.hasError('maxlength')) {
-        <mat-error>{{ 'common.maxLength' | translate: { max: 200 } }}</mat-error>
+        <mat-error>{{ 'common.validation.maxLength' | translate: { max: 200 } }}</mat-error>
       }
     </mat-form-field>
   </form>
@@ -37,7 +37,7 @@
     (click)="onCancel()"
     data-testid="cancel-clone-button"
   >
-    {{ 'common.cancel' | translate }}
+    {{ 'common.actions.cancel' | translate }}
   </button>
   <button
     matButton="elevated"

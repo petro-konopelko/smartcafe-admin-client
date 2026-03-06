@@ -3,7 +3,7 @@
     <button
       matIconButton
       [routerLink]="['/cafes', cafeId(), 'menus']"
-      [matTooltip]="'common.back' | translate"
+      [matTooltip]="'common.actions.back' | translate"
       data-testid="back-button"
     >
       <mat-icon>arrow_back</mat-icon>
@@ -19,7 +19,7 @@
         data-testid="preview-button"
       >
         <mat-icon>visibility</mat-icon>
-        {{ 'common.preview' | translate }}
+        {{ 'common.actions.preview' | translate }}
       </button>
     }
     <button
@@ -29,7 +29,7 @@
       data-testid="save-button"
     >
       <mat-icon>save</mat-icon>
-      {{ 'common.save' | translate }}
+      {{ 'common.actions.save' | translate }}
     </button>
   </div>
 </div>
@@ -50,10 +50,10 @@
           data-testid="menu-name-input"
         />
         @if (menuForm.get('name')?.hasError('required') && menuForm.get('name')?.touched) {
-          <mat-error>{{ 'common.required' | translate }}</mat-error>
+          <mat-error>{{ 'common.validation.required' | translate }}</mat-error>
         }
         @if (menuForm.get('name')?.hasError('maxlength')) {
-          <mat-error>{{ 'common.maxLength' | translate: { max: 200 } }}</mat-error>
+          <mat-error>{{ 'common.validation.maxLength' | translate: { max: 200 } }}</mat-error>
         }
       </mat-form-field>
 
@@ -66,7 +66,7 @@
           data-testid="menu-description-input"
         />
         @if (menuForm.get('description')?.hasError('maxlength')) {
-          <mat-error>{{ 'common.maxLength' | translate: { max: 500 } }}</mat-error>
+          <mat-error>{{ 'common.validation.maxLength' | translate: { max: 500 } }}</mat-error>
         }
       </mat-form-field>
     </div>
