@@ -1,5 +1,7 @@
-import { Injectable, signal, effect, inject } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { take } from 'rxjs';
+import { WINDOW } from '@smartcafe/admin/shared/utils';
 
 export const SUPPORTED_LOCALES = {
   EN_US: 'en-US',
@@ -26,6 +28,7 @@ export const LOCALE_CURRENCY_MAP: Record<SupportedLocale, string> = {
 export class LocaleService {
   private readonly STORAGE_KEY = 'smartcafe-locale';
   private readonly translate = inject(TranslateService);
+  private readonly window = inject(WINDOW);
 
   readonly availableLocales = Object.values(SUPPORTED_LOCALES);
   readonly currentLocale = signal<SupportedLocale>(this.getInitialLocale());
@@ -36,41 +39,64 @@ export class LocaleService {
     // Just add available languages
     this.translate.addLangs(this.availableLocales);
 
-    // If stored locale differs from default, switch to it
-    const storedLocale = this.getInitialLocale();
-    if (storedLocale !== DEFAULT_LOCALE) {
-      this.translate.use(storedLocale).subscribe(() => {
-        this.isReady.set(true);
-      });
-    } else {
-      // Already using default language
-      this.isReady.set(true);
-    }
-
-    // Persist locale changes
-    effect(() => {
-      const locale = this.currentLocale();
-      if (locale !== this.translate.currentLang) {
-        localStorage.setItem(this.STORAGE_KEY, locale);
-        this.translate.use(locale);
-      }
-    });
+    this.applyLocale(this.currentLocale(), false);
   }
 
   setLocale(locale: SupportedLocale): void {
+    if (locale === this.currentLocale()) {
+      return;
+    }
+
     this.currentLocale.set(locale);
+    this.applyLocale(locale, true);
   }
 
   getCurrency(): string {
     return LOCALE_CURRENCY_MAP[this.currentLocale()];
   }
 
+  private applyLocale(locale: SupportedLocale, persist: boolean): void {
+    if (persist) {
+      this.setStoredLocale(locale);
+    }
+
+    if (locale === this.translate.currentLang) {
+      this.isReady.set(true);
+      return;
+    }
+
+    this.isReady.set(false);
+    this.translate
+      .use(locale)
+      .pipe(take(1))
+      .subscribe({
+        next: () => this.isReady.set(true),
+        error: () => this.isReady.set(true)
+      });
+  }
+
   private getInitialLocale(): SupportedLocale {
-    const stored = localStorage.getItem(this.STORAGE_KEY);
+    const stored = this.getStoredLocale();
     if (stored && this.isValidLocale(stored)) {
       return stored as SupportedLocale;
     }
     return DEFAULT_LOCALE;
+  }
+
+  private getStoredLocale(): string | null {
+    if (!this.window || typeof this.window.localStorage === 'undefined') {
+      return null;
+    }
+
+    return this.window.localStorage.getItem(this.STORAGE_KEY);
+  }
+
+  private setStoredLocale(locale: SupportedLocale): void {
+    if (!this.window || typeof this.window.localStorage === 'undefined') {
+      return;
+    }
+
+    this.window.localStorage.setItem(this.STORAGE_KEY, locale);
   }
 
   private isValidLocale(locale: string): boolean {

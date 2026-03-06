@@ -5,3 +5,6 @@ export * from './lib/confirm-dialog/confirm-dialog.component';
 export * from './lib/content-container/content-container.component';
 export * from './lib/editable-chip-list/editable-chip-list.component';
 export * from './lib/price-summary/price-summary.component';
+export * from './lib/pipes/local-date.pipe';
+export * from './lib/pipes/local-currency.pipe';
+export * from './lib/pipes/local-number.pipe';

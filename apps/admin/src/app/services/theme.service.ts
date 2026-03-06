@@ -1,4 +1,5 @@
-import { Injectable, signal, effect, inject, DOCUMENT } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Injectable, signal, effect, inject } from '@angular/core';
 import { WINDOW } from '@smartcafe/admin/shared/utils';
 
 export const LIGHT_THEME_NAME = 'light';
