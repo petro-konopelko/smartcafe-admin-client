@@ -13,9 +13,9 @@ import { MenuState, MenuSummaryDto } from '../../models';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
-  ContentContainerComponent
+  ContentContainerComponent,
+  ScLocalDatePipe
 } from '@smartcafe/admin/shared/ui';
-import { ScLocalDatePipe } from '@smartcafe/admin/shared/utils';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
 import {

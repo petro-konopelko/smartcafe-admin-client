@@ -9,10 +9,6 @@ describe('retryInterceptor', () => {
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
-    vi.spyOn(console, 'log').mockImplementation(() => {
-      /* noop */
-    });
-
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(withInterceptors([retryInterceptor])),

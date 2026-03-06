@@ -12,9 +12,9 @@ import { CafeDto } from '../../models';
 import {
   ContentContainerComponent,
   ConfirmDialogComponent,
-  ConfirmDialogData
+  ConfirmDialogData,
+  ScLocalDatePipe
 } from '@smartcafe/admin/shared/ui';
-import { ScLocalDatePipe } from '@smartcafe/admin/shared/utils';
 import { CafeFormDialogComponent } from '../cafe-form-dialog/cafe-form-dialog.component';
 
 @Component({

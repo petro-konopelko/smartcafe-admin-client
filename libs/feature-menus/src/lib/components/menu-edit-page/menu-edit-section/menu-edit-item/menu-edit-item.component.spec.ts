@@ -104,6 +104,7 @@ describe('MenuEditItemComponent', () => {
     component.itemForm().get('discountPercent')?.setValue(150);
     fixture.detectChanges();
     expect(component.discountPercent()).toBe(100);
+    expect(component.calculatedPrice().amount).toBe(0);
   });
 
   it('should handle zero price', () => {

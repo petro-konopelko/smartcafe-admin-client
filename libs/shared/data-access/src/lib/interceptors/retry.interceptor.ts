@@ -16,12 +16,11 @@ export const retryInterceptor: HttpInterceptorFn = (req, next) => {
       delay: (error: HttpErrorResponse, retryCount: number) => {
         // Only retry on network errors or 5xx server errors
         if (error.status === 0 || error.status >= 500) {
-          console.log(`Retrying request (attempt ${retryCount + 1}/${MAX_RETRIES})...`);
           return timer(RETRY_DELAY_MS * retryCount);
         }
         // Don't retry for other errors
         throw error;
-      },
-    }),
+      }
+    })
   );
 };

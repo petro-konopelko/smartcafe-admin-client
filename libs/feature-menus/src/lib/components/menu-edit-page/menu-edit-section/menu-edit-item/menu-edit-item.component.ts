@@ -77,8 +77,9 @@ export class MenuEditItemComponent {
   });
 
   calculatedPrice = computed(() => {
-    const vals = this.priceInfo();
-    const final = vals.price - (vals.price * vals.discountPercent) / 100;
+    const price = Number(this.priceInfo().price) || 0;
+    const clampedDiscountPercent = this.discountPercent();
+    const final = price - (price * clampedDiscountPercent) / 100;
     return { amount: final };
   });
 

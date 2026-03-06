@@ -15,7 +15,8 @@ const mockMenuSummary: MenuSummaryDto = {
   menuId: 'menu-456',
   name: 'Test Menu',
   state: MenuState.New,
-  createdAt: '2024-01-01T00:00:00Z'
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-01-01T00:00:00Z'
 };
 
 describe('MenuPageComponent', () => {

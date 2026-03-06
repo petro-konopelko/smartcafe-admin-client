@@ -8,11 +8,15 @@ import { firstValueFrom } from 'rxjs';
 interface CafeState {
   cafes: CafeDto[];
   selectedCafe: CafeDto | null;
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: CafeState = {
   cafes: [],
-  selectedCafe: null
+  selectedCafe: null,
+  loading: false,
+  error: null
 };
 
 export const CafeStore = signalStore(

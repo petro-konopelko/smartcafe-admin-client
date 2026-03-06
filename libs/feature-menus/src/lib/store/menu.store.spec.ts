@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { MenuStore } from './menu.store';
 import { MenuApiService } from '../services/menu-api.service';
-import { MenuState, MenuDto, MenuSummaryDto } from '../models';
+import { MenuState, MenuDto, MenuSummaryDto, PublishMenuResponse } from '../models';
 
 const TEST_CAFE_ID = 'cafe-123';
 const TEST_MENU_ID = 'menu-456';
@@ -12,7 +12,8 @@ const mockMenuSummary: MenuSummaryDto = {
   menuId: TEST_MENU_ID,
   name: 'Test Menu',
   state: MenuState.New,
-  createdAt: '2024-01-01T00:00:00Z'
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-01-01T00:00:00Z'
 };
 
 const mockMenuDto: MenuDto = {
@@ -169,7 +170,9 @@ describe('MenuStore', () => {
   describe('createMenu', () => {
     it('should create menu and reload list', async () => {
       const newMenuId = 'new-menu-id';
-      vi.mocked(menuApi.createMenu).mockReturnValue(of({ menuId: newMenuId }));
+      vi.mocked(menuApi.createMenu).mockReturnValue(
+        of({ menuId: newMenuId, cafeId: TEST_CAFE_ID })
+      );
       vi.mocked(menuApi.listMenus).mockReturnValue(of({ menus: [mockMenuSummary] }));
 
       const result = await store.createMenu(TEST_CAFE_ID, { name: 'New', sections: [] });
@@ -215,7 +218,7 @@ describe('MenuStore', () => {
   describe('cloneMenu', () => {
     it('should clone menu and reload list', async () => {
       const clonedId = 'cloned-id';
-      vi.mocked(menuApi.cloneMenu).mockReturnValue(of({ menuId: clonedId }));
+      vi.mocked(menuApi.cloneMenu).mockReturnValue(of({ menuId: clonedId, cafeId: TEST_CAFE_ID }));
       vi.mocked(menuApi.listMenus).mockReturnValue(of({ menus: [mockMenuSummary] }));
 
       const result = await store.cloneMenu(TEST_CAFE_ID, TEST_MENU_ID, 'Cloned Name');
@@ -228,7 +231,9 @@ describe('MenuStore', () => {
   describe('publishMenu', () => {
     it('should publish menu and reload state', async () => {
       const publishedMenu = { ...mockMenuDto, state: MenuState.Published };
-      vi.mocked(menuApi.publishMenu).mockReturnValue(of({ menuId: TEST_MENU_ID }));
+      vi.mocked(menuApi.publishMenu).mockReturnValue(
+        of({ menuId: TEST_MENU_ID } as PublishMenuResponse)
+      );
       vi.mocked(menuApi.getMenu).mockReturnValue(of(publishedMenu));
       vi.mocked(menuApi.listMenus).mockReturnValue(
         of({ menus: [{ ...mockMenuSummary, state: MenuState.Published }] })

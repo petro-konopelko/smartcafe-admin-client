@@ -24,6 +24,25 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Write runtime app config
+        shell: bash
+        env:
+          API_URL: ${{ vars.API_URI  }}
+        run: |
+          if [ -z "$API_URL" ]; then
+            echo "API_URI GitHub variable is not set for this environment."
+            exit 1
+          fi
+
+          CONFIG_PATH="dist/admin/browser/app-config.json"
+
+          if [ ! -f "$CONFIG_PATH" ]; then
+            echo '{}' > "$CONFIG_PATH"
+          fi
+
+          jq --arg apiUrl "$API_URL" '.apiUrl = $apiUrl' "$CONFIG_PATH" > "$CONFIG_PATH.tmp"
+          mv "$CONFIG_PATH.tmp" "$CONFIG_PATH"
+
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
         with:
