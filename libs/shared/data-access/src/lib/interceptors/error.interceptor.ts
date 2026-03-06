@@ -1,66 +1,77 @@
-import { HttpInterceptorFn, HttpErrorResponse, HttpContextToken } from '@angular/common/http';
+import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ProblemDetails, HttpValidationProblemDetails } from '@smartcafe/admin/shared/models';
+import { ErrorTrackingService } from '../services/error-tracking.service';
 
-// Context token to track if error has been shown
-export const ERROR_SHOWN = new HttpContextToken<boolean>(() => false);
+const SNACKBAR_DURATION_MS = 5000;
 
-const shownErrors = new Set<string>();
+function isProblemDetails(value: unknown): value is ProblemDetails {
+  return typeof value === 'object' && value !== null && 'status' in value && 'title' in value;
+}
+
+function isValidationProblemDetails(value: unknown): value is HttpValidationProblemDetails {
+  return isProblemDetails(value) && 'errors' in value;
+}
+
+function extractValidationMessages(problem: HttpValidationProblemDetails): string {
+  const messages = Object.values(problem.errors).flat();
+  return messages.length > 0 ? messages.join('; ') : (problem.detail ?? 'Validation failed.');
+}
+
+function getErrorMessage(error: HttpErrorResponse): string {
+  if (error.error instanceof ErrorEvent) {
+    return error.error.message;
+  }
+
+  const body = error.error;
+
+  // Parse ProblemDetails from backend
+  if (isValidationProblemDetails(body)) {
+    return extractValidationMessages(body);
+  }
+
+  if (isProblemDetails(body) && body.detail) {
+    return body.detail;
+  }
+
+  // Fallback by status code
+  switch (error.status) {
+    case 0:
+      return 'Network error. Please check your connection.';
+    case 400:
+      return 'Invalid request. Please check your input.';
+    case 404:
+      return 'Resource not found.';
+    case 409:
+      return 'Conflict with existing data.';
+    default:
+      if (error.status >= 500) {
+        return 'Server error. Please try again later.';
+      }
+      return body?.detail || error.message || 'An error occurred';
+  }
+}
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const snackBar = inject(MatSnackBar);
+  const errorTracking = inject(ErrorTrackingService);
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      // Create a unique key for this error to prevent duplicates
-      const errorKey = `${req.url}-${error.status}-${Date.now()}`;
-      const baseErrorKey = `${req.url}-${error.status}`;
-
-      // Check if we've already shown this error recently (within last 5 seconds)
-      const recentlyShown = Array.from(shownErrors).some(
-        (key) =>
-          key.startsWith(baseErrorKey) && Date.now() - parseInt(key.split('-').pop() || '0') < 5000,
-      );
-
-      if (!recentlyShown) {
-        let errorMessage = 'An error occurred';
-
-        if (error.error instanceof ErrorEvent) {
-          // Client-side error
-          errorMessage = error.error.message;
-        } else {
-          // Server-side error
-          if (error.status === 400) {
-            errorMessage = 'Invalid request. Please check your input.';
-          } else if (error.status === 404) {
-            errorMessage = 'Resource not found.';
-          } else if (error.status === 409) {
-            errorMessage = 'Conflict with existing data.';
-          } else if (error.status >= 500) {
-            errorMessage = 'Server error. Please try again later.';
-          } else if (error.status === 0) {
-            errorMessage = 'Network error. Please check your connection.';
-          } else {
-            errorMessage = error.error?.detail || error.message || 'Unknown error';
-          }
-        }
+      if (!errorTracking.isRecentlyShown(req.url, error.status)) {
+        const errorMessage = getErrorMessage(error);
 
         snackBar.open(errorMessage, 'Close', {
-          duration: 5000,
+          duration: SNACKBAR_DURATION_MS,
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
-          panelClass: ['error-snackbar'],
+          panelClass: ['error-snackbar']
         });
-
-        // Track this error
-        shownErrors.add(errorKey);
-
-        // Clean up old entries after 10 seconds
-        setTimeout(() => shownErrors.delete(errorKey), 10000);
       }
 
       return throwError(() => error);
-    }),
+    })
   );
 };

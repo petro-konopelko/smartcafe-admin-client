@@ -1,5 +1,6 @@
 import { signalStore, withState, withMethods, withComputed, patchState } from '@ngrx/signals';
 import { computed, inject } from '@angular/core';
+import { withRequestStatus } from '@smartcafe/admin/shared/data-access';
 import { CafeApiService } from '../services/cafe-api.service';
 import { CafeDto, CreateCafeRequest } from '../models';
 import { firstValueFrom } from 'rxjs';
@@ -7,99 +8,60 @@ import { firstValueFrom } from 'rxjs';
 interface CafeState {
   cafes: CafeDto[];
   selectedCafe: CafeDto | null;
-  loading: boolean;
-  error: string | null;
 }
 
 const initialState: CafeState = {
   cafes: [],
-  selectedCafe: null,
-  loading: false,
-  error: null,
+  selectedCafe: null
 };
 
 export const CafeStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
+  withRequestStatus(),
   withComputed(({ cafes }) => ({
     cafeCount: computed(() => cafes().length),
-    hasCafes: computed(() => cafes().length > 0),
+    hasCafes: computed(() => cafes().length > 0)
   })),
   withMethods((store, cafeApi = inject(CafeApiService)) => ({
     async loadCafes(): Promise<void> {
-      patchState(store, { loading: true, error: null });
-      try {
+      await store.withLoading(async () => {
         const response = await firstValueFrom(cafeApi.listCafes());
-        patchState(store, { cafes: response.cafes, loading: false });
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Failed to load cafes';
-        console.error('Failed to load cafes:', error);
-        patchState(store, {
-          error: errorMessage,
-          loading: false,
-        });
-      }
+        patchState(store, { cafes: response.cafes });
+      });
     },
 
     async selectCafe(cafeId: string): Promise<void> {
-      patchState(store, { loading: true, error: null });
-      try {
+      await store.withLoading(async () => {
         const cafe = await firstValueFrom(cafeApi.getCafe(cafeId));
-        patchState(store, { selectedCafe: cafe, loading: false });
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Failed to load cafe';
-        console.error(`Failed to load cafe ${cafeId}:`, error);
-        patchState(store, {
-          error: errorMessage,
-          loading: false,
-        });
-      }
+        patchState(store, { selectedCafe: cafe });
+      });
     },
 
     async createCafe(request: CreateCafeRequest): Promise<string | null> {
-      patchState(store, { loading: true, error: null });
-      try {
+      const result = await store.withLoading(async () => {
         const response = await firstValueFrom(cafeApi.createCafe(request));
-        // Reload the list after creating
-        await firstValueFrom(cafeApi.listCafes()).then((list) => {
-          patchState(store, { cafes: list.cafes, loading: false });
-        });
+        const list = await firstValueFrom(cafeApi.listCafes());
+        patchState(store, { cafes: list.cafes });
         return response.cafeId;
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Failed to create cafe';
-        console.error('Failed to create cafe:', error);
-        patchState(store, {
-          error: errorMessage,
-          loading: false,
-        });
-        return null;
-      }
+      });
+      return result ?? null;
     },
 
     async deleteCafe(cafeId: string): Promise<boolean> {
-      patchState(store, { loading: true, error: null });
-      try {
+      const result = await store.withLoading(async () => {
         await firstValueFrom(cafeApi.deleteCafe(cafeId));
-        // Remove from local state
         patchState(store, {
           cafes: store.cafes().filter((c) => c.id !== cafeId),
-          selectedCafe: store.selectedCafe()?.id === cafeId ? null : store.selectedCafe(),
-          loading: false,
+          selectedCafe: store.selectedCafe()?.id === cafeId ? null : store.selectedCafe()
         });
         return true;
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Failed to delete cafe';
-        console.error(`Failed to delete cafe ${cafeId}:`, error);
-        patchState(store, {
-          error: errorMessage,
-          loading: false,
-        });
-        return false;
-      }
+      });
+      return result ?? false;
     },
 
     clearSelectedCafe(): void {
       patchState(store, { selectedCafe: null });
-    },
-  })),
+    }
+  }))
 );

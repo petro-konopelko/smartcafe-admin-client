@@ -81,7 +81,7 @@
       cdkDropList
       (cdkDropListDropped)="dropItem.emit($event)"
     >
-      @for (item of items.controls; track $index; let itemIndex = $index) {
+      @for (item of items.controls; track item; let itemIndex = $index) {
         <div cdkDrag>
           <div
             class="item-drag-placeholder"

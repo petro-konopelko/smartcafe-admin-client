@@ -8,7 +8,7 @@ describe('ErrorMessageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ErrorMessageComponent],
+      imports: [ErrorMessageComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ErrorMessageComponent);
@@ -24,5 +24,29 @@ describe('ErrorMessageComponent', () => {
   it('should display error message', () => {
     const compiled = fixture.nativeElement;
     expect(compiled.textContent).toContain('Test error');
+  });
+
+  it('should display default title when none provided', () => {
+    expect(component.title()).toBe('Error');
+    expect(fixture.nativeElement.textContent).toContain('Error');
+  });
+
+  it('should display custom title when provided', () => {
+    fixture.componentRef.setInput('title', 'Connection Failed');
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Connection Failed');
+  });
+
+  it('should display default message when none provided', async () => {
+    const freshFixture = TestBed.createComponent(ErrorMessageComponent);
+    freshFixture.detectChanges();
+
+    expect(freshFixture.componentInstance.message()).toBe('An error occurred. Please try again.');
+  });
+
+  it('should render error_outline icon', () => {
+    const icon = fixture.nativeElement.querySelector('mat-icon');
+    expect(icon.textContent).toContain('error_outline');
   });
 });

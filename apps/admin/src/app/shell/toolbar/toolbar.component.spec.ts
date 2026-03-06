@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -7,26 +7,14 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ToolbarComponent } from './toolbar.component';
 import { ThemeService } from '../../services/theme.service';
 import { LocaleService } from '@smartcafe/admin/shared/data-access';
+import { setupMatchMediaMock } from '../../../test-setup';
 
 describe('ToolbarComponent', () => {
   let component: ToolbarComponent;
   let fixture: ComponentFixture<ToolbarComponent>;
 
   beforeEach(async () => {
-    // Mock window.matchMedia for ThemeSwitcherComponent
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: vi.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn()
-      }))
-    });
+    setupMatchMediaMock();
 
     await TestBed.configureTestingModule({
       imports: [ToolbarComponent, TranslateModule.forRoot()],

@@ -118,7 +118,7 @@
               (click)="onPreview(menu)"
             >
               <mat-icon>visibility</mat-icon>
-              {{ 'menus.preview' | translate }}
+              {{ 'common.preview' | translate }}
             </button>
             @if (menu.state !== MenuState.Active) {
               <button
@@ -136,7 +136,7 @@
                 data-testid="publish-menu-button"
               >
                 <mat-icon>publish</mat-icon>
-                {{ 'menus.publish' | translate }}
+                {{ 'common.publish' | translate }}
               </button>
             }
             @if (menu.state === MenuState.Published) {
@@ -146,7 +146,7 @@
                 data-testid="activate-menu-button"
               >
                 <mat-icon>check_circle</mat-icon>
-                {{ 'menus.activate' | translate }}
+                {{ 'common.activate' | translate }}
               </button>
             }
             <button
@@ -154,7 +154,7 @@
               (click)="onClone(menu)"
             >
               <mat-icon>content_copy</mat-icon>
-              {{ 'menus.clone' | translate }}
+              {{ 'common.clone' | translate }}
             </button>
             @if (menu.state !== MenuState.Active) {
               <button

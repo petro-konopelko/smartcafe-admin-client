@@ -40,7 +40,6 @@ export default defineConfig(
             {
               sourceTag: 'type:feature',
               onlyDependOnLibsWithTags: [
-                'type:feature',
                 'type:ui',
                 'type:data-access',
                 'type:models',
