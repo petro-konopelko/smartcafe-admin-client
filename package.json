@@ -51,7 +51,7 @@
     "@ngrx/signals": "21.0.1",
     "@ngx-translate/core": "17.0.0",
     "@ngx-translate/http-loader": "17.0.0",
-    "rxjs": "7.8.0"
+    "rxjs": "7.8.2"
   },
   "devDependencies": {
     "@analogjs/storybook-angular": "^2.3.1",
