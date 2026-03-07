@@ -12,9 +12,7 @@ updates:
         patterns:
           - '@angular/*'
           - '@angular-devkit/*'
-          - '@angular-eslint/*'
           - '@schematics/angular'
-          - 'angular-eslint'
       nx:
         patterns:
           - 'nx'
@@ -31,6 +29,8 @@ updates:
           - 'eslint-*'
           - '@eslint/*'
           - 'typescript-eslint'
+          - 'angular-eslint'
+          - '@angular-eslint/*'
       stylelint:
         patterns:
           - 'stylelint'
