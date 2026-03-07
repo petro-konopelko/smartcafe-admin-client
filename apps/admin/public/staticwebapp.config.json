@@ -1,5 +1,14 @@
 {
   "navigationFallback": {
-    "rewrite": "/index.html"
+    "rewrite": "/index.html",
+    "exclude": [
+      "/api/*",
+      "/i18n/*",
+      "/app-config.json",
+      "/favicon.ico",
+      "/*.css",
+      "/*.js",
+      "/*.map"
+    ]
   }
 }
