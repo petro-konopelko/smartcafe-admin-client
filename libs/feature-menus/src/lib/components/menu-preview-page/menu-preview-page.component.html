@@ -1,72 +1,114 @@
-@if (menuStore.loading()) {
-  <div class="loading">
-    <mat-icon>hourglass_empty</mat-icon>
-    {{ 'common.labels.loading' | translate }}
+<div class="page-header">
+  <div class="page-header-left">
+    <button
+      matIconButton
+      (click)="onBack()"
+      [matTooltip]="'common.actions.back' | translate"
+      data-testid="back-button"
+    >
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 data-testid="page-title">
+      {{ menuStore.selectedMenu()?.name ?? ('menus.previewTitle' | translate) }}
+    </h1>
   </div>
-}
-
-@if (menuStore.error()) {
-  <div class="error-card">
-    <mat-icon class="icon-error">error</mat-icon>
-    <span>{{ menuStore.error() }}</span>
-  </div>
-}
-
-@if (menuStore.selectedMenu(); as menu) {
-  <!-- Hero Header -->
-  <div class="preview-header">
-    <div class="header-content">
-      <h1 class="cafe-name">{{ menu.name }}</h1>
-      @if (menu.sections.length > 0) {
-        <p class="header-subtitle">
-          @if (menu.sections[0]) {
-            {{ menu.sections[0].name }}
-            @if (menu.sections[0].availableFrom && menu.sections[0].availableTo) {
-              <span>
-                • {{ menu.sections[0].availableFrom }} - {{ menu.sections[0].availableTo }}</span
-              >
-            }
-          }
-        </p>
-      }
+  <div class="page-header-actions">
+    @if (menuStore.selectedMenu()) {
       <button
-        class="back-to-edit-btn"
+        matButton="elevated"
         (click)="onEdit()"
+        data-testid="edit-button"
       >
-        {{ 'menus.preview.backToEdit' | translate }}
+        <mat-icon>edit</mat-icon>
+        {{ 'common.actions.edit' | translate }}
       </button>
-    </div>
-  </div>
-
-  <!-- Menu Content -->
-  <div class="preview-content">
-    @for (section of menu.sections; track section.id || $index) {
-      <section class="menu-section">
-        <h2 class="section-title">{{ section.name }}</h2>
-
-        <div class="items-list">
-          @for (item of section.items; track item.id || $index) {
-            <div class="menu-item">
-              <div class="item-content">
-                <h3 class="item-name">{{ item.name }}</h3>
-                @if (item.description) {
-                  <p class="item-description">{{ item.description }}</p>
-                }
-                <div class="item-price">
-                  @if (item.price.discountPercent > 0) {
-                    <span class="discounted-price">{{ getFormattedPrice(item.price) }}</span>
-                  } @else {
-                    <span class="price">{{ getFormattedPrice(item.price) }}</span>
-                  }
-                </div>
-              </div>
-              <div class="item-image">
-                <!-- Image placeholder -->
-              </div>
-            </div>
-          }
-        </div>
-      </section>
     }
   </div>
-}
+</div>
+
+<sc-content-container
+  [loading]="menuStore.loading()"
+  [loadingMessage]="'common.labels.loading' | translate"
+>
+  @if (menuStore.error()) {
+    <sc-error-message
+      [title]="'common.labels.error' | translate"
+      [message]="menuStore.error()!"
+      data-testid="error-message"
+    />
+  } @else if (menuStore.selectedMenu(); as menu) {
+    @if (menu.description) {
+      <p
+        class="menu-description"
+        data-testid="menu-description"
+      >
+        {{ menu.description }}
+      </p>
+    }
+
+    @for (section of menu.sections; track section.id || $index) {
+      <mat-card
+        class="section-card"
+        data-testid="menu-section"
+      >
+        <mat-card-header>
+          <mat-card-title data-testid="section-title">{{ section.name }}</mat-card-title>
+          @if (section.availableFrom && section.availableTo) {
+            <mat-card-subtitle>
+              {{ section.availableFrom }} – {{ section.availableTo }}
+            </mat-card-subtitle>
+          }
+        </mat-card-header>
+
+        <mat-card-content>
+          @for (item of section.items; track item.id || $index) {
+            @if (!$first) {
+              <mat-divider />
+            }
+            <div
+              class="menu-item"
+              data-testid="menu-item"
+            >
+              @if (item.image?.thumbnailImageUrl) {
+                <img
+                  [src]="item.image.thumbnailImageUrl"
+                  [alt]="item.name"
+                  class="item-image"
+                />
+              }
+              <div class="item-details">
+                <h3
+                  class="item-name"
+                  data-testid="item-name"
+                >
+                  {{ item.name }}
+                </h3>
+                @if (item.description) {
+                  <p
+                    class="item-description"
+                    data-testid="item-description"
+                  >
+                    {{ item.description }}
+                  </p>
+                }
+                @if (item.ingredients.length) {
+                  <mat-chip-set class="item-ingredients">
+                    @for (ingredient of item.ingredients; track ingredient.name) {
+                      <mat-chip>{{ ingredient.name }}</mat-chip>
+                    }
+                  </mat-chip-set>
+                }
+              </div>
+              <sc-price-summary
+                [originalPrice]="item.price.amount"
+                [finalPrice]="getFinalPrice(item.price)"
+                [discountPercent]="item.price.discountPercent"
+                [unitLabel]="getUnitLabel(item.price.unit)"
+              />
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+    }
+  }
+</sc-content-container>

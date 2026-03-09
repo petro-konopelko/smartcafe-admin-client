@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MenuStore } from '../../store/menu.store';
@@ -32,6 +33,7 @@ import {
     MatMenuModule,
     MatChipsModule,
     MatTableModule,
+    MatTooltipModule,
     TranslateModule,
     ContentContainerComponent,
     ScLocalDatePipe
