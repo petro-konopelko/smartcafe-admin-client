@@ -60,6 +60,7 @@
     "title": "Menus",
     "createTitle": "Create Menu",
     "editTitle": "Edit Menu",
+    "previewTitle": "Menu Preview",
     "name": "Menu Name",
     "form": {
       "name": "Menu Name",

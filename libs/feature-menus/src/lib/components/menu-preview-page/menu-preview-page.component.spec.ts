@@ -7,8 +7,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { MenuPreviewPageComponent } from './menu-preview-page.component';
 import { MenuStore } from '../../store/menu.store';
-import { MenuDto, MenuState } from '../../models';
-import { LocaleService, DEFAULT_LOCALE } from '@smartcafe/admin/shared/data-access';
+import { MenuDto, MenuState, PriceUnit } from '../../models';
 
 const TEST_CAFE_ID = 'cafe-123';
 const TEST_MENU_ID = 'menu-456';
@@ -28,7 +27,7 @@ const mockMenu: MenuDto = {
           id: 'item-1',
           name: 'Pizza Margherita',
           description: 'Classic Italian pizza',
-          price: { amount: 12.5, unit: 'PerItem', discountPercent: 10 },
+          price: { amount: 12.5, unit: PriceUnit.PerItem, discountPercent: 10 },
           image: null,
           ingredients: [{ name: 'Mozzarella', isExcludable: true }]
         }
@@ -56,10 +55,6 @@ describe('MenuPreviewPageComponent', () => {
       imports: [MenuPreviewPageComponent, NoopAnimationsModule, TranslateModule.forRoot()],
       providers: [
         { provide: MenuStore, useValue: mockMenuStore },
-        {
-          provide: LocaleService,
-          useValue: { currentLocale: signal(DEFAULT_LOCALE) }
-        },
         provideRouter([]),
         {
           provide: ActivatedRoute,
@@ -84,38 +79,43 @@ describe('MenuPreviewPageComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display menu name', () => {
-    const name = fixture.nativeElement.querySelector('.cafe-name');
-    expect(name?.textContent).toContain('Preview Menu');
+  it('should display menu name in page title', () => {
+    const title = fixture.nativeElement.querySelector('[data-testid="page-title"]');
+    expect(title?.textContent).toContain(mockMenu.name);
   });
 
   it('should display sections', () => {
-    const sections = fixture.nativeElement.querySelectorAll('.menu-section');
+    const sections = fixture.nativeElement.querySelectorAll('[data-testid="menu-section"]');
     expect(sections).toHaveLength(1);
   });
 
   it('should display section title', () => {
-    const title = fixture.nativeElement.querySelector('.section-title');
+    const title = fixture.nativeElement.querySelector('[data-testid="section-title"]');
     expect(title?.textContent).toContain('Main Course');
   });
 
   it('should display menu items', () => {
-    const items = fixture.nativeElement.querySelectorAll('.menu-item');
+    const items = fixture.nativeElement.querySelectorAll('[data-testid="menu-item"]');
     expect(items).toHaveLength(1);
   });
 
   it('should display item name', () => {
-    const name = fixture.nativeElement.querySelector('.item-name');
+    const name = fixture.nativeElement.querySelector('[data-testid="item-name"]');
     expect(name?.textContent).toContain('Pizza Margherita');
   });
 
   it('should display item description', () => {
-    const desc = fixture.nativeElement.querySelector('.item-description');
+    const desc = fixture.nativeElement.querySelector('[data-testid="item-description"]');
     expect(desc?.textContent).toContain('Classic Italian pizza');
   });
 
-  it('should display back-to-edit button', () => {
-    const button = fixture.nativeElement.querySelector('.back-to-edit-btn');
+  it('should display back button', () => {
+    const button = fixture.nativeElement.querySelector('[data-testid="back-button"]');
+    expect(button).toBeTruthy();
+  });
+
+  it('should display edit button', () => {
+    const button = fixture.nativeElement.querySelector('[data-testid="edit-button"]');
     expect(button).toBeTruthy();
   });
 
@@ -124,8 +124,8 @@ describe('MenuPreviewPageComponent', () => {
     (mockMenuStore.selectedMenu as ReturnType<typeof signal>).set(null);
     fixture.detectChanges();
 
-    const loading = fixture.nativeElement.querySelector('.loading');
-    expect(loading).toBeTruthy();
+    const spinner = fixture.nativeElement.querySelector('sc-loading-spinner');
+    expect(spinner).toBeTruthy();
   });
 
   it('should show error state', () => {
@@ -133,7 +133,7 @@ describe('MenuPreviewPageComponent', () => {
     (mockMenuStore.selectedMenu as ReturnType<typeof signal>).set(null);
     fixture.detectChanges();
 
-    const error = fixture.nativeElement.querySelector('.error-card');
+    const error = fixture.nativeElement.querySelector('[data-testid="error-message"]');
     expect(error).toBeTruthy();
   });
 });

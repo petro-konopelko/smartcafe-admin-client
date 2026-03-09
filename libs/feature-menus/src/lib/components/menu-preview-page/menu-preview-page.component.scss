@@ -1,191 +1,75 @@
 @use 'mixins' as *;
 
-:host {
-  display: block;
-  min-height: 100vh;
-  background: var(--app-background);
-}
-
-// Loading and error states
-.loading {
+.page-header-left {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 4rem 2rem;
-  color: var(--app-on-surface-variant);
+  gap: 8px;
+
+  h1 {
+    margin: 0;
+  }
 }
 
-.error-card {
+.page-header-actions {
   display: flex;
+  gap: 8px;
   align-items: center;
-  gap: 0.5rem;
-  margin: 2rem;
-  padding: 1rem;
-  background-color: var(--app-error-container, #ffebee);
-  color: var(--md-on-error-container, #c62828);
-  border-radius: 8px;
 }
 
-// Hero header with blue background
-.preview-header {
-  background: var(--app-primary-container);
-  padding: 4rem 1rem;
-  text-align: center;
-
-  @include mobile-only {
-    padding: 3rem 1rem;
-  }
+.menu-description {
+  margin: 0 0 24px;
+  color: var(--mat-sys-on-surface-variant);
+  line-height: 1.5;
 }
 
-.header-content {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.cafe-name {
-  margin: 0 0 0.5rem;
-  font-size: 2.5rem;
-  font-weight: 600;
-  color: var(--app-on-primary-container);
-  letter-spacing: -0.5px;
-
-  @include mobile-only {
-    font-size: 2rem;
-  }
-}
-
-.header-subtitle {
-  margin: 0 0 2rem;
-  font-size: 1.125rem;
-  color: var(--app-on-primary-container);
-  font-weight: 400;
-  opacity: 0.9;
-
-  @include mobile-only {
-    font-size: 1rem;
-  }
-}
-
-.back-to-edit-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 32px;
-  background: var(--app-primary, #0b57d0);
-  color: var(--app-on-primary, white);
-  border: none;
-  border-radius: 24px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
-
-  &:hover {
-    background: var(--app-primary);
-    filter: brightness(0.9);
-    box-shadow: 0 4px 8px rgb(0 0 0 / 15%);
-    transform: translateY(-1px);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-}
-
-// Content area
-.preview-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 3rem 1rem;
-
-  @include mobile-only {
-    padding: 2rem 1rem;
-  }
-}
-
-// Section styling
-.menu-section {
-  margin-bottom: 4rem;
+.section-card {
+  margin-bottom: 24px;
 
   &:last-child {
     margin-bottom: 0;
   }
 }
 
-.section-title {
-  margin: 0 0 2rem;
-  font-size: 1.75rem;
-  font-weight: 600;
-  color: var(--app-on-surface);
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--app-on-surface);
-  display: inline-block;
-
-  @include mobile-only {
-    font-size: 1.5rem;
-  }
-}
-
-// Items list (vertical stack, not grid)
-.items-list {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-// Menu item card
 .menu-item {
   display: flex;
-  gap: 2rem;
   align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
 
   @include mobile-only {
-    flex-direction: column;
-    gap: 1rem;
+    flex-wrap: wrap;
   }
 }
 
-.item-content {
+.item-details {
   flex: 1;
+  min-width: 0;
 }
 
 .item-name {
-  margin: 0 0 0.5rem;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--app-on-surface);
+  margin: 0 0 4px;
+  font-weight: 500;
 }
 
 .item-description {
-  margin: 0 0 0.75rem;
-  font-size: 1rem;
-  color: var(--app-on-surface-variant);
+  margin: 0 0 8px;
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.875rem;
   line-height: 1.5;
 }
 
-.item-price {
-  margin-top: 0.5rem;
-
-  .price,
-  .discounted-price {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--app-primary, #0b57d0);
-  }
+.item-ingredients {
+  margin-top: 8px;
 }
 
-// Image placeholder
 .item-image {
-  width: 100px;
-  height: 100px;
-  background: var(--app-surface-variant);
+  width: 80px;
+  height: 80px;
   border-radius: 8px;
+  object-fit: cover;
   flex-shrink: 0;
+}
 
-  @include mobile-only {
-    width: 100%;
-    height: 200px;
-  }
+sc-price-summary {
+  flex-shrink: 0;
 }

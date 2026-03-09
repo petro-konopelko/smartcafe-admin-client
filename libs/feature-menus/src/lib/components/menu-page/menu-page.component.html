@@ -1,14 +1,16 @@
 <div class="page-header">
-  <h1>{{ 'menus.title' | translate }}</h1>
-  <div class="header-actions">
+  <div class="page-header-left">
     <button
-      mat-button
+      matIconButton
       (click)="onBack()"
+      [matTooltip]="'common.actions.back' | translate"
       data-testid="back-button"
     >
       <mat-icon>arrow_back</mat-icon>
-      {{ 'common.actions.back' | translate }}
     </button>
+    <h1>{{ 'menus.title' | translate }}</h1>
+  </div>
+  <div class="page-header-actions">
     <button
       matButton="elevated"
       (click)="onCreateMenu()"
