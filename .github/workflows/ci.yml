@@ -9,10 +9,36 @@ concurrency:
   group: ci-main
   cancel-in-progress: false
 
+
 jobs:
+  release-please:
+    name: Release Please
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    outputs:
+      releases_created: ${{ steps.release.outputs.releases_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+      release_id: ${{ steps.release.outputs.id }}
+      upload_url: ${{ steps.release.outputs.upload_url }}
+
+    steps:
+      - name: Run release-please
+        id: release
+        uses: googleapis/release-please-action@v4
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
   validate:
     name: Lint, Test & Build (all)
+    needs: release-please
+    if: needs.release-please.outputs.releases_created != 'true'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout
@@ -47,9 +73,69 @@ jobs:
       - name: Build (all)
         run: npm run build:ci
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v7
+  release:
+    name: Validate & Publish Release
+    needs: release-please
+    if: needs.release-please.outputs.releases_created == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
         with:
-          name: admin-build
-          path: dist/admin/browser
-          retention-days: 1
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Cache Nx
+        uses: actions/cache@v5
+        with:
+          path: .nx/cache
+          key: nx-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ github.sha }}
+          restore-keys: |
+            nx-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
+            nx-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint (all)
+        run: npm run lint:ci
+
+      - name: Test (all)
+        run: npm run test:ci
+
+      - name: Build (all)
+        run: npm run build:ci
+
+      - name: Archive build artifact
+        run: |
+          cd dist/admin/browser
+          zip -r ../../../admin-build-${{ needs.release-please.outputs.tag_name }}.zip .
+
+      - name: Upload artifact to GitHub Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release-please.outputs.upload_url }}
+          asset_path: admin-build-${{ needs.release-please.outputs.tag_name }}.zip
+          asset_name: admin-build-${{ needs.release-please.outputs.tag_name }}.zip
+          asset_content_type: application/zip
+
+      - name: Publish release (undraft)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: ${{ needs.release-please.outputs.release_id }},
+              draft: false
+            });
