@@ -1,28 +1,48 @@
 name: CD
 
 on:
-  workflow_run:
-    workflows: [CI]
+  release:
     types:
-      - completed
-    branches:
-      - main
+      - published
 
 jobs:
   deploy:
     name: Deploy to Azure Static Web Apps
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     environment: dev
 
     steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v8
+      - name: Download build artifact from release
+        uses: actions/github-script@v7
         with:
-          name: admin-build
-          path: dist/admin/browser
-          run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const release = await github.rest.repos.getRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: context.payload.release.id
+            });
+
+            const asset = release.data.assets.find(a => a.name.endsWith('.zip'));
+            if (!asset) {
+              throw new Error('No build artifact (.zip) found on release ' + context.payload.release.tag_name);
+            }
+
+            const download = await github.rest.repos.getReleaseAsset({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              asset_id: asset.id,
+              headers: { Accept: 'application/octet-stream' }
+            });
+
+            fs.writeFileSync('admin-build.zip', Buffer.from(download.data));
+            console.log(`Downloaded ${asset.name} (${download.data.byteLength} bytes)`);
+
+      - name: Extract build artifact
+        run: |
+          mkdir -p dist/admin/browser
+          unzip admin-build.zip -d dist/admin/browser
+          rm admin-build.zip
 
       - name: Write runtime app config
         shell: bash
