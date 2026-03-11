@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.2](https://github.com/petro-konopelko/smartcafe-admin-client/compare/v1.0.1...v1.0.2) (2026-03-11)
+
+
+### Bug Fixes
+
+* **build:** enable force-tag-creation to create tag for draft releases ([7cff101](https://github.com/petro-konopelko/smartcafe-admin-client/commit/7cff101c82a039054f51b4bc35152deb758e40ff))
+
+
+### Documentation
+
+* update README.md ([71a6d25](https://github.com/petro-konopelko/smartcafe-admin-client/commit/71a6d25ecf96111637ffe847e41e2e6bccd0ac35))
+
 ## [1.0.1](https://github.com/petro-konopelko/smartcafe-admin-client/compare/v1.0.0...v1.0.1) (2026-03-11)
 
 
