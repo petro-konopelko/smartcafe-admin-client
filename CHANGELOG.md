@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/petro-konopelko/smartcafe-admin-client/compare/v1.0.2...v1.0.3) (2026-03-11)
+
+
+### Bug Fixes
+
+* **build:** remove draft release to avoid issue with extra pr from release-please ([b7fdc8d](https://github.com/petro-konopelko/smartcafe-admin-client/commit/b7fdc8ddd75eec68580d57b5413a0eac9cc851a5))
+
 ## [1.0.2](https://github.com/petro-konopelko/smartcafe-admin-client/compare/v1.0.1...v1.0.2) (2026-03-11)
 
 
