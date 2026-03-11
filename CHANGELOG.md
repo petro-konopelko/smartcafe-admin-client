@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/petro-konopelko/smartcafe-admin-client/compare/v1.0.0...v1.0.1) (2026-03-11)
+
+
+### Bug Fixes
+
+* change the PAT token to undraft the release to trigger workflow ([aab7cd7](https://github.com/petro-konopelko/smartcafe-admin-client/commit/aab7cd7231ba077f6bcb6e1b9b9513014aae204e))
+
 ## 1.0.0 (2026-03-11)
 
 
