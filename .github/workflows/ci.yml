@@ -9,7 +9,6 @@ concurrency:
   group: ci-main
   cancel-in-progress: false
 
-
 jobs:
   validate:
     name: Lint, Test & Build (all)
@@ -76,6 +75,7 @@ jobs:
         id: release
         uses: googleapis/release-please-action@v4
         with:
+          token: ${{ secrets.CREATE_PULL_REQUEST_PAT }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
