@@ -13,30 +13,29 @@ jobs:
 
     steps:
       - name: Download build artifact from release
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const release = await github.rest.repos.getRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              release_id: context.payload.release.id
-            });
-
-            const asset = release.data.assets.find(a => a.name.endsWith('.zip'));
-            if (!asset) {
-              throw new Error('No build artifact (.zip) found on release ' + context.payload.release.tag_name);
-            }
-
-            const download = await github.rest.repos.getReleaseAsset({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              asset_id: asset.id,
-              headers: { Accept: 'application/octet-stream' }
-            });
-
-            fs.writeFileSync('admin-build.zip', Buffer.from(download.data));
-            console.log(`Downloaded ${asset.name} (${download.data.byteLength} bytes)`);
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          echo "Waiting for build artifact to be attached to release ${TAG}..."
+          for attempt in $(seq 1 10); do
+            ASSET=$(gh release view "$TAG" \
+              --json assets \
+              --jq '.assets[] | select(.name | endswith(".zip")) | .name' \
+              --repo ${{ github.repository }} 2>/dev/null || true)
+            if [ -n "$ASSET" ]; then
+              echo "Found asset: ${ASSET}"
+              gh release download "$TAG" \
+                --pattern "$ASSET" \
+                --output admin-build.zip \
+                --repo ${{ github.repository }}
+              exit 0
+            fi
+            echo "Attempt ${attempt}/10: asset not yet available, retrying in 30s..."
+            sleep 30
+          done
+          echo "Timed out waiting for release asset after 5 minutes"
+          exit 1
 
       - name: Extract build artifact
         run: |
