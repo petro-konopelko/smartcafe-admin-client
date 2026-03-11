@@ -67,8 +67,6 @@ jobs:
     outputs:
       releases_created: ${{ steps.release.outputs.releases_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
-      release_id: ${{ steps.release.outputs.id }}
-      upload_url: ${{ steps.release.outputs.upload_url }}
 
     steps:
       - name: Run release-please
@@ -99,23 +97,14 @@ jobs:
           cd dist/admin/browser
           zip -r ../../../admin-build-${{ needs.release-please.outputs.tag_name }}.zip .
 
-      - name: Upload artifact to GitHub Release
-        uses: actions/upload-release-asset@v1
+      - name: Upload artifact and publish release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.release-please.outputs.upload_url }}
-          asset_path: admin-build-${{ needs.release-please.outputs.tag_name }}.zip
-          asset_name: admin-build-${{ needs.release-please.outputs.tag_name }}.zip
-          asset_content_type: application/zip
-
-      - name: Publish release (undraft)
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.repos.updateRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              release_id: ${{ needs.release-please.outputs.release_id }},
-              draft: false
-            });
+          GH_TOKEN: ${{ secrets.CREATE_PULL_REQUEST_PAT }}
+        run: |
+          gh release upload ${{ needs.release-please.outputs.tag_name }} \
+            admin-build-${{ needs.release-please.outputs.tag_name }}.zip \
+            --clobber \
+            --repo ${{ github.repository }}
+          gh release edit ${{ needs.release-please.outputs.tag_name }} \
+            --draft=false \
+            --repo ${{ github.repository }}
