@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, ActivatedRoute, Router } from '@angular/router';
 import { signal } from '@angular/core';
 import { of } from 'rxjs';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { MenuEditPageComponent } from './menu-edit-page.component';
 import { MenuStore } from '../../store/menu.store';
@@ -27,7 +26,7 @@ describe('MenuEditPageComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [MenuEditPageComponent, NoopAnimationsModule, TranslateModule.forRoot()],
+      imports: [MenuEditPageComponent, TranslateModule.forRoot()],
       providers: [
         { provide: MenuStore, useValue: mockMenuStore },
         provideRouter([]),
@@ -215,7 +214,7 @@ describe('MenuEditPageComponent (edit mode)', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [MenuEditPageComponent, NoopAnimationsModule, TranslateModule.forRoot()],
+      imports: [MenuEditPageComponent, TranslateModule.forRoot()],
       providers: [
         { provide: MenuStore, useValue: mockMenuStore },
         provideRouter([]),

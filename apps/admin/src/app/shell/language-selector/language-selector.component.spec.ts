@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageSelectorComponent } from './language-selector.component';
 import { LocaleService } from '@smartcafe/admin/shared/data-access';
@@ -15,12 +14,7 @@ describe('LanguageSelectorComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LanguageSelectorComponent, TranslateModule.forRoot()],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideAnimations(),
-        LocaleService
-      ]
+      providers: [provideHttpClient(), provideHttpClientTesting(), LocaleService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(LanguageSelectorComponent);
