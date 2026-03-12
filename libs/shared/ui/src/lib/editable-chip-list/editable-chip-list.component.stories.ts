@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { applicationConfig, moduleMetadata } from '@storybook/angular';
+import { moduleMetadata } from '@storybook/angular';
 import { Component, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { EditableChipListComponent, ChipItem } from './editable-chip-list.component';
 
 const chip = (text: string, checked = false): ChipItem => ({ text, checked });
@@ -38,9 +37,6 @@ const meta: Meta<ChipListWrapperComponent> = {
   component: ChipListWrapperComponent,
   tags: ['autodocs'],
   decorators: [
-    applicationConfig({
-      providers: [provideAnimationsAsync()]
-    }),
     moduleMetadata({
       imports: [EditableChipListComponent, ReactiveFormsModule]
     })

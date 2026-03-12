@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { applicationConfig, moduleMetadata } from '@storybook/angular';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { moduleMetadata } from '@storybook/angular';
 import { Component, inject, signal } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -45,9 +44,6 @@ const meta: Meta<DialogWrapperComponent> = {
   component: DialogWrapperComponent,
   tags: ['autodocs'],
   decorators: [
-    applicationConfig({
-      providers: [provideAnimationsAsync()]
-    }),
     moduleMetadata({
       imports: [MatDialogModule, MatButtonModule, ConfirmDialogComponent]
     })

@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup, FormArray, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { MenuEditSectionComponent } from './menu-edit-section.component';
 
@@ -31,12 +30,7 @@ describe('MenuEditSectionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        MenuEditSectionComponent,
-        NoopAnimationsModule,
-        ReactiveFormsModule,
-        TranslateModule.forRoot()
-      ]
+      imports: [MenuEditSectionComponent, ReactiveFormsModule, TranslateModule.forRoot()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(MenuEditSectionComponent);

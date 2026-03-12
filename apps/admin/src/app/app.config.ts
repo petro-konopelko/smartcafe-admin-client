@@ -2,7 +2,6 @@ import { ApplicationConfig, inject, provideAppInitializer } from '@angular/core'
 import { provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
@@ -22,7 +21,6 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes),
     provideHttpClient(withInterceptors([retryInterceptor, loadingInterceptor, errorInterceptor])),
-    provideAnimationsAsync(),
     provideTranslateService({
       loader: provideTranslateHttpLoader({
         prefix: '/i18n/',

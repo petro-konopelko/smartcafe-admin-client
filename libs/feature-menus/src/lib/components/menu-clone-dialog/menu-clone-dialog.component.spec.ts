@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MenuCloneDialogComponent, MenuCloneDialogData } from './menu-clone-dialog.component';
@@ -18,7 +17,7 @@ describe('MenuCloneDialogComponent', () => {
     dialogRefSpy = { close: vi.fn() };
 
     await TestBed.configureTestingModule({
-      imports: [MenuCloneDialogComponent, NoopAnimationsModule, TranslateModule.forRoot()],
+      imports: [MenuCloneDialogComponent, TranslateModule.forRoot()],
       providers: [
         { provide: MatDialogRef, useValue: dialogRefSpy },
         { provide: MAT_DIALOG_DATA, useValue: mockDialogData }

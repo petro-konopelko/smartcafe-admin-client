@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, ActivatedRoute } from '@angular/router';
 import { signal } from '@angular/core';
 import { of } from 'rxjs';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { MenuPreviewPageComponent } from './menu-preview-page.component';
 import { MenuStore } from '../../store/menu.store';
@@ -52,7 +51,7 @@ describe('MenuPreviewPageComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [MenuPreviewPageComponent, NoopAnimationsModule, TranslateModule.forRoot()],
+      imports: [MenuPreviewPageComponent, TranslateModule.forRoot()],
       providers: [
         { provide: MenuStore, useValue: mockMenuStore },
         provideRouter([]),

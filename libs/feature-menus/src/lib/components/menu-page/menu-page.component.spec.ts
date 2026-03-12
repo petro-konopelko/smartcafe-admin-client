@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, ActivatedRoute } from '@angular/router';
 import { signal } from '@angular/core';
 import { of } from 'rxjs';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { MenuPageComponent } from './menu-page.component';
 import { MenuStore } from '../../store/menu.store';
@@ -39,7 +38,7 @@ describe('MenuPageComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [MenuPageComponent, NoopAnimationsModule, TranslateModule.forRoot()],
+      imports: [MenuPageComponent, TranslateModule.forRoot()],
       providers: [
         { provide: MenuStore, useValue: mockMenuStore },
         provideRouter([]),
