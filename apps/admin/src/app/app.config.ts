@@ -13,7 +13,8 @@ import {
   errorInterceptor,
   loadingInterceptor,
   retryInterceptor,
-  API_URL
+  API_URL,
+  DEFAULT_LOCALE
 } from '@smartcafe/admin/shared/data-access';
 
 export const appConfig: ApplicationConfig = {
@@ -27,8 +28,7 @@ export const appConfig: ApplicationConfig = {
         prefix: '/i18n/',
         suffix: '.json'
       }),
-      fallbackLang: 'en-US',
-      lang: 'en-US'
+      fallbackLang: DEFAULT_LOCALE
     }),
     provideAppInitializer(() => {
       return inject(AppConfigService).load();

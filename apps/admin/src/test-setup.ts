@@ -6,13 +6,15 @@ import { vi } from 'vitest';
 setupTestBed();
 
 /**
- * Mocks window.matchMedia for tests that depend on ThemeService.
- * Call in beforeEach/beforeAll instead of duplicating the mock inline.
+ * Creates a mock Window object for tests that depend on ThemeService.
+ * Provide via `{ provide: WINDOW, useValue: createMockWindow() }` in TestBed providers
+ * instead of patching the native window object.
+ *
+ * @param prefersDark - When true, `matchMedia('(prefers-color-scheme: dark)').matches` returns true.
  */
-export function setupMatchMediaMock(prefersDark = false): void {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: vi.fn().mockImplementation((query: string) => ({
+export function createMockWindow(prefersDark = false): Partial<Window> {
+  return {
+    matchMedia: vi.fn().mockImplementation((query: string) => ({
       matches: prefersDark && query === '(prefers-color-scheme: dark)',
       media: query,
       onchange: null,
@@ -21,6 +23,14 @@ export function setupMatchMediaMock(prefersDark = false): void {
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
       dispatchEvent: vi.fn()
-    }))
-  });
+    })),
+    localStorage: {
+      getItem: vi.fn().mockReturnValue(null),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      clear: vi.fn(),
+      key: vi.fn(),
+      length: 0
+    } as Storage
+  };
 }

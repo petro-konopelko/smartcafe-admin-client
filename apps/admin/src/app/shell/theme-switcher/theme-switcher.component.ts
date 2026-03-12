@@ -13,10 +13,10 @@ import { ThemeService, LIGHT_THEME_NAME } from '../../services/theme.service';
 export class ThemeSwitcherComponent {
   private readonly themeService = inject(ThemeService);
 
-  readonly currentTheme = this.themeService.currentTheme;
-
   readonly label = computed(() =>
-    this.currentTheme() === LIGHT_THEME_NAME ? 'app.theme.switchToDark' : 'app.theme.switchToLight'
+    this.themeService.currentTheme() === LIGHT_THEME_NAME
+      ? 'app.theme.switchToDark'
+      : 'app.theme.switchToLight'
   );
 
   toggleTheme(): void {

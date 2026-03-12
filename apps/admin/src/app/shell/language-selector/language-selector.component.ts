@@ -4,7 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import {
   LOCALES_KEY_VALUES,
   LocaleService,
-  SUPPORTED_LOCALES
+  SupportedLocale
 } from '@smartcafe/admin/shared/data-access';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,9 +23,7 @@ export class LanguageSelectorComponent {
   protected readonly localeService = inject(LocaleService);
   protected readonly label = 'app.language.select';
 
-  protected onLanguageChange(locale: string): void {
-    this.localeService.setLocale(
-      locale as (typeof SUPPORTED_LOCALES)[keyof typeof SUPPORTED_LOCALES]
-    );
+  protected onLanguageChange(locale: SupportedLocale): void {
+    this.localeService.setLocale(locale);
   }
 }
