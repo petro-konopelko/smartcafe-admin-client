@@ -7,15 +7,14 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ToolbarComponent } from './toolbar.component';
 import { ThemeService } from '../../services/theme.service';
 import { LocaleService } from '@smartcafe/admin/shared/data-access';
-import { setupMatchMediaMock } from '../../../test-setup';
+import { WINDOW } from '@smartcafe/admin/shared/utils';
+import { createMockWindow } from '../../../test-setup';
 
 describe('ToolbarComponent', () => {
   let component: ToolbarComponent;
   let fixture: ComponentFixture<ToolbarComponent>;
 
   beforeEach(async () => {
-    setupMatchMediaMock();
-
     await TestBed.configureTestingModule({
       imports: [ToolbarComponent, TranslateModule.forRoot()],
       providers: [
@@ -23,7 +22,8 @@ describe('ToolbarComponent', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         ThemeService,
-        LocaleService
+        LocaleService,
+        { provide: WINDOW, useValue: createMockWindow() }
       ]
     }).compileComponents();
 

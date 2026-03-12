@@ -1,14 +1,14 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { take } from 'rxjs';
-import { WINDOW } from '@smartcafe/admin/shared/utils';
+import { LocalStorageService } from '@smartcafe/admin/shared/utils';
 
 export const SUPPORTED_LOCALES = {
   EN_US: 'en-US',
   UK_UA: 'uk-UA'
 } as const;
 
-export const LOCALES_KEY_VALUES = new Map<string, string>([
+export const LOCALES_KEY_VALUES = new Map<SupportedLocale, string>([
   [SUPPORTED_LOCALES.EN_US, 'English'],
   [SUPPORTED_LOCALES.UK_UA, 'Українська']
 ]);
@@ -28,18 +28,13 @@ export const LOCALE_CURRENCY_MAP: Record<SupportedLocale, string> = {
 export class LocaleService {
   private readonly STORAGE_KEY = 'smartcafe-locale';
   private readonly translate = inject(TranslateService);
-  private readonly window = inject(WINDOW);
+  private readonly localStorage = inject(LocalStorageService);
+  private readonly availableLocales = Object.values(SUPPORTED_LOCALES);
 
-  readonly availableLocales = Object.values(SUPPORTED_LOCALES);
   readonly currentLocale = signal<SupportedLocale>(this.getInitialLocale());
-  readonly isReady = signal<boolean>(false);
 
   constructor() {
-    // The translate service is already configured in app.config with default language
-    // Just add available languages
-    this.translate.addLangs(this.availableLocales);
-
-    this.applyLocale(this.currentLocale(), false);
+    this.applyLocale(this.currentLocale());
   }
 
   setLocale(locale: SupportedLocale): void {
@@ -48,31 +43,20 @@ export class LocaleService {
     }
 
     this.currentLocale.set(locale);
-    this.applyLocale(locale, true);
+    this.applyLocale(locale);
+    this.setStoredLocale(locale);
   }
 
   getCurrency(): string {
     return LOCALE_CURRENCY_MAP[this.currentLocale()];
   }
 
-  private applyLocale(locale: SupportedLocale, persist: boolean): void {
-    if (persist) {
-      this.setStoredLocale(locale);
-    }
-
-    if (locale === this.translate.currentLang) {
-      this.isReady.set(true);
+  private applyLocale(locale: SupportedLocale): void {
+    if (locale === this.translate.getCurrentLang()) {
       return;
     }
 
-    this.isReady.set(false);
-    this.translate
-      .use(locale)
-      .pipe(take(1))
-      .subscribe({
-        next: () => this.isReady.set(true),
-        error: () => this.isReady.set(true)
-      });
+    this.translate.use(locale).pipe(take(1)).subscribe();
   }
 
   private getInitialLocale(): SupportedLocale {
@@ -80,23 +64,16 @@ export class LocaleService {
     if (stored && this.isValidLocale(stored)) {
       return stored as SupportedLocale;
     }
+
     return DEFAULT_LOCALE;
   }
 
   private getStoredLocale(): string | null {
-    if (!this.window || typeof this.window.localStorage === 'undefined') {
-      return null;
-    }
-
-    return this.window.localStorage.getItem(this.STORAGE_KEY);
+    return this.localStorage.get(this.STORAGE_KEY);
   }
 
   private setStoredLocale(locale: SupportedLocale): void {
-    if (!this.window || typeof this.window.localStorage === 'undefined') {
-      return;
-    }
-
-    this.window.localStorage.setItem(this.STORAGE_KEY, locale);
+    this.localStorage.set(this.STORAGE_KEY, locale);
   }
 
   private isValidLocale(locale: string): boolean {

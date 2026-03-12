@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
-import { Injectable, signal, effect, inject } from '@angular/core';
-import { WINDOW } from '@smartcafe/admin/shared/utils';
+import { Injectable, signal, inject } from '@angular/core';
+import { LocalStorageService, WINDOW } from '@smartcafe/admin/shared/utils';
 
 export const LIGHT_THEME_NAME = 'light';
 export const DARK_THEME_NAME = 'dark';
@@ -16,6 +16,7 @@ export class ThemeService {
 
   private readonly document = inject(DOCUMENT);
   private readonly window = inject(WINDOW);
+  private readonly localStorage = inject(LocalStorageService);
 
   private readonly themeMap: Map<Theme, () => void> = new Map([
     [LIGHT_THEME_NAME, () => this.document.documentElement.classList.remove(this.DARK_CLASS)],
@@ -25,17 +26,14 @@ export class ThemeService {
   readonly currentTheme = signal<Theme>(this.loadTheme());
 
   constructor() {
-    // Watch for theme changes and apply them
-    effect(() => {
-      const theme = this.currentTheme();
-      this.applyTheme(theme);
-      this.saveTheme(theme);
-    });
+    this.applyTheme(this.currentTheme());
   }
 
   toggleTheme(): void {
     const newTheme = this.currentTheme() === LIGHT_THEME_NAME ? DARK_THEME_NAME : LIGHT_THEME_NAME;
     this.currentTheme.set(newTheme);
+    this.applyTheme(newTheme);
+    this.localStorage.set(this.STORAGE_KEY, newTheme);
   }
 
   private applyTheme(theme: Theme): void {
@@ -43,25 +41,13 @@ export class ThemeService {
   }
 
   private loadTheme(): Theme {
-    if (!this.window || typeof this.window.localStorage === 'undefined') {
-      return LIGHT_THEME_NAME;
-    }
-
-    const saved = this.window.localStorage.getItem(this.STORAGE_KEY) as Theme | null;
+    const saved = this.localStorage.get(this.STORAGE_KEY) as Theme | null;
     if (saved === LIGHT_THEME_NAME || saved === DARK_THEME_NAME) {
       return saved;
     }
 
     // Check system preference
-    const prefersDark = this.window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const prefersDark = this.window?.matchMedia('(prefers-color-scheme: dark)').matches ?? false;
     return prefersDark ? DARK_THEME_NAME : LIGHT_THEME_NAME;
-  }
-
-  private saveTheme(theme: Theme): void {
-    if (!this.window || typeof this.window.localStorage === 'undefined') {
-      return;
-    }
-
-    this.window.localStorage.setItem(this.STORAGE_KEY, theme);
   }
 }
