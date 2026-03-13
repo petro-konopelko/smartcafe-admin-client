@@ -1,7 +1,9 @@
+import './preview.scss';
 import { Preview, applicationConfig } from '@storybook/angular';
 import { provideHttpClient } from '@angular/common/http';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideZonelessChangeDetection } from '@angular/core';
+import { withThemeByClassName } from '@storybook/addon-themes';
 
 const preview: Preview = {
   parameters: {
@@ -10,39 +12,28 @@ const preview: Preview = {
         color: /(background|color)$/i,
         date: /Date$/
       }
-    },
-    backgrounds: {
-      default: 'light',
-      values: [
-        {
-          name: 'light',
-          value: '#F8F9FA'
-        },
-        {
-          name: 'dark',
-          value: '#111318'
-        }
-      ]
     }
   },
 
   decorators: [
+    withThemeByClassName({
+      themes: {
+        light: '',
+        dark: 'dark-mode'
+      },
+      defaultTheme: 'light',
+      parentSelector: 'html'
+    }),
     applicationConfig({
       providers: [
         provideZonelessChangeDetection(),
         provideHttpClient(),
         provideTranslateService({
-          defaultLanguage: 'en-US'
+          fallbackLang: 'en-US'
         })
       ]
     })
-  ],
-
-  initialGlobals: {
-    backgrounds: {
-      value: 'light'
-    }
-  }
+  ]
 };
 
 export default preview;
