@@ -67,7 +67,7 @@
     "@angular/compiler-cli": "21.2.4",
     "@angular/platform-browser-dynamic": "21.2.4",
     "@commitlint/cli": "^20.4.3",
-    "@commitlint/config-conventional": "^20.4.3",
+    "@commitlint/config-conventional": "^20.4.4",
     "@eslint/js": "10.0.1",
     "@nx/angular": "22.5.4",
     "@nx/eslint": "22.5.4",
