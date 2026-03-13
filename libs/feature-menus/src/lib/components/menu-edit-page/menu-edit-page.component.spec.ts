@@ -41,6 +41,8 @@ describe('MenuEditPageComponent', () => {
 
     fixture = TestBed.createComponent(MenuEditPageComponent);
     component = fixture.componentInstance;
+    const router = TestBed.inject(Router);
+    vi.spyOn(router, 'navigate').mockResolvedValue(true);
     fixture.detectChanges();
   });
 
@@ -234,6 +236,8 @@ describe('MenuEditPageComponent (edit mode)', () => {
 
     fixture = TestBed.createComponent(MenuEditPageComponent);
     component = fixture.componentInstance;
+    const router = TestBed.inject(Router);
+    vi.spyOn(router, 'navigate').mockResolvedValue(true);
     fixture.detectChanges();
   });
 
