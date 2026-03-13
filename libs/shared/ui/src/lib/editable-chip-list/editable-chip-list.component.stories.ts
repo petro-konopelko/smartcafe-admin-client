@@ -3,12 +3,13 @@ import { moduleMetadata } from '@storybook/angular';
 import { Component, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { EditableChipListComponent, ChipItem } from './editable-chip-list.component';
+import { JsonPipe } from '@angular/common';
 
 const chip = (text: string, checked = false): ChipItem => ({ text, checked });
 
 @Component({
   selector: 'sc-chip-list-wrapper',
-  imports: [EditableChipListComponent, ReactiveFormsModule],
+  imports: [EditableChipListComponent, ReactiveFormsModule, JsonPipe],
   template: `
     <div style="padding: 20px; max-width: 600px;">
       <sc-editable-chip-list

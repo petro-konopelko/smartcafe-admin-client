@@ -163,15 +163,8 @@ npx storybook@latest init --type angular
 import type { StorybookConfig } from '@storybook/angular';
 
 const config: StorybookConfig = {
-  stories: [
-    '../libs/shared/ui/src/**/*.stories.@(js|jsx|ts|tsx|mdx)'
-  ],
-  addons: [
-    '@storybook/addon-links',
-    '@storybook/addon-essentials',
-    '@storybook/addon-interactions',
-    '@storybook/addon-a11y'
-  ],
+  stories: ['../libs/shared/ui/src/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
+  addons: ['@storybook/addon-a11y'],
   framework: {
     name: '@storybook/angular',
     options: {}
@@ -298,6 +291,7 @@ Add the following scripts to your `package.json`:
 ```
 
 **Explanation:**
+
 - `start`, `build`, `test`, `lint` - Standard development commands
 - `lint:pr`, `test:pr`, `build:pr` - Run only on **affected projects** (for Pull Requests)
 - `lint:ci`, `test:ci`, `build:ci` - Run on **all projects** (for CI on main branch)
@@ -329,6 +323,7 @@ npx nx configure-ai-agents
 ```
 
 This command will:
+
 1. Prompt you to select which AI agents/assistants to configure (Claude, GitHub Copilot, etc.)
 2. Set up the Nx MCP server configuration
 3. Generate AI agent configuration files (`AGENTS.md`, `CLAUDE.md`)
@@ -457,7 +452,7 @@ export const SUPPORTED_LOCALES = {
   UK_UA: 'uk-UA'
 } as const;
 
-export type SupportedLocale = typeof SUPPORTED_LOCALES[keyof typeof SUPPORTED_LOCALES];
+export type SupportedLocale = (typeof SUPPORTED_LOCALES)[keyof typeof SUPPORTED_LOCALES];
 
 export const DEFAULT_LOCALE: SupportedLocale = SUPPORTED_LOCALES.EN_US;
 
@@ -472,7 +467,7 @@ export const LOCALE_CURRENCY_MAP: Record<SupportedLocale, string> = {
 export class LocaleService {
   private readonly STORAGE_KEY = 'smartcafe-locale';
   private readonly DEFAULT_LOCALE = DEFAULT_LOCALE;
-  
+
   // Signal for reactive locale changes
   currentLocale = signal<SupportedLocale>(this.getStoredLocale());
 
@@ -483,11 +478,11 @@ export class LocaleService {
     // Configure supported languages
     this.translate.addLangs(Object.values(SUPPORTED_LOCALES));
     this.translate.setDefaultLang(DEFAULT_LOCALE);
-    
+
     // Set initial locale
     const locale = this.getStoredLocale();
     this.translate.use(locale);
-    
+
     // Persist locale changes to localStorage
     effect(() => {
       const locale = this.currentLocale();
@@ -518,7 +513,11 @@ export class LocaleService {
 ```typescript
 // apps/admin/src/app/app.config.ts
 
-import { ApplicationConfig, provideExperimentalZonelessChangeDetection, importProvidersFrom } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideExperimentalZonelessChangeDetection,
+  importProvidersFrom
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors, HttpClient } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -537,7 +536,9 @@ export const appConfig: ApplicationConfig = {
     provideRouter(appRoutes),
     provideAnimationsAsync(),
     provideHttpClient(
-      withInterceptors([/* your interceptors */])
+      withInterceptors([
+        /* your interceptors */
+      ])
     ),
     importProvidersFrom(
       TranslateModule.forRoot({
@@ -569,20 +570,17 @@ import { LocaleService } from '../services/locale.service';
 export class ScLocalDatePipe implements PipeTransform {
   private localeService = inject(LocaleService);
 
-  transform(
-    value: Date | string | number,
-    options?: Intl.DateTimeFormatOptions
-  ): string {
+  transform(value: Date | string | number, options?: Intl.DateTimeFormatOptions): string {
     const locale = this.localeService.currentLocale();
     const date = value instanceof Date ? value : new Date(value);
-    
+
     const defaultOptions: Intl.DateTimeFormatOptions = {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
       ...options
     };
-    
+
     return new Intl.DateTimeFormat(locale, defaultOptions).format(date);
   }
 }
@@ -604,16 +602,12 @@ import { LocaleService } from '../services/locale.service';
 export class ScLocalCurrencyPipe implements PipeTransform {
   private localeService = inject(LocaleService);
 
-  transform(
-    value: number | string,
-    currency?: string,
-    options?: Intl.NumberFormatOptions
-  ): string {
+  transform(value: number | string, currency?: string, options?: Intl.NumberFormatOptions): string {
     const locale = this.localeService.currentLocale();
     // Use locale-based currency if not specified
     const currencyCode = currency ?? this.localeService.currentCurrency();
     const amount = typeof value === 'string' ? parseFloat(value) : value;
-    
+
     return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: currencyCode,
@@ -639,13 +633,10 @@ import { LocaleService } from '../services/locale.service';
 export class ScLocalNumberPipe implements PipeTransform {
   private localeService = inject(LocaleService);
 
-  transform(
-    value: number | string,
-    options?: Intl.NumberFormatOptions
-  ): string {
+  transform(value: number | string, options?: Intl.NumberFormatOptions): string {
     const locale = this.localeService.currentLocale();
     const num = typeof value === 'string' ? parseFloat(value) : value;
-    
+
     return new Intl.NumberFormat(locale, options).format(num);
   }
 }
@@ -665,19 +656,22 @@ import { LocaleService, SupportedLocale } from '@smartcafe/admin/shared/utils';
   standalone: true,
   imports: [MatSelectModule],
   template: `
-    <mat-select 
-      [value]="localeService.currentLocale()" 
+    <mat-select
+      [value]="localeService.currentLocale()"
       (selectionChange)="onLanguageChange($event.value)"
-      aria-label="Select language">
+      aria-label="Select language"
+    >
       <mat-option value="en-US">English (US)</mat-option>
       <mat-option value="uk-UA">Українська</mat-option>
     </mat-select>
   `,
-  styles: [`
-    mat-select {
-      min-width: 120px;
-    }
-  `]
+  styles: [
+    `
+      mat-select {
+        min-width: 120px;
+      }
+    `
+  ]
 })
 export class LanguageSelectorComponent {
   localeService = inject(LocaleService);
@@ -720,21 +714,16 @@ export class LanguageSelectorComponent {
 import { Component, inject } from '@angular/core';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { LocaleService } from '@smartcafe/admin/shared/utils';
-import { 
-  ScLocalDatePipe, 
+import {
+  ScLocalDatePipe,
   ScLocalCurrencyPipe,
-  ScLocalNumberPipe 
+  ScLocalNumberPipe
 } from '@smartcafe/admin/shared/utils';
 
 @Component({
   selector: 'sc-cafe-details',
   standalone: true,
-  imports: [
-    TranslateModule,
-    ScLocalDatePipe,
-    ScLocalCurrencyPipe,
-    ScLocalNumberPipe
-  ],
+  imports: [TranslateModule, ScLocalDatePipe, ScLocalCurrencyPipe, ScLocalNumberPipe],
   template: `
     <h2>{{ 'cafes.title' | translate }}</h2>
     <p>{{ 'cafes.description' | translate }}</p>
@@ -750,7 +739,7 @@ export class ScCafeDetailsComponent {
     // Programmatic translation
     const message = this.translate.instant('cafes.count.other', { count: 10 });
     console.log(message);
-    
+
     // Get current locale
     const currentLocale = this.localeService.currentLocale();
     console.log('Current locale:', currentLocale);
@@ -779,11 +768,13 @@ import { LanguageSelectorComponent } from '@smartcafe/admin/shared/ui';
       <sc-language-selector />
     </mat-toolbar>
   `,
-  styles: [`
-    .spacer {
-      flex: 1 1 auto;
-    }
-  `]
+  styles: [
+    `
+      .spacer {
+        flex: 1 1 auto;
+      }
+    `
+  ]
 })
 export class ToolbarComponent {}
 ```
@@ -909,13 +900,7 @@ export const appConfig: ApplicationConfig = {
     provideExperimentalZonelessChangeDetection(), // Zoneless for better performance
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideHttpClient(
-      withInterceptors([
-        errorInterceptor,
-        loadingInterceptor,
-        retryInterceptor
-      ])
-    )
+    provideHttpClient(withInterceptors([errorInterceptor, loadingInterceptor, retryInterceptor]))
   ]
 };
 ```
@@ -958,15 +943,13 @@ export class CafeCardComponent {
   // ✅ Use signals for all state
   name = signal('My Cafe');
   itemCount = signal(0);
-  
+
   // ✅ Use computed for derived state
-  displayStatus = computed(() => 
-    this.itemCount() > 0 ? 'Active' : 'Empty'
-  );
-  
+  displayStatus = computed(() => (this.itemCount() > 0 ? 'Active' : 'Empty'));
+
   // ✅ Event handlers automatically trigger change detection
   increment() {
-    this.itemCount.update(n => n + 1); // UI updates automatically
+    this.itemCount.update((n) => n + 1); // UI updates automatically
   }
 }
 ```
@@ -980,10 +963,10 @@ import { ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'sc-menu-list',
-  changeDetection: ChangeDetectionStrategy.OnPush, // ⚠️ Required for zoneless!
+  changeDetection: ChangeDetectionStrategy.OnPush // ⚠️ Required for zoneless!
   // ...
 })
-export class MenuListComponent { }
+export class MenuListComponent {}
 ```
 
 #### 3. **Use Signal Inputs (Angular 17.1+)**
@@ -1004,11 +987,9 @@ import { Component, input, computed } from '@angular/core';
 export class MenuItemComponent {
   // ✅ Signal input (automatically reactive)
   item = input.required<MenuItem>();
-  
+
   // ✅ Computed from input
-  formattedPrice = computed(() => 
-    `$${this.item().price.toFixed(2)}`
-  );
+  formattedPrice = computed(() => `$${this.item().price.toFixed(2)}`);
 }
 ```
 
@@ -1026,7 +1007,7 @@ import { Component, inject } from '@angular/core';
     @if (cafeStore.loading()) {
       <mat-spinner></mat-spinner>
     }
-    
+
     @if (cafeStore.cafes(); as cafeList) {
       @for (cafe of cafeList; track cafe.id) {
         <sc-cafe-card [cafe]="cafe" />
@@ -1038,7 +1019,7 @@ export class CafeListComponent {
   // ✅ Recommended: Use NgRx Signal Store
   // All async logic stays in the store, component stays synchronous
   cafeStore = inject(CafeStore);
-  
+
   ngOnInit() {
     this.cafeStore.loadCafes(); // No async/await needed in component!
   }
@@ -1064,7 +1045,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class MenuListComponent {
   private menuService = inject(MenuApiService);
-  
+
   // ✅ Convert Observable to Signal (for read-only data)
   menus = toSignal(this.menuService.getMenus(this.cafeId), { initialValue: [] });
 }
@@ -1078,7 +1059,7 @@ export class MenuListComponent {
 export class DataComponent {
   loading = signal(false);
   data = signal<Cafe[]>([]);
-  
+
   async loadData() {
     this.loading.set(true);
     try {
@@ -1139,13 +1120,13 @@ export const CafeStore = signalStore(
         const cafes = await cafeApi.getCafes();
         patchState(store, { cafes, loading: false });
       } catch (error) {
-        patchState(store, { 
-          error: error.message, 
-          loading: false 
+        patchState(store, {
+          error: error.message,
+          loading: false
         });
       }
     },
-    
+
     async addCafe(cafe: CreateCafeRequest) {
       const newCafe = await cafeApi.createCafe(cafe);
       patchState(store, (state) => ({
@@ -1166,7 +1147,7 @@ export const CafeStore = signalStore(
     @if (cafeStore.loading()) {
       <mat-spinner></mat-spinner>
     }
-    
+
     @for (cafe of cafeStore.cafes(); track cafe.id) {
       <sc-cafe-card [cafe]="cafe" />
     }
@@ -1174,7 +1155,7 @@ export const CafeStore = signalStore(
 })
 export class CafeManagementComponent {
   cafeStore = inject(CafeStore);
-  
+
   ngOnInit() {
     // ✅ No async needed in component - store handles async operations
     // Just call the store method, it updates signals automatically
@@ -1195,8 +1176,11 @@ import { debounceTime, switchMap } from 'rxjs/operators';
   selector: 'sc-search',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <input [value]="searchTerm()" (input)="onSearch($event)" />
-    
+    <input
+      [value]="searchTerm()"
+      (input)="onSearch($event)"
+    />
+
     @for (result of results(); track result.id) {
       <div>{{ result.name }}</div>
     }
@@ -1204,22 +1188,22 @@ import { debounceTime, switchMap } from 'rxjs/operators';
 })
 export class SearchComponent {
   private searchService = inject(SearchService);
-  
+
   // ✅ Signal for search term
   searchTerm = signal('');
-  
+
   // ✅ Convert signal to observable for RxJS operators
   private searchTerm$ = toObservable(this.searchTerm);
-  
+
   // ✅ Convert observable result back to signal
   results = toSignal(
     this.searchTerm$.pipe(
       debounceTime(300),
-      switchMap(term => this.searchService.search(term))
+      switchMap((term) => this.searchService.search(term))
     ),
     { initialValue: [] }
   );
-  
+
   onSearch(event: Event) {
     const value = (event.target as HTMLInputElement).value;
     this.searchTerm.set(value); // ✅ Triggers RxJS pipeline
@@ -1310,7 +1294,10 @@ setTimeout(() => {
   selector: 'sc-cafe-form',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+    >
       <input formControlName="name" />
       @if (cafeStore.loading()) {
         <mat-spinner></mat-spinner>
@@ -1322,14 +1309,14 @@ setTimeout(() => {
 export class CafeFormComponent {
   private fb = inject(FormBuilder);
   cafeStore = inject(CafeStore);
-  
+
   form = this.fb.group({
     name: ['', Validators.required]
   });
-  
+
   onSubmit() {
     if (this.form.invalid) return;
-    
+
     // ✅ Call store method synchronously - store handles async
     this.cafeStore.createCafe(this.form.value);
     this.form.reset();
@@ -1355,7 +1342,7 @@ export class CafeFormComponent {
 })
 export class DataViewComponent {
   dataStore = inject(DataStore);
-  
+
   ngOnInit() {
     // ✅ Component stays synchronous - store handles async
     this.dataStore.loadData();
@@ -1386,7 +1373,8 @@ export const DataStore = signalStore(
   }))
 );
 ```
-```
+
+````
 
 ### Performance Benefits
 
@@ -1415,18 +1403,18 @@ describe('CafeComponent', () => {
       ]
     });
   });
-  
+
   it('should update on signal change', () => {
     const fixture = TestBed.createComponent(CafeComponent);
     const component = fixture.componentInstance;
-    
+
     component.name.set('New Name');
     fixture.detectChanges(); // Manual detection still works
-    
+
     expect(fixture.nativeElement.textContent).toContain('New Name');
   });
 });
-```
+````
 
 ---
 
@@ -1453,14 +1441,14 @@ libs/shared/models/
 
 **When to Create a New Library:**
 
-| Scenario | Library Type | Example |
-|----------|--------------|----------|
-| New feature domain | Feature library | `libs/feature-reports/` for reporting feature |
-| New API endpoint group | Data access library | `libs/data-access-orders/` for order API |
-| Component used 3+ times | Move to shared UI | Extract to `libs/shared/ui/` |
-| Utility functions shared | Shared utils | `libs/shared/utils/` for helpers |
-| DTOs/interfaces shared | Shared models | `libs/shared/models/` for types |
-| Testing helpers | Testing library | `libs/testing/test-helpers/` |
+| Scenario                 | Library Type        | Example                                       |
+| ------------------------ | ------------------- | --------------------------------------------- |
+| New feature domain       | Feature library     | `libs/feature-reports/` for reporting feature |
+| New API endpoint group   | Data access library | `libs/data-access-orders/` for order API      |
+| Component used 3+ times  | Move to shared UI   | Extract to `libs/shared/ui/`                  |
+| Utility functions shared | Shared utils        | `libs/shared/utils/` for helpers              |
+| DTOs/interfaces shared   | Shared models       | `libs/shared/models/` for types               |
+| Testing helpers          | Testing library     | `libs/testing/test-helpers/`                  |
 
 **Decision Flow:**
 
@@ -1484,14 +1472,14 @@ Is it a utility function/model?
 
 **When to Create a New Library:**
 
-| Scenario | Library Type | Example |
-|----------|--------------|----------|
-| New feature domain | Feature library | `libs/feature-reports/` for reporting feature |
-| New API endpoint group | Data access library | `libs/data-access-orders/` for order API |
-| Component used 3+ times | Move to shared UI | Extract to `libs/shared/ui/` |
-| Utility functions shared | Shared utils | `libs/shared/utils/` for helpers |
-| DTOs/interfaces shared | Shared models | `libs/shared/models/` for types |
-| Testing helpers | Testing library | `libs/testing/test-helpers/` |
+| Scenario                 | Library Type        | Example                                       |
+| ------------------------ | ------------------- | --------------------------------------------- |
+| New feature domain       | Feature library     | `libs/feature-reports/` for reporting feature |
+| New API endpoint group   | Data access library | `libs/data-access-orders/` for order API      |
+| Component used 3+ times  | Move to shared UI   | Extract to `libs/shared/ui/`                  |
+| Utility functions shared | Shared utils        | `libs/shared/utils/` for helpers              |
+| DTOs/interfaces shared   | Shared models       | `libs/shared/models/` for types               |
+| Testing helpers          | Testing library     | `libs/testing/test-helpers/`                  |
 
 **Decision Flow:**
 
@@ -1516,6 +1504,7 @@ Is it a utility function/model?
 ### 2. Shared Component Rule (Rule of Three)
 
 **When to create a shared component:**
+
 - ✅ **If a component is used 3+ times across different features, move it to `libs/shared/ui/`**
 - ✅ This ensures maintainability and consistency
 - ✅ Updates to shared components automatically propagate to all usage locations
@@ -1523,11 +1512,13 @@ Is it a utility function/model?
 - ✅ Examples: loading spinner, error message, confirmation dialog, empty state, data table, form fields
 
 **Component placement:**
+
 - **Feature-specific components** (used 1-2 times): Keep in feature library (e.g., `libs/feature-cafes/`)
 - **Reusable components** (used 3+ times): Move to `libs/shared/ui/`
 - **Cross-cutting components** (used in multiple features): Always in `libs/shared/ui/`
 
 **Refactoring workflow:**
+
 1. Component appears in 3rd location → Extract to `libs/shared/ui/`
 2. Update all usage locations to import from `@smartcafe/admin/shared/ui`
 3. Add component to Storybook for documentation
@@ -1602,24 +1593,15 @@ Is it a utility function/model?
               },
               {
                 "sourceTag": "type:data-access",
-                "onlyDependOnLibsWithTags": [
-                  "type:models",
-                  "type:utils"
-                ]
+                "onlyDependOnLibsWithTags": ["type:models", "type:utils"]
               },
               {
                 "sourceTag": "type:ui",
-                "onlyDependOnLibsWithTags": [
-                  "type:models",
-                  "type:utils"
-                ]
+                "onlyDependOnLibsWithTags": ["type:models", "type:utils"]
               },
               {
                 "sourceTag": "scope:admin",
-                "onlyDependOnLibsWithTags": [
-                  "scope:admin",
-                  "scope:shared"
-                ]
+                "onlyDependOnLibsWithTags": ["scope:admin", "scope:shared"]
               }
             ]
           }
@@ -1687,6 +1669,7 @@ nx reset
 ### 6. Using Angular MCP Server (VS Code)
 
 The Angular MCP server works seamlessly with Nx:
+
 - Generate components, services, guards in specific libraries
 - Run Nx commands through MCP
 - Access Angular documentation
@@ -1697,32 +1680,36 @@ The Angular MCP server works seamlessly with Nx:
 **One Entity Per File (Mandatory):**
 
 ✅ **One file per:**
+
 - Class (components, services, directives, pipes)
 - Interface
 - Enum
 
 **Examples:**
+
 ```typescript
 // ✅ CORRECT: cafe.component.ts
-export class CafeComponent { }
+export class CafeComponent {}
 
 // ✅ CORRECT: cafe-dto.interface.ts
-export interface CafeDto { }
+export interface CafeDto {}
 
 // ✅ CORRECT: menu-state.enum.ts
-export enum MenuState { }
+export enum MenuState {}
 
 // ❌ WRONG: cafe.ts (multiple classes)
-export class CafeComponent { }
-export class CafeService { }  // Move to cafe.service.ts
+export class CafeComponent {}
+export class CafeService {} // Move to cafe.service.ts
 ```
 
 ✅ **Multiple items allowed per file:**
+
 - Constants (e.g., `SUPPORTED_LOCALES`, `DEFAULT_LOCALE`)
 - Type aliases (e.g., `type UserId = string`)
 - Helper types (e.g., `type Optional<T> = T | null`)
 
 **Examples:**
+
 ```typescript
 // ✅ CORRECT: constants.ts
 export const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -1736,6 +1723,7 @@ export type Result<T> = { success: true; data: T } | { success: false; error: st
 ```
 
 **Why this rule?**
+
 - Easier to find and navigate code
 - Clearer module dependencies
 - Better tree-shaking (unused classes are removed)
@@ -1749,6 +1737,7 @@ export type Result<T> = { success: true; data: T } | { success: false; error: st
 ### Nx Library Organization
 
 #### Apps Layer
+
 ```
 apps/admin/               # Main application shell
 └── src/
@@ -1765,6 +1754,7 @@ apps/admin/               # Main application shell
 #### Feature Libraries (Smart Components + Routing)
 
 **1. Cafes Feature** (`libs/feature-cafes`)
+
 ```typescript
 // Lazy loaded route
 export const CAFES_ROUTES: Route[] = [
@@ -1785,12 +1775,14 @@ export * from './lib/store/cafe.store';
 ```
 
 **Contents**:
+
 - `CafeGridPageComponent` - Main page with virtual scrolling
 - `CafeCreatePageComponent` - Cafe creation form
 - `CafeEditPageComponent` - Cafe editing (future)
 - `CafeStore` - NgRx Signal Store for cafe feature state
 
 **Features**:
+
 - Virtual scrolling for large cafe lists
 - Create/edit cafe with validation
 - Soft delete with confirmation
@@ -1799,6 +1791,7 @@ export * from './lib/store/cafe.store';
 - Feature-level state management with CafeStore
 
 **2. Menus Feature** (`libs/feature-menus`)
+
 ```typescript
 // Lazy loaded route
 export const MENUS_ROUTES: Route[] = [
@@ -1827,6 +1820,7 @@ export * from './lib/store/menu.store';
 ```
 
 **Contents**:
+
 - `MenuGridPageComponent` - Grid with state badges
 - `MenuCreatePageComponent` - Multi-step menu creation
 - `MenuEditPageComponent` - Edit with drag & drop
@@ -1834,6 +1828,7 @@ export * from './lib/store/menu.store';
 - `MenuStore` - NgRx Signal Store for menu feature state
 
 **Features**:
+
 - Create menu with nested sections/items
 - Drag & drop reordering (sections and items)
 - Image upload for menu items
@@ -1845,6 +1840,7 @@ export * from './lib/store/menu.store';
 #### Data Access Libraries (API + State)
 
 **1. Cafe Data Access** (`libs/data-access-cafes`)
+
 ```typescript
 // Barrel export
 export * from './lib/services/cafe-api.service';
@@ -1855,11 +1851,13 @@ import { CafeApiService, CafeFormService } from '@smartcafe/admin/data-access-ca
 ```
 
 **Contents**:
+
 - `CafeApiService` - HTTP calls to cafe endpoints
 - `CafeFormService` - Form operations with validation
 - Cafe-specific models (if not in shared/models)
 
 **2. Menu Data Access** (`libs/data-access-menus`)
+
 ```typescript
 export * from './lib/services/menu-api.service';
 export * from './lib/services/image-api.service';
@@ -1867,6 +1865,7 @@ export * from './lib/services/menu-form.service';
 ```
 
 **Contents**:
+
 - `MenuApiService` - HTTP calls to menu endpoints
 - `ImageApiService` - Image upload service
 - `MenuFormService` - Form operations with validation
@@ -1874,6 +1873,7 @@ export * from './lib/services/menu-form.service';
 #### UI Libraries (Presentational Components)
 
 **1. Shared UI** (`libs/shared/ui`)
+
 ```typescript
 // Core reusable components
 export * from './lib/loading-spinner/loading-spinner.component';
@@ -1885,6 +1885,7 @@ export * from './lib/empty-state/empty-state.component';
 #### Shared Libraries
 
 **1. Models** (`libs/shared/models`)
+
 ```typescript
 // All TypeScript models/DTOs
 export * from './lib/cafe.models';
@@ -1894,6 +1895,7 @@ export * from './lib/enums';
 ```
 
 **2. Shared Data Access** (`libs/shared/data-access`)
+
 ```typescript
 // Core services used across features
 export * from './lib/theme.service';
@@ -1904,6 +1906,7 @@ export * from './lib/i18n.service';
 ```
 
 **3. Utils** (`libs/shared/utils`)
+
 ```typescript
 // Pure utility functions
 export * from './lib/date-utils';
@@ -1914,6 +1917,7 @@ export * from './lib/image-compression';
 #### Testing Libraries
 
 **Test Helpers** (`libs/testing/test-helpers`)
+
 ```typescript
 // Shared test utilities
 export * from './lib/mocks/cafe.mocks';
@@ -2048,13 +2052,11 @@ export const APP_ROUTES: Routes = [
   },
   {
     path: 'cafes',
-    loadChildren: () =>
-      import('@smartcafe/admin/feature-cafes').then((m) => m.CAFES_ROUTES)
+    loadChildren: () => import('@smartcafe/admin/feature-cafes').then((m) => m.CAFES_ROUTES)
   },
   {
     path: 'cafes/:cafeId/menus',
-    loadChildren: () =>
-      import('@smartcafe/admin/feature-menus').then((m) => m.MENUS_ROUTES)
+    loadChildren: () => import('@smartcafe/admin/feature-menus').then((m) => m.MENUS_ROUTES)
   },
   {
     path: '**',
@@ -2062,6 +2064,7 @@ export const APP_ROUTES: Routes = [
   }
 ];
 ```
+
 - `MenuCreatePage` - Create menu with sections/items
 - `MenuEditPage` - Edit existing menu (drag & drop)
 - `MenuPreviewPage` - Customer-facing menu view
@@ -2074,6 +2077,7 @@ export const APP_ROUTES: Routes = [
 - `MenuStateBadge` - Visual state indicator (New/Published/Active)
 
 **Features**:
+
 - Create menu with nested sections and items
 - Drag & drop reordering (sections and items)
 - Image upload for menu items (with client-side compression)
@@ -2131,32 +2135,32 @@ export const environment = {
 
 #### Cafe Endpoints
 
-| Method | Endpoint | Request Body | Response | Description |
-|--------|----------|--------------|----------|-------------|
-| GET | `/cafes` | - | `CafeDto[]` | List all cafes |
-| POST | `/cafes` | `CreateCafeRequest` | `CreateCafeResponse` | Create cafe |
-| GET | `/cafes/{cafeId}` | - | `CafeDto` | Get cafe by ID |
-| DELETE | `/cafes/{cafeId}` | - | 204 No Content | Soft delete cafe |
+| Method | Endpoint          | Request Body        | Response             | Description      |
+| ------ | ----------------- | ------------------- | -------------------- | ---------------- |
+| GET    | `/cafes`          | -                   | `CafeDto[]`          | List all cafes   |
+| POST   | `/cafes`          | `CreateCafeRequest` | `CreateCafeResponse` | Create cafe      |
+| GET    | `/cafes/{cafeId}` | -                   | `CafeDto`            | Get cafe by ID   |
+| DELETE | `/cafes/{cafeId}` | -                   | 204 No Content       | Soft delete cafe |
 
 #### Menu Endpoints
 
-| Method | Endpoint | Request Body | Response | Description |
-|--------|----------|--------------|----------|-------------|
-| GET | `/cafes/{cafeId}/menus` | - | `ListMenusResponse` | List menus for cafe |
-| POST | `/cafes/{cafeId}/menus` | `CreateMenuRequest` | `CreateMenuResponse` | Create menu |
-| GET | `/cafes/{cafeId}/menus/{menuId}` | - | `MenuDto` | Get menu by ID |
-| PUT | `/cafes/{cafeId}/menus/{menuId}` | `UpdateMenuRequest` | 204 No Content | Update menu |
-| DELETE | `/cafes/{cafeId}/menus/{menuId}` | - | 204 No Content | Delete menu |
-| GET | `/cafes/{cafeId}/menus/active` | - | `MenuDto` | Get active menu |
-| POST | `/cafes/{cafeId}/menus/{menuId}/clone` | `CloneMenuRequest` | `CreateMenuResponse` | Clone menu |
-| POST | `/cafes/{cafeId}/menus/{menuId}/publish` | - | `PublishMenuResponse` | Publish menu |
-| POST | `/cafes/{cafeId}/menus/{menuId}/activate` | - | `ActivateMenuResponse` | Activate menu |
+| Method | Endpoint                                  | Request Body        | Response               | Description         |
+| ------ | ----------------------------------------- | ------------------- | ---------------------- | ------------------- |
+| GET    | `/cafes/{cafeId}/menus`                   | -                   | `ListMenusResponse`    | List menus for cafe |
+| POST   | `/cafes/{cafeId}/menus`                   | `CreateMenuRequest` | `CreateMenuResponse`   | Create menu         |
+| GET    | `/cafes/{cafeId}/menus/{menuId}`          | -                   | `MenuDto`              | Get menu by ID      |
+| PUT    | `/cafes/{cafeId}/menus/{menuId}`          | `UpdateMenuRequest` | 204 No Content         | Update menu         |
+| DELETE | `/cafes/{cafeId}/menus/{menuId}`          | -                   | 204 No Content         | Delete menu         |
+| GET    | `/cafes/{cafeId}/menus/active`            | -                   | `MenuDto`              | Get active menu     |
+| POST   | `/cafes/{cafeId}/menus/{menuId}/clone`    | `CloneMenuRequest`  | `CreateMenuResponse`   | Clone menu          |
+| POST   | `/cafes/{cafeId}/menus/{menuId}/publish`  | -                   | `PublishMenuResponse`  | Publish menu        |
+| POST   | `/cafes/{cafeId}/menus/{menuId}/activate` | -                   | `ActivateMenuResponse` | Activate menu       |
 
 #### Image Endpoint
 
-| Method | Endpoint | Request Body | Response | Description |
-|--------|----------|--------------|----------|-------------|
-| POST | `/images/upload` | `FormData` (multipart) | `UploadImageResponse` | Upload menu item image |
+| Method | Endpoint         | Request Body           | Response              | Description            |
+| ------ | ---------------- | ---------------------- | --------------------- | ---------------------- |
+| POST   | `/images/upload` | `FormData` (multipart) | `UploadImageResponse` | Upload menu item image |
 
 ### TypeScript Models (DTOs)
 
@@ -2302,11 +2306,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { 
-  CafeDto, 
-  CreateCafeRequest, 
-  CreateCafeResponse
-} from '../../../shared/models/api.models';
+import { CafeDto, CreateCafeRequest, CreateCafeResponse } from '../../../shared/models/api.models';
 
 @Injectable({
   providedIn: 'root'
@@ -2340,7 +2340,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { 
+import {
   MenuDto,
   CreateMenuRequest,
   UpdateMenuRequest,
@@ -2382,23 +2382,27 @@ export class MenuApiService {
     return this.http.delete<void>(`${this.baseUrl}/cafes/${cafeId}/menus/${menuId}`);
   }
 
-  cloneMenu(cafeId: string, menuId: string, request: CloneMenuRequest): Observable<CreateMenuResponse> {
+  cloneMenu(
+    cafeId: string,
+    menuId: string,
+    request: CloneMenuRequest
+  ): Observable<CreateMenuResponse> {
     return this.http.post<CreateMenuResponse>(
-      `${this.baseUrl}/cafes/${cafeId}/menus/${menuId}/clone`, 
+      `${this.baseUrl}/cafes/${cafeId}/menus/${menuId}/clone`,
       request
     );
   }
 
   publishMenu(cafeId: string, menuId: string): Observable<PublishMenuResponse> {
     return this.http.post<PublishMenuResponse>(
-      `${this.baseUrl}/cafes/${cafeId}/menus/${menuId}/publish`, 
+      `${this.baseUrl}/cafes/${cafeId}/menus/${menuId}/publish`,
       null
     );
   }
 
   activateMenu(cafeId: string, menuId: string): Observable<ActivateMenuResponse> {
     return this.http.post<ActivateMenuResponse>(
-      `${this.baseUrl}/cafes/${cafeId}/menus/${menuId}/activate`, 
+      `${this.baseUrl}/cafes/${cafeId}/menus/${menuId}/activate`,
       null
     );
   }
@@ -2424,7 +2428,7 @@ export class ImageApiService {
   uploadImage(file: File): Observable<UploadImageResponse> {
     const formData = new FormData();
     formData.append('file', file);
-    
+
     return this.http.post<UploadImageResponse>(`${this.baseUrl}/upload`, formData);
   }
 }
@@ -2461,7 +2465,11 @@ import { CafeCardComponent } from '../cafe-card/cafe-card.component';
     <div class="cafe-grid-container">
       <div class="header">
         <h1>Cafes</h1>
-        <button mat-raised-button color="primary" routerLink="/cafes/create">
+        <button
+          mat-raised-button
+          color="primary"
+          routerLink="/cafes/create"
+        >
           <mat-icon>add</mat-icon>
           Create Cafe
         </button>
@@ -2492,35 +2500,39 @@ import { CafeCardComponent } from '../cafe-card/cafe-card.component';
             <sc-cafe-card
               [cafe]="cafe"
               (delete)="onDelete($event)"
-              (navigate)="onNavigate($event)" />
+              (navigate)="onNavigate($event)"
+            />
           }
         </div>
       }
     </div>
   `,
-  styles: [`
-    .cafe-grid-container {
-      padding: 24px;
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 24px;
-    }
-    .loading-container, .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 48px;
-    }
-  `]
+  styles: [
+    `
+      .cafe-grid-container {
+        padding: 24px;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 24px;
+      }
+      .loading-container,
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 48px;
+      }
+    `
+  ]
 })
 export class CafeGridComponent implements OnInit {
   cafeStore = inject(CafeStore);
@@ -2548,12 +2560,7 @@ export class CafeGridComponent implements OnInit {
 
 import { Component, inject, signal, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -2578,10 +2585,20 @@ import { ValidationRules } from '@smartcafe/admin/shared/utils';
         <mat-card-title>Create Cafe</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <form [formGroup]="cafeForm" (ngSubmit)="onSubmit()">
-          <mat-form-field appearance="outline" class="full-width">
+        <form
+          [formGroup]="cafeForm"
+          (ngSubmit)="onSubmit()"
+        >
+          <mat-form-field
+            appearance="outline"
+            class="full-width"
+          >
             <mat-label>Cafe Name</mat-label>
-            <input matInput formControlName="name" required />
+            <input
+              matInput
+              formControlName="name"
+              required
+            />
             @if (cafeForm.get('name')?.hasError('required') && cafeForm.get('name')?.touched) {
               <mat-error>{{ ValidationRules.Cafe.name.messages.required }}</mat-error>
             }
@@ -2590,21 +2607,35 @@ import { ValidationRules } from '@smartcafe/admin/shared/utils';
             }
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="full-width">
+          <mat-form-field
+            appearance="outline"
+            class="full-width"
+          >
             <mat-label>Contact Info</mat-label>
-            <textarea matInput formControlName="contactInfo" rows="3"></textarea>
+            <textarea
+              matInput
+              formControlName="contactInfo"
+              rows="3"
+            ></textarea>
             @if (cafeForm.get('contactInfo')?.hasError('maxlength')) {
               <mat-error>{{ ValidationRules.Cafe.contactInfo.messages.maxLength }}</mat-error>
             }
           </mat-form-field>
 
           <div class="actions">
-            <button mat-button type="button" (click)="onCancel()">Cancel</button>
+            <button
+              mat-button
+              type="button"
+              (click)="onCancel()"
+            >
+              Cancel
+            </button>
             <button
               mat-raised-button
               color="primary"
               type="submit"
-              [disabled]="cafeForm.invalid || submitting()">
+              [disabled]="cafeForm.invalid || submitting()"
+            >
               {{ submitting() ? 'Creating...' : 'Create Cafe' }}
             </button>
           </div>
@@ -2612,18 +2643,20 @@ import { ValidationRules } from '@smartcafe/admin/shared/utils';
       </mat-card-content>
     </mat-card>
   `,
-  styles: [`
-    .full-width {
-      width: 100%;
-      margin-bottom: 16px;
-    }
-    .actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-      margin-top: 24px;
-    }
-  `]
+  styles: [
+    `
+      .full-width {
+        width: 100%;
+        margin-bottom: 16px;
+      }
+      .actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 24px;
+      }
+    `
+  ]
 })
 export class CafeFormComponent {
   private fb = inject(FormBuilder);
@@ -2633,13 +2666,8 @@ export class CafeFormComponent {
   created = output<string>();
 
   cafeForm = this.fb.group({
-    name: ['', [
-      Validators.required,
-      Validators.maxLength(ValidationRules.Cafe.name.maxLength)
-    ]],
-    contactInfo: ['', [
-      Validators.maxLength(ValidationRules.Cafe.contactInfo.maxLength)
-    ]]
+    name: ['', [Validators.required, Validators.maxLength(ValidationRules.Cafe.name.maxLength)]],
+    contactInfo: ['', [Validators.maxLength(ValidationRules.Cafe.contactInfo.maxLength)]]
   });
 
   onSubmit() {
@@ -2675,7 +2703,10 @@ import { CafeCardComponent } from '../cafe-card/cafe-card.component';
   standalone: true,
   imports: [CommonModule, ScrollingModule, CafeCardComponent],
   template: `
-    <cdk-virtual-scroll-viewport itemSize="200" class="viewport">
+    <cdk-virtual-scroll-viewport
+      itemSize="200"
+      class="viewport"
+    >
       @for (cafe of cafeStore.cafes(); track cafe.id) {
         <div class="cafe-item">
           <sc-cafe-card [cafe]="cafe" />
@@ -2683,17 +2714,19 @@ import { CafeCardComponent } from '../cafe-card/cafe-card.component';
       }
     </cdk-virtual-scroll-viewport>
   `,
-  styles: [`
-    .viewport {
-      height: calc(100vh - 200px);
-      width: 100%;
-    }
-    .cafe-item {
-      height: 200px;
-      padding: 12px;
-      box-sizing: border-box;
-    }
-  `]
+  styles: [
+    `
+      .viewport {
+        height: calc(100vh - 200px);
+        width: 100%;
+      }
+      .cafe-item {
+        height: 200px;
+        padding: 12px;
+        box-sizing: border-box;
+      }
+    `
+  ]
 })
 export class CafeVirtualListComponent implements OnInit {
   cafeStore = inject(CafeStore);
@@ -2722,7 +2755,11 @@ import { MenuStore } from '@smartcafe/admin/data-access-menus';
   standalone: true,
   imports: [CommonModule, MatGridListModule],
   template: `
-    <mat-grid-list [cols]="columns()" rowHeight="300px" gutterSize="16px">
+    <mat-grid-list
+      [cols]="columns()"
+      rowHeight="300px"
+      gutterSize="16px"
+    >
       @for (menu of menuStore.menus(); track menu.id) {
         <mat-grid-tile>
           <sc-menu-card [menu]="menu" />
@@ -2748,7 +2785,7 @@ export class MenuGridComponent implements OnInit, OnDestroy {
         Breakpoints.XLarge
       ])
       .pipe(takeUntil(this.destroy$))
-      .subscribe(result => {
+      .subscribe((result) => {
         if (result.breakpoints[Breakpoints.XSmall]) {
           this.columns.set(1);
         } else if (result.breakpoints[Breakpoints.Small]) {
@@ -2785,12 +2822,7 @@ import { ImageCompressionService } from '@smartcafe/admin/shared/utils';
 @Component({
   selector: 'sc-image-upload',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressBarModule
-  ],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatProgressBarModule],
   template: `
     <div class="upload-container">
       <input
@@ -2798,14 +2830,16 @@ import { ImageCompressionService } from '@smartcafe/admin/shared/utils';
         type="file"
         accept="image/*"
         (change)="onFileSelected($event)"
-        hidden />
+        hidden
+      />
 
       @if (!imageUrl()) {
         <button
           mat-raised-button
           color="primary"
           (click)="fileInput.click()"
-          [disabled]="uploading()">
+          [disabled]="uploading()"
+        >
           <mat-icon>cloud_upload</mat-icon>
           {{ uploading() ? 'Uploading...' : 'Upload Image' }}
         </button>
@@ -2817,8 +2851,14 @@ import { ImageCompressionService } from '@smartcafe/admin/shared/utils';
 
       @if (imageUrl()) {
         <div class="image-preview">
-          <img [src]="imageUrl()" alt="Uploaded image" />
-          <button mat-icon-button (click)="removeImage()">
+          <img
+            [src]="imageUrl()"
+            alt="Uploaded image"
+          />
+          <button
+            mat-icon-button
+            (click)="removeImage()"
+          >
             <mat-icon>close</mat-icon>
           </button>
         </div>
@@ -2829,32 +2869,34 @@ import { ImageCompressionService } from '@smartcafe/admin/shared/utils';
       }
     </div>
   `,
-  styles: [`
-    .upload-container {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .image-preview {
-      position: relative;
-      max-width: 300px;
-    }
-    .image-preview img {
-      width: 100%;
-      border-radius: 8px;
-    }
-    .image-preview button {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
-    }
-    .error {
-      color: #f44336;
-      font-size: 14px;
-    }
-  `]
+  styles: [
+    `
+      .upload-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .image-preview {
+        position: relative;
+        max-width: 300px;
+      }
+      .image-preview img {
+        width: 100%;
+        border-radius: 8px;
+      }
+      .image-preview button {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+      }
+      .error {
+        color: #f44336;
+        font-size: 14px;
+      }
+    `
+  ]
 })
 export class ImageUploadComponent {
   private imageApi = inject(ImageApiService);
@@ -2918,18 +2960,8 @@ export class ImageUploadComponent {
 
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  CdkDragDrop,
-  moveItemInArray,
-  DragDropModule
-} from '@angular/cdk/drag-drop';
-import {
-  FormBuilder,
-  FormArray,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
+import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
+import { FormBuilder, FormArray, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -2951,14 +2983,25 @@ import { MatCardModule } from '@angular/material/card';
   ],
   template: `
     <form [formGroup]="menuForm">
-      <mat-form-field appearance="outline" class="full-width">
+      <mat-form-field
+        appearance="outline"
+        class="full-width"
+      >
         <mat-label>Menu Name</mat-label>
-        <input matInput formControlName="name" required />
+        <input
+          matInput
+          formControlName="name"
+          required
+        />
       </mat-form-field>
 
       <div class="sections-header">
         <h3>Sections</h3>
-        <button mat-raised-button type="button" (click)="addSection()">
+        <button
+          mat-raised-button
+          type="button"
+          (click)="addSection()"
+        >
           <mat-icon>add</mat-icon>
           Add Section
         </button>
@@ -2967,24 +3010,38 @@ import { MatCardModule } from '@angular/material/card';
       <div
         cdkDropList
         (cdkDropListDropped)="dropSection($event)"
-        class="sections-list">
+        class="sections-list"
+      >
         @for (section of sectionsArray.controls; track section; let i = $index) {
-          <mat-card cdkDrag class="section-card">
-            <div class="drag-handle" cdkDragHandle>
+          <mat-card
+            cdkDrag
+            class="section-card"
+          >
+            <div
+              class="drag-handle"
+              cdkDragHandle
+            >
               <mat-icon>drag_indicator</mat-icon>
             </div>
 
-            <div [formGroupName]="i" class="section-content">
+            <div
+              [formGroupName]="i"
+              class="section-content"
+            >
               <mat-form-field appearance="outline">
                 <mat-label>Section Name</mat-label>
-                <input matInput formControlName="name" />
+                <input
+                  matInput
+                  formControlName="name"
+                />
               </mat-form-field>
 
               <button
                 mat-icon-button
                 color="warn"
                 type="button"
-                (click)="removeSection(i)">
+                (click)="removeSection(i)"
+              >
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
@@ -2993,37 +3050,39 @@ import { MatCardModule } from '@angular/material/card';
       </div>
     </form>
   `,
-  styles: [`
-    .full-width {
-      width: 100%;
-    }
-    .sections-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 24px 0 16px;
-    }
-    .sections-list {
-      min-height: 100px;
-    }
-    .section-card {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 12px;
-      cursor: move;
-    }
-    .drag-handle {
-      display: flex;
-      align-items: center;
-      color: #666;
-    }
-    .section-content {
-      flex: 1;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-  `]
+  styles: [
+    `
+      .full-width {
+        width: 100%;
+      }
+      .sections-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 24px 0 16px;
+      }
+      .sections-list {
+        min-height: 100px;
+      }
+      .section-card {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 12px;
+        cursor: move;
+      }
+      .drag-handle {
+        display: flex;
+        align-items: center;
+        color: #666;
+      }
+      .section-content {
+        flex: 1;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+    `
+  ]
 })
 export class MenuBuilderComponent {
   private fb = inject(FormBuilder);
@@ -3050,11 +3109,7 @@ export class MenuBuilderComponent {
   }
 
   dropSection(event: CdkDragDrop<any>) {
-    moveItemInArray(
-      this.sectionsArray.controls,
-      event.previousIndex,
-      event.currentIndex
-    );
+    moveItemInArray(this.sectionsArray.controls, event.previousIndex, event.currentIndex);
     this.sectionsArray.updateValueAndValidity();
   }
 }
@@ -3155,6 +3210,7 @@ Form Group (reactive forms)
 ```
 
 **Key Principles:**
+
 - **API Service**: Shared HTTP layer used by both stores and form services (no duplication)
 - **Store**: Pure state management - handles queries, state updates, and data loading
 - **Form Service**: Handles form-specific operations (create/update) with validation error mapping
@@ -3213,12 +3269,11 @@ import { FormGroup, FormArray } from '@angular/forms';
 export interface ValidationError {
   message: string;
   code?: string;
-  field?: string;  // Backend field name (PascalCase)
+  field?: string; // Backend field name (PascalCase)
 }
 
 @Injectable({ providedIn: 'root' })
 export class FormErrorMapperService {
-  
   /**
    * Maps backend validation errors to Angular form controls
    * Converts PascalCase backend field names to camelCase frontend names
@@ -3237,19 +3292,19 @@ export class FormErrorMapperService {
 
       if (control) {
         // Set backend errors on the control
-        const errorMessages = fieldErrors.map(e => e.message);
-        control.setErrors({ 
-          backend: errorMessages.length === 1 ? errorMessages[0] : errorMessages 
+        const errorMessages = fieldErrors.map((e) => e.message);
+        control.setErrors({
+          backend: errorMessages.length === 1 ? errorMessages[0] : errorMessages
         });
         control.markAsTouched();
       }
     }
 
     // Handle general errors (no field specified)
-    const generalErrors = errors.filter(e => !e.field);
+    const generalErrors = errors.filter((e) => !e.field);
     if (generalErrors.length > 0) {
-      form.setErrors({ 
-        backend: generalErrors.map(e => e.message) 
+      form.setErrors({
+        backend: generalErrors.map((e) => e.message)
       });
     }
   }
@@ -3257,17 +3312,17 @@ export class FormErrorMapperService {
   /**
    * Converts backend PascalCase field names to frontend camelCase
    * Also converts array notation [0] to dot notation .0
-   * Examples: 
+   * Examples:
    *   "Name" -> "name"
    *   "ContactInfo" -> "contactInfo"
    *   "Sections[0].Name" -> "sections.0.name"
    */
   private toFormFieldName(backendField: string): string {
     if (!backendField) return '';
-    
+
     // Convert array notation [0] to dot notation .0
     const withDotNotation = backendField.replace(/\[(\d+)\]/g, '.$1');
-    
+
     // Convert first character to lowercase (PascalCase to camelCase)
     return withDotNotation.charAt(0).toLowerCase() + withDotNotation.slice(1);
   }
@@ -3276,15 +3331,18 @@ export class FormErrorMapperService {
    * Groups validation errors by field name
    */
   private groupErrorsByField(errors: ValidationError[]): Record<string, ValidationError[]> {
-    return errors.reduce((acc, error) => {
-      if (error.field) {
-        if (!acc[error.field]) {
-          acc[error.field] = [];
+    return errors.reduce(
+      (acc, error) => {
+        if (error.field) {
+          if (!acc[error.field]) {
+            acc[error.field] = [];
+          }
+          acc[error.field].push(error);
         }
-        acc[error.field].push(error);
-      }
-      return acc;
-    }, {} as Record<string, ValidationError[]>);
+        return acc;
+      },
+      {} as Record<string, ValidationError[]>
+    );
   }
 
   /**
@@ -3323,7 +3381,7 @@ export class FormErrorMapperService {
     }
 
     // Clear control-level errors recursively
-    Object.values(form.controls).forEach(control => {
+    Object.values(form.controls).forEach((control) => {
       if (control instanceof FormGroup || control instanceof FormArray) {
         this.clearFormErrors(control as FormGroup);
       } else if (control.errors?.['backend']) {
@@ -3376,18 +3434,16 @@ export class CafeFormService {
     }
 
     try {
-      const response = await firstValueFrom(
-        this.apiService.createCafe(form.value)
-      );
-      
+      const response = await firstValueFrom(this.apiService.createCafe(form.value));
+
       this.notifications.showSuccess('Cafe created successfully');
-      
+
       // Reload store state after successful creation
       await this.store.loadCafes();
-      
+
       // Navigate to cafe detail page
       await this.router.navigate(['/cafes', response.id]);
-      
+
       return { success: true, data: response };
     } catch (error: any) {
       return this.handleError(error, form);
@@ -3404,15 +3460,13 @@ export class CafeFormService {
     }
 
     try {
-      await firstValueFrom(
-        this.apiService.updateCafe(cafeId, form.value)
-      );
-      
+      await firstValueFrom(this.apiService.updateCafe(cafeId, form.value));
+
       this.notifications.showSuccess('Cafe updated successfully');
-      
+
       // Reload store state
       await this.store.loadCafes();
-      
+
       return { success: true };
     } catch (error: any) {
       return this.handleError(error, form);
@@ -3469,14 +3523,12 @@ export class MenuFormService {
     }
 
     try {
-      const response = await firstValueFrom(
-        this.apiService.createMenu(cafeId, form.value)
-      );
-      
+      const response = await firstValueFrom(this.apiService.createMenu(cafeId, form.value));
+
       this.notifications.showSuccess('Menu created successfully');
       await this.store.loadMenus(cafeId);
       await this.router.navigate(['/cafes', cafeId, 'menus', response.id]);
-      
+
       return { success: true, data: response };
     } catch (error: any) {
       // Handle validation errors (400) - map to form controls
@@ -3485,7 +3537,7 @@ export class MenuFormService {
         this.errorMapper.applyToForm(form, error.error.details);
         return { success: false };
       }
-      
+
       // All other errors (404, 409, 500) handled by error interceptor
       return { success: false };
     }
@@ -3498,13 +3550,11 @@ export class MenuFormService {
     }
 
     try {
-      await firstValueFrom(
-        this.apiService.updateMenu(cafeId, menuId, form.value)
-      );
-      
+      await firstValueFrom(this.apiService.updateMenu(cafeId, menuId, form.value));
+
       this.notifications.showSuccess('Menu updated successfully');
       await this.store.loadMenus(cafeId);
-      
+
       return { success: true };
     } catch (error: any) {
       // Handle validation errors (400) - map to form controls
@@ -3513,7 +3563,7 @@ export class MenuFormService {
         this.errorMapper.applyToForm(form, error.error.details);
         return { success: false };
       }
-      
+
       // All other errors (404, 409, 500) handled by error interceptor
       return { success: false };
     }
@@ -3535,10 +3585,16 @@ import { CafeFormService } from '@smartcafe/admin/data-access-cafes';
   standalone: true,
   imports: [ReactiveFormsModule],
   template: `
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+    >
       <div class="form-field">
         <label for="name">Name *</label>
-        <input id="name" formControlName="name" />
+        <input
+          id="name"
+          formControlName="name"
+        />
         @if (form.get('name')?.touched && form.get('name')?.errors) {
           <div class="error">
             @if (form.get('name')?.errors?.['required']) {
@@ -3553,7 +3609,10 @@ import { CafeFormService } from '@smartcafe/admin/data-access-cafes';
 
       <div class="form-field">
         <label for="contactInfo">Contact Info</label>
-        <input id="contactInfo" formControlName="contactInfo" />
+        <input
+          id="contactInfo"
+          formControlName="contactInfo"
+        />
         @if (form.get('contactInfo')?.touched && form.get('contactInfo')?.errors?.['backend']) {
           <div class="error">
             {{ form.get('contactInfo')?.errors?.['backend'] }}
@@ -3561,7 +3620,10 @@ import { CafeFormService } from '@smartcafe/admin/data-access-cafes';
         }
       </div>
 
-      <button type="submit" [disabled]="submitting()">
+      <button
+        type="submit"
+        [disabled]="submitting()"
+      >
         {{ cafeId() ? 'Update' : 'Create' }}
       </button>
     </form>
@@ -3620,9 +3682,11 @@ The backend returns validation errors in this format:
 ```
 
 **Error Type Enum:**
+
 - `0` = NotFound
 - `1` = Validation
 - `2` = Conflict
+
 ```
 
 ### Field Name Mapping
@@ -3655,12 +3719,14 @@ Backend uses **PascalCase** with array notation `[index]`, frontend uses **camel
 
 **Data Flow Example:**
 ```
+
 1. Component renders form with initial data from Store.loadCafe()
 2. User fills form and submits
 3. FormService.createCafe(form) → validates → calls API → handles errors
 4. On success: FormService → Store.loadCafes() → navigation
 5. On validation error: FormService → FormErrorMapper → form controls
-```
+
+````
 
 ---
 
@@ -3708,7 +3774,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       return throwError(() => error);
     })
   );
-```
+````
 
 ### Loading Interceptor
 
@@ -3725,9 +3791,7 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
 
   loadingService.show();
 
-  return next(req).pipe(
-    finalize(() => loadingService.hide())
-  );
+  return next(req).pipe(finalize(() => loadingService.hide()));
 };
 ```
 
@@ -3763,12 +3827,14 @@ export const retryInterceptor: HttpInterceptorFn = (req, next) => {
 **Important:** Stores handle **state queries and updates only**. For form-based create/update operations with validation error handling, use **Form Services** (see Form Services section above).
 
 **Store Responsibilities:**
+
 - Load and cache data (read operations)
 - Manage UI state (loading, error, selections)
 - Provide computed values (filtered lists, counts)
 - Execute non-form operations (delete, publish, activate, clone)
 
 **Form Service Responsibilities:**
+
 - Handle create/update operations from forms
 - Map backend validation errors to form controls
 - Show success/error notifications
@@ -3808,66 +3874,68 @@ export const CafeStore = signalStore(
     cafeCount: computed(() => store.cafes().length),
     hasError: computed(() => store.error() !== null)
   })),
-  withMethods((store, apiService = inject(CafeApiService), notifications = inject(NotificationService)) => ({
-    /**
-     * Loads all cafes from the API
-     * Used by: List views, initial data loading
-     */
-    async loadCafes() {
-      patchState(store, { loading: true, error: null });
-      try {
-        const cafes = await firstValueFrom(apiService.getCafes());
-        patchState(store, { cafes, loading: false });
-      } catch (error) {
-        const errorMessage = 'Failed to load cafes';
-        patchState(store, { error: errorMessage, loading: false });
-        // Error notification shown by error interceptor
-      }
-    },
+  withMethods(
+    (store, apiService = inject(CafeApiService), notifications = inject(NotificationService)) => ({
+      /**
+       * Loads all cafes from the API
+       * Used by: List views, initial data loading
+       */
+      async loadCafes() {
+        patchState(store, { loading: true, error: null });
+        try {
+          const cafes = await firstValueFrom(apiService.getCafes());
+          patchState(store, { cafes, loading: false });
+        } catch (error) {
+          const errorMessage = 'Failed to load cafes';
+          patchState(store, { error: errorMessage, loading: false });
+          // Error notification shown by error interceptor
+        }
+      },
 
-    /**
-     * Loads a single cafe by ID
-     * Used by: Detail views, edit forms (to load existing data)
-     */
-    async loadCafe(cafeId: string) {
-      patchState(store, { loading: true, error: null });
-      try {
-        const cafe = await firstValueFrom(apiService.getCafe(cafeId));
-        patchState(store, { selectedCafe: cafe, loading: false });
-      } catch (error) {
-        const errorMessage = 'Failed to load cafe';
-        patchState(store, { error: errorMessage, loading: false });
-      }
-    },
+      /**
+       * Loads a single cafe by ID
+       * Used by: Detail views, edit forms (to load existing data)
+       */
+      async loadCafe(cafeId: string) {
+        patchState(store, { loading: true, error: null });
+        try {
+          const cafe = await firstValueFrom(apiService.getCafe(cafeId));
+          patchState(store, { selectedCafe: cafe, loading: false });
+        } catch (error) {
+          const errorMessage = 'Failed to load cafe';
+          patchState(store, { error: errorMessage, loading: false });
+        }
+      },
 
-    /**
-     * Deletes a cafe (non-form operation)
-     * Used by: Delete confirmations, bulk operations
-     */
-    async deleteCafe(cafeId: string) {
-      patchState(store, { loading: true, error: null });
-      try {
-        await firstValueFrom(apiService.deleteCafe(cafeId));
-        notifications.showSuccess('Cafe deleted successfully');
-        // Remove from local state
-        patchState(store, { 
-          cafes: store.cafes().filter(c => c.id !== cafeId),
-          loading: false 
-        });
-      } catch (error) {
-        const errorMessage = 'Failed to delete cafe';
-        patchState(store, { error: errorMessage, loading: false });
-        notifications.showError(errorMessage);
-      }
-    },
+      /**
+       * Deletes a cafe (non-form operation)
+       * Used by: Delete confirmations, bulk operations
+       */
+      async deleteCafe(cafeId: string) {
+        patchState(store, { loading: true, error: null });
+        try {
+          await firstValueFrom(apiService.deleteCafe(cafeId));
+          notifications.showSuccess('Cafe deleted successfully');
+          // Remove from local state
+          patchState(store, {
+            cafes: store.cafes().filter((c) => c.id !== cafeId),
+            loading: false
+          });
+        } catch (error) {
+          const errorMessage = 'Failed to delete cafe';
+          patchState(store, { error: errorMessage, loading: false });
+          notifications.showError(errorMessage);
+        }
+      },
 
-    /**
-     * Sets the selected cafe (UI state management)
-     */
-    selectCafe(cafe: CafeDto | null) {
-      patchState(store, { selectedCafe: cafe });
-    }
-  }))
+      /**
+       * Sets the selected cafe (UI state management)
+       */
+      selectCafe(cafe: CafeDto | null) {
+        patchState(store, { selectedCafe: cafe });
+      }
+    })
+  )
 );
 ```
 
@@ -3905,17 +3973,17 @@ export const MenuStore = signalStore(
     currentCafeId: null
   }),
   withComputed((store) => ({
-    newMenus: computed(() => 
+    newMenus: computed(() =>
       store.menus().filter(m => m.state === MenuState.New)
     ),
-    publishedMenus: computed(() => 
+    publishedMenus: computed(() =>
       store.menus().filter(m => m.state === MenuState.Published)
     ),
-    activeMenuSummary: computed(() => 
+    activeMenuSummary: computed(() =>
       store.menus().find(m => m.state === MenuState.Active) ?? null
     ),
     menuCount: computed(() => store.menus().length),
-    hasActiveMenu: computed(() => 
+    hasActiveMenu: computed(() =>
       store.menus().some(m => m.state === MenuState.Active)
     )
   })),
@@ -4126,9 +4194,9 @@ export const MenuStore = signalStore(
       try {
         await firstValueFrom(menuService.deleteMenu(cafeId, menuId));
         notificationService.showSuccess('Menu deleted successfully');
-        patchState(store, { 
+        patchState(store, {
           menus: store.menus().filter(m => m.id !== menuId),
-          loading: false 
+          loading: false
         });
       } catch (error) {
         const errorMessage = 'Failed to delete menu';
@@ -4229,7 +4297,7 @@ export class CustomValidators {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
       if (!value) return null;
-      
+
       const timePattern = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/;
       return timePattern.test(value) ? null : { invalidTimeSpan: true };
     };
@@ -4239,9 +4307,9 @@ export class CustomValidators {
     return (formGroup: AbstractControl): ValidationErrors | null => {
       const from = formGroup.get(fromControlName)?.value;
       const to = formGroup.get(toControlName)?.value;
-      
+
       if (!from || !to) return null;
-      
+
       return from < to ? null : { invalidRange: true };
     };
   }
@@ -4249,8 +4317,8 @@ export class CustomValidators {
   static maxSectionItems(maxItems: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const items = control.value as any[];
-      return items && items.length > maxItems 
-        ? { maxItems: { max: maxItems, actual: items.length } } 
+      return items && items.length > maxItems
+        ? { maxItems: { max: maxItems, actual: items.length } }
         : null;
     };
   }
@@ -4262,7 +4330,9 @@ export class CustomValidators {
 ## Theming & Styling
 
 ### UI Library
+
 **The application MUST use Angular Material (`@angular/material`) for all components and styling:**
+
 - ✅ **Angular Material** is the official Material Design component library for Angular
 - ✅ Use Angular Material components exclusively (buttons, cards, forms, dialogs, tables, etc.)
 - ✅ Import Material modules from `@angular/material/*` packages
@@ -4272,7 +4342,9 @@ export class CustomValidators {
 - ✅ Do NOT use other UI libraries (Bootstrap, Tailwind, etc.) - Angular Material only
 
 ### Design System Requirements
+
 **The application MUST follow Material Design 3 (M3) principles:**
+
 - ✅ Use Angular Material components with Material Design 3 theming
 - ✅ Follow Material Design guidelines for spacing, typography, elevation, and motion
 - ✅ Use Material Design color system (primary, secondary, tertiary, error, neutral)
@@ -4282,7 +4354,9 @@ export class CustomValidators {
 - ✅ Accessibility compliance (WCAG 2.1 AA) built into Material components
 
 ### Theme Requirements
+
 **The application MUST:**
+
 - ✅ Support light and dark themes (Material Design 3)
 - ✅ **Automatically detect and apply system/device theme preference** (`prefers-color-scheme`)
 - ✅ Allow manual theme override with toggle switch in UI
@@ -4305,36 +4379,40 @@ export class CustomValidators {
 // ============================================
 
 // Define M3 light theme
-$light-theme: mat.define-theme((
-  color: (
-    theme-type: light,
-    primary: mat.$azure-palette,
-    tertiary: mat.$blue-palette,
-  ),
-  typography: (
-    brand-family: 'Roboto, sans-serif',
-    plain-family: 'Roboto, sans-serif',
-  ),
-  density: (
-    scale: 0,
+$light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette
+    ),
+    typography: (
+      brand-family: 'Roboto, sans-serif',
+      plain-family: 'Roboto, sans-serif'
+    ),
+    density: (
+      scale: 0
+    )
   )
-));
+);
 
 // Define M3 dark theme
-$dark-theme: mat.define-theme((
-  color: (
-    theme-type: dark,
-    primary: mat.$azure-palette,
-    tertiary: mat.$blue-palette,
-  ),
-  typography: (
-    brand-family: 'Roboto, sans-serif',
-    plain-family: 'Roboto, sans-serif',
-  ),
-  density: (
-    scale: 0,
+$dark-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette
+    ),
+    typography: (
+      brand-family: 'Roboto, sans-serif',
+      plain-family: 'Roboto, sans-serif'
+    ),
+    density: (
+      scale: 0
+    )
   )
-));
+);
 
 // ============================================
 // Apply Themes
@@ -4343,7 +4421,7 @@ $dark-theme: mat.define-theme((
 // Default (light) theme
 :root {
   @include mat.all-component-themes($light-theme);
-  
+
   // Custom CSS variables for app-specific styling
   --background-color: #fafafa;
   --surface-color: #ffffff;
@@ -4354,7 +4432,7 @@ $dark-theme: mat.define-theme((
 // Dark theme (applied when .dark-theme class is on <body>)
 .dark-theme {
   @include mat.all-component-colors($dark-theme);
-  
+
   // Custom CSS variables for dark mode
   --background-color: #303030;
   --surface-color: #424242;
@@ -4372,7 +4450,8 @@ $dark-theme: mat.define-theme((
 
 @include mat.core();
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
@@ -4382,6 +4461,7 @@ html, body {
 ```
 
 **Key Differences from Material 2:**
+
 - ✅ Use `mat.define-theme()` instead of `mat.define-light-theme()` / `mat.define-dark-theme()`
 - ✅ Specify `theme-type: light` or `theme-type: dark` in color config
 - ✅ Use `mat.$azure-palette`, `mat.$blue-palette` instead of custom palette definitions
@@ -4403,11 +4483,11 @@ export type Theme = 'light' | 'dark' | 'system';
 export class ThemeService {
   private readonly STORAGE_KEY = 'smartcafe-theme';
   private systemThemeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-  
+
   // Default to 'system' to respect device preference
   theme = signal<Theme>(this.getStoredTheme());
   effectiveTheme = signal<'light' | 'dark'>(this.getEffectiveTheme());
-  
+
   constructor() {
     // Apply theme whenever it changes
     effect(() => {
@@ -4415,7 +4495,7 @@ export class ThemeService {
       this.applyTheme(theme);
       localStorage.setItem(this.STORAGE_KEY, theme);
     });
-    
+
     // Listen to system theme changes in real-time
     this.systemThemeMediaQuery.addEventListener('change', (e) => {
       if (this.theme() === 'system') {
@@ -4425,23 +4505,23 @@ export class ThemeService {
       }
     });
   }
-  
+
   toggleTheme() {
     const current = this.effectiveTheme();
     const newTheme = current === 'light' ? 'dark' : 'light';
     this.theme.set(newTheme);
   }
-  
+
   setTheme(theme: Theme) {
     this.theme.set(theme);
   }
-  
+
   private getStoredTheme(): Theme {
     const stored = localStorage.getItem(this.STORAGE_KEY) as Theme;
     // Default to 'system' if no preference stored
     return stored || 'system';
   }
-  
+
   private getEffectiveTheme(): 'light' | 'dark' {
     const theme = this.getStoredTheme();
     if (theme === 'system') {
@@ -4449,12 +4529,11 @@ export class ThemeService {
     }
     return theme;
   }
-  
+
   private applyTheme(theme: Theme) {
-    const effectiveTheme = theme === 'system' 
-      ? (this.systemThemeMediaQuery.matches ? 'dark' : 'light')
-      : theme;
-    
+    const effectiveTheme =
+      theme === 'system' ? (this.systemThemeMediaQuery.matches ? 'dark' : 'light') : theme;
+
     this.effectiveTheme.set(effectiveTheme);
     document.body.classList.remove('light-theme', 'dark-theme');
     document.body.classList.add(`${effectiveTheme}-theme`);
@@ -4477,8 +4556,11 @@ import { ThemeService, Theme } from '../../core/services/theme.service';
   selector: 'sc-theme-toggle',
   imports: [MatButtonModule, MatIconModule, MatMenuModule],
   template: `
-    <button mat-icon-button [matMenuTriggerFor]="themeMenu" 
-            [attr.aria-label]="'Theme: ' + themeService.theme()">
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="themeMenu"
+      [attr.aria-label]="'Theme: ' + themeService.theme()"
+    >
       <mat-icon>
         @if (themeService.effectiveTheme() === 'light') {
           light_mode
@@ -4487,17 +4569,26 @@ import { ThemeService, Theme } from '../../core/services/theme.service';
         }
       </mat-icon>
     </button>
-    
+
     <mat-menu #themeMenu="matMenu">
-      <button mat-menu-item (click)="setTheme('light')">
+      <button
+        mat-menu-item
+        (click)="setTheme('light')"
+      >
         <mat-icon>light_mode</mat-icon>
         <span>Light</span>
       </button>
-      <button mat-menu-item (click)="setTheme('dark')">
+      <button
+        mat-menu-item
+        (click)="setTheme('dark')"
+      >
         <mat-icon>dark_mode</mat-icon>
         <span>Dark</span>
       </button>
-      <button mat-menu-item (click)="setTheme('system')">
+      <button
+        mat-menu-item
+        (click)="setTheme('system')"
+      >
         <mat-icon>settings_brightness</mat-icon>
         <span>System</span>
       </button>
@@ -4506,7 +4597,7 @@ import { ThemeService, Theme } from '../../core/services/theme.service';
 })
 export class ThemeToggleComponent {
   themeService = inject(ThemeService);
-  
+
   setTheme(theme: Theme) {
     this.themeService.setTheme(theme);
   }
@@ -4518,7 +4609,9 @@ export class ThemeToggleComponent {
 ## Responsive Design
 
 ### Requirements
+
 **All components and pages MUST be fully responsive:**
+
 - ✅ Work seamlessly on mobile (320px+), tablet (768px+), and desktop (1024px+)
 - ✅ Use mobile-first approach
 - ✅ Touch-friendly interactions (minimum 44x44px tap targets)
@@ -4526,6 +4619,7 @@ export class ThemeToggleComponent {
 - ✅ Optimized images with appropriate sizes
 
 ### Breakpoints
+
 ```scss
 // src/styles/_variables.scss
 
@@ -4538,43 +4632,50 @@ $breakpoints: (
 
 // Mobile-first media queries
 @mixin tablet {
-  @media (min-width: 768px) { @content; }
+  @media (min-width: 768px) {
+    @content;
+  }
 }
 
 @mixin desktop {
-  @media (min-width: 1024px) { @content; }
+  @media (min-width: 1024px) {
+    @content;
+  }
 }
 
 @mixin wide {
-  @media (min-width: 1440px) { @content; }
+  @media (min-width: 1440px) {
+    @content;
+  }
 }
 ```
 
 ### Responsive Grid Example
+
 ```scss
 // Cafe/Menu grids
 .card-grid {
   display: grid;
   gap: 1rem;
   padding: 1rem;
-  
+
   // Mobile: 1 column
   grid-template-columns: 1fr;
-  
+
   // Tablet: 2 columns
   @include tablet {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
     padding: 1.5rem;
   }
-  
+
   // Desktop: 3 columns
   @include desktop {
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     padding: 2rem;
   }
-  
+
   // Wide: 4 columns
   @include wide {
     grid-template-columns: repeat(4, 1fr);
@@ -4583,38 +4684,39 @@ $breakpoints: (
 ```
 
 ### Angular CDK Layout
+
 ```typescript
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { inject, signal } from '@angular/core';
 
 @Component({
-  selector: 'sc-menu-grid',
+  selector: 'sc-menu-grid'
   // ...
 })
 export class MenuGridComponent {
   private breakpointObserver = inject(BreakpointObserver);
-  
+
   isMobile = signal(false);
   isTablet = signal(false);
   isDesktop = signal(false);
-  
+
   constructor() {
     // Detect mobile
     this.breakpointObserver
       .observe([Breakpoints.Handset])
-      .subscribe(result => this.isMobile.set(result.matches));
-    
+      .subscribe((result) => this.isMobile.set(result.matches));
+
     // Detect tablet
     this.breakpointObserver
       .observe([Breakpoints.Tablet])
-      .subscribe(result => this.isTablet.set(result.matches));
-      
+      .subscribe((result) => this.isTablet.set(result.matches));
+
     // Detect desktop
     this.breakpointObserver
       .observe([Breakpoints.Web])
-      .subscribe(result => this.isDesktop.set(result.matches));
+      .subscribe((result) => this.isDesktop.set(result.matches));
   }
-  
+
   // Computed columns based on screen size
   gridColumns = computed(() => {
     if (this.isMobile()) return 1;
@@ -4741,12 +4843,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
-      exclude: [
-        'node_modules/',
-        'src/test-setup.ts',
-        '**/*.spec.ts',
-        '**/*.config.ts'
-      ]
+      exclude: ['node_modules/', 'src/test-setup.ts', '**/*.spec.ts', '**/*.config.ts']
     }
   }
 });
@@ -4768,31 +4865,31 @@ export default defineConfig({
   reporter: 'html',
   use: {
     baseURL: 'http://localhost:4200',
-    trace: 'on-first-retry',
+    trace: 'on-first-retry'
   },
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'] }
     },
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      use: { ...devices['Desktop Firefox'] }
     },
     {
       name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      use: { ...devices['Desktop Safari'] }
     },
     {
       name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
-    },
+      use: { ...devices['Pixel 5'] }
+    }
   ],
   webServer: {
     command: 'npm run start',
     url: 'http://localhost:4200',
-    reuseExistingServer: !process.env.CI,
-  },
+    reuseExistingServer: !process.env.CI
+  }
 });
 ```
 
@@ -4849,10 +4946,7 @@ export default defineConfig({
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
-import {
-  HttpTestingController,
-  provideHttpClientTesting
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { CafeApiService } from './cafe-api.service';
 
 describe('CafeApiService', () => {
@@ -4862,11 +4956,7 @@ describe('CafeApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        CafeApiService,
-        provideHttpClient(),
-        provideHttpClientTesting()
-      ]
+      providers: [CafeApiService, provideHttpClient(), provideHttpClientTesting()]
     });
 
     service = TestBed.inject(CafeApiService);
@@ -4879,12 +4969,10 @@ describe('CafeApiService', () => {
 
   it('should fetch cafes', (done) => {
     const mockResponse = {
-      cafes: [
-        { id: '123', name: 'Test Cafe', contactInfo: 'test@cafe.com' }
-      ]
+      cafes: [{ id: '123', name: 'Test Cafe', contactInfo: 'test@cafe.com' }]
     };
 
-    service.getCafes().subscribe(response => {
+    service.getCafes().subscribe((response) => {
       expect(response).toEqual(mockResponse);
       expect(response.cafes.length).toBe(1);
       done();
@@ -4899,7 +4987,7 @@ describe('CafeApiService', () => {
     const newCafe = { name: 'New Cafe', contactInfo: 'new@cafe.com' };
     const mockResponse = { cafeId: 'abc-123' };
 
-    service.createCafe(newCafe).subscribe(response => {
+    service.createCafe(newCafe).subscribe((response) => {
       expect(response.cafeId).toBe('abc-123');
       done();
     });
@@ -4946,10 +5034,7 @@ describe('CafeGridComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [CafeGridComponent],
-      providers: [
-        { provide: CafeStore, useValue: mockStore },
-        provideRouter([])
-      ]
+      providers: [{ provide: CafeStore, useValue: mockStore }, provideRouter([])]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CafeGridComponent);
@@ -5012,14 +5097,8 @@ describe('CafeFormComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [
-        CafeFormComponent,
-        ReactiveFormsModule,
-        NoopAnimationsModule
-      ],
-      providers: [
-        { provide: CafeStore, useValue: mockStore }
-      ]
+      imports: [CafeFormComponent, ReactiveFormsModule, NoopAnimationsModule],
+      providers: [{ provide: CafeStore, useValue: mockStore }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CafeFormComponent);
@@ -5053,10 +5132,7 @@ describe('CafeFormComponent', () => {
 
     await component.onSubmit();
 
-    expect(mockStore.createCafe).toHaveBeenCalledWith(
-      'New Cafe',
-      'contact@cafe.com'
-    );
+    expect(mockStore.createCafe).toHaveBeenCalledWith('New Cafe', 'contact@cafe.com');
   });
 
   it('should reset form after successful submit', async () => {
@@ -5120,7 +5196,7 @@ test.describe('Cafe Management', () => {
     await page.waitForSelector('sc-cafe-card');
 
     // Setup dialog confirmation
-    page.on('dialog', dialog => dialog.accept());
+    page.on('dialog', (dialog) => dialog.accept());
 
     // Click delete button
     await page.click('button[aria-label="Delete cafe"]');
@@ -5137,7 +5213,7 @@ test.describe('Responsive Design', () => {
 
     // Check that grid adapts to mobile (single column)
     const grid = page.locator('.grid');
-    const gridStyles = await grid.evaluate(el => {
+    const gridStyles = await grid.evaluate((el) => {
       return window.getComputedStyle(el).gridTemplateColumns;
     });
 
@@ -5149,7 +5225,7 @@ test.describe('Responsive Design', () => {
     await page.goto('/cafes');
 
     const grid = page.locator('.grid');
-    const gridStyles = await grid.evaluate(el => {
+    const gridStyles = await grid.evaluate((el) => {
       return window.getComputedStyle(el).gridTemplateColumns;
     });
 
@@ -5190,10 +5266,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: [
-    ['html'],
-    ['junit', { outputFile: 'TestResults/e2e-results.xml' }]
-  ],
+  reporter: [['html'], ['junit', { outputFile: 'TestResults/e2e-results.xml' }]],
   use: {
     baseURL: 'http://localhost:4200',
     trace: 'on-first-retry',
@@ -5471,7 +5544,7 @@ name: CD - Deploy to Dev
 
 on:
   workflow_run:
-    workflows: ["CI"]
+    workflows: ['CI']
     types:
       - completed
     branches:
@@ -5505,10 +5578,10 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_DEV }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          action: "upload"
-          app_location: "/"
-          api_location: ""
-          output_location: "dist/apps/admin/browser"
+          action: 'upload'
+          app_location: '/'
+          api_location: ''
+          output_location: 'dist/apps/admin/browser'
 
   deploy-failed:
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
@@ -5538,10 +5611,19 @@ import { SectionDto } from '../../../../shared/models/api.models';
   selector: 'sc-section-drag-drop',
   imports: [DragDropModule],
   template: `
-    <div cdkDropList (cdkDropListDropped)="drop($event)">
+    <div
+      cdkDropList
+      (cdkDropListDropped)="drop($event)"
+    >
       @for (section of sections(); track section.id) {
-        <div cdkDrag class="section-item">
-          <div class="section-drag-handle" cdkDragHandle>
+        <div
+          cdkDrag
+          class="section-item"
+        >
+          <div
+            class="section-drag-handle"
+            cdkDragHandle
+          >
             <mat-icon>drag_indicator</mat-icon>
           </div>
           <div class="section-content">
@@ -5580,27 +5662,27 @@ export class ImageCompressionService {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      
+
       reader.onload = (event: any) => {
         const img = new Image();
         img.src = event.target.result;
-        
+
         img.onload = () => {
           const canvas = document.createElement('canvas');
           let width = img.width;
           let height = img.height;
-          
+
           if (width > maxWidth) {
             height = (height * maxWidth) / width;
             width = maxWidth;
           }
-          
+
           canvas.width = width;
           canvas.height = height;
-          
+
           const ctx = canvas.getContext('2d')!;
           ctx.drawImage(img, 0, 0, width, height);
-          
+
           canvas.toBlob(
             (blob) => {
               if (blob) {
@@ -5617,10 +5699,10 @@ export class ImageCompressionService {
             quality
           );
         };
-        
+
         img.onerror = reject;
       };
-      
+
       reader.onerror = reject;
     });
   }
@@ -5645,7 +5727,7 @@ export const unsavedChangesGuard: CanDeactivateFn<CanComponentDeactivate> = (com
   if (component.canDeactivate()) {
     return true;
   }
-  
+
   const dialog = inject(MatDialog);
   const dialogRef = dialog.open(ConfirmationDialogComponent, {
     data: {
@@ -5655,7 +5737,7 @@ export const unsavedChangesGuard: CanDeactivateFn<CanComponentDeactivate> = (com
       cancelText: 'Stay'
     }
   });
-  
+
   return dialogRef.afterClosed();
 };
 ```
@@ -5665,12 +5747,14 @@ export const unsavedChangesGuard: CanDeactivateFn<CanComponentDeactivate> = (com
 ## Performance Targets
 
 ### Lighthouse Scores
+
 - **Performance**: 90+
 - **Accessibility**: 100
 - **Best Practices**: 100
 - **SEO**: 90+
 
 ### Bundle Size Targets
+
 - **Initial Bundle**: < 200KB (gzipped)
 - **Lazy Loaded Modules**: < 50KB each (gzipped)
 
@@ -5681,13 +5765,14 @@ export const unsavedChangesGuard: CanDeactivateFn<CanComponentDeactivate> = (com
 ### Daily Development Tasks
 
 1. **Generate Component in Feature Library**:
+
    ```bash
    # In feature library
    nx g @nx/angular:component cafe-card \
      --project=feature-cafes \
      --export \
      --changeDetection=OnPush
-   
+
    # In UI library
    nx g @nx/angular:component loading-spinner \
      --project=shared-ui \
@@ -5695,76 +5780,83 @@ export const unsavedChangesGuard: CanDeactivateFn<CanComponentDeactivate> = (com
    ```
 
 2. **Generate Service in Data Access Library**:
+
    ```bash
    nx g @nx/angular:service cafe-api \
      --project=data-access-cafes
    ```
 
 3. **Run Development Server**:
+
    ```bash
    # Serve main app
    nx serve admin
-   
+
    # With proxy configuration
    nx serve admin --configuration=development
    ```
 
 4. **Run Tests**:
+
    ```bash
    # Test specific library
    nx test feature-cafes
-   
+
    # Test all affected by changes
    nx affected:test
-   
+
    # Test with coverage
    nx test admin --coverage
-   
+
    # Watch mode
    nx test feature-cafes --watch
-   
+
    # E2E tests
    nx e2e admin-e2e
    ```
 
 5. **Run Storybook**:
+
    ```bash
    # Start Storybook for shared UI
    nx storybook shared-ui
    ```
 
 6. **Build for Production**:
+
    ```bash
    # Build main app
    nx build admin --configuration=production
-   
+
    # Build all affected projects
    nx affected:build --configuration=production
-   
+
    # Build specific library
    nx build admin-feature-cafes
    ```
 
 7. **Lint & Format**:
+
    ```bash
    # Lint specific library
    nx lint feature-cafes
-   
+
    # Lint all affected
    nx affected:lint
-   
+
    # Format all files
    nx format:write
-   
+
    # Check formatting
    nx format:check
    ```
 
 8. **View Dependency Graph**:
+
    ```bash
    # Interactive graph
    nx graph
-   
+
    # Show affected projects
    nx affected:graph
    ```
@@ -5777,11 +5869,13 @@ export const unsavedChangesGuard: CanDeactivateFn<CanComponentDeactivate> = (com
 ### Nx Caching & Performance
 
 **Nx automatically caches:**
+
 - Build outputs
 - Test results
 - Lint results
 
 **Benefits:**
+
 - Subsequent runs are instant if nothing changed
 - Only affected projects rebuild
 - Shared cache across team (with Nx Cloud - optional)
@@ -5867,7 +5961,7 @@ nx affected:lint
 ✅ Image upload with compression works  
 ✅ Confirmation dialogs prevent accidental deletions  
 ✅ Unsaved changes guard works on forms  
-✅ Touch-friendly UI (44x44px minimum tap targets)  
+✅ Touch-friendly UI (44x44px minimum tap targets)
 
 ---
 
