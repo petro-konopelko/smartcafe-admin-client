@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.0.4](https://github.com/petro-konopelko/smartcafe-admin-client/compare/v1.0.3...v1.0.4) (2026-03-13)
+
+
+### Bug Fixes
+
+* inject router after updating vi ([b0d097c](https://github.com/petro-konopelko/smartcafe-admin-client/commit/b0d097c43af0a1e57c016942183b21ea99034000))
+* remoe unused imports, setup error level ([0931320](https://github.com/petro-konopelko/smartcafe-admin-client/commit/0931320743cafde4dfaade14661b40d666667e20))
+* update storybook configuration ([09944ba](https://github.com/petro-konopelko/smartcafe-admin-client/commit/09944ba5b8c2278bda22eaf11218edeeecfbd3ba))
+
+
+### Code Refactoring
+
+* remove Angular animations and related dependencies ([9687e28](https://github.com/petro-konopelko/smartcafe-admin-client/commit/9687e28620b75741e4d565815ca00b0807a7d32b))
+* use local storage instead of direct window ([5581510](https://github.com/petro-konopelko/smartcafe-admin-client/commit/55815100635773b477cc12d6a80d2f32b9fb24b7))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump @commitlint/config-conventional ([89998f0](https://github.com/petro-konopelko/smartcafe-admin-client/commit/89998f0ad0fe9a3e6f3424bcdf47b2711fbdb11a))
+* **deps-dev:** bump the storybook group with 5 updates ([a5b8cdf](https://github.com/petro-konopelko/smartcafe-admin-client/commit/a5b8cdf68711ded754a92a2ec59878e4ee7a4a68))
+* **deps-dev:** bump the vitest group with 3 updates ([033f9cb](https://github.com/petro-konopelko/smartcafe-admin-client/commit/033f9cb14862ae01782a57706a09bd7fb24e38c5))
+* **deps-dev:** bump typescript-eslint in the eslint group ([c6923bf](https://github.com/petro-konopelko/smartcafe-admin-client/commit/c6923bf5763a52cf69e675dbb61cd80f51669b72))
+* **deps:** bump the angular group with 15 updates ([31e2bd9](https://github.com/petro-konopelko/smartcafe-admin-client/commit/31e2bd9c9d54d4e306f01bf828f40a52cac8b245))
+* **deps:** bump the github-actions group with 2 updates ([4df7c13](https://github.com/petro-konopelko/smartcafe-admin-client/commit/4df7c1398fe5e0f865c9f71b151a137a0e675c27))
+* **deps:** regenerate package-lock.json to update dependecies ([64f399a](https://github.com/petro-konopelko/smartcafe-admin-client/commit/64f399a8fc6acbdd3dc590ae910459f6c4f069a8))
+
 ## [1.0.3](https://github.com/petro-konopelko/smartcafe-admin-client/compare/v1.0.2...v1.0.3) (2026-03-11)
 
 
