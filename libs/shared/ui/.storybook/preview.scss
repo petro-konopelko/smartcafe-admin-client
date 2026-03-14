@@ -1,2 +1,16 @@
 // Import global application styles for Storybook
 @use '../../../../apps/admin/src/styles';
+
+html,
+body {
+  background-color: var(--app-color-surface);
+  color: var(--app-color-on-surface);
+}
+
+.sbdocs.sbdocs-wrapper,
+.sbdocs.sbdocs-content,
+.sbdocs.sbdocs-preview,
+.docs-story {
+  background-color: var(--app-color-surface) !important;
+  color: var(--app-color-on-surface);
+}
