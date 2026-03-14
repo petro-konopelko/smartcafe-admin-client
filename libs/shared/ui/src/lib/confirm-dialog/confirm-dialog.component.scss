@@ -7,10 +7,10 @@ p {
 
 // Danger button variant using M3 error tokens
 .btn-danger {
-  --mat-button-protected-label-text-color: var(--mat-sys-error);
+  --mat-button-protected-label-text-color: var(--app-color-error);
   --mat-button-protected-ripple-color: color-mix(
     in srgb,
-    var(--mat-sys-error) calc(var(--mat-sys-pressed-state-layer-opacity) * 100%),
+    var(--app-color-error) calc(var(--app-opacity-pressed-state-layer) * 100%),
     transparent
   );
 }

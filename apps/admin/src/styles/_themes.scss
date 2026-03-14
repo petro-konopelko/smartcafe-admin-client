@@ -14,12 +14,25 @@ html {
     )
   );
 
-  --active-chip-color: #008b00;
+  --app-color-primary: var(--mat-sys-primary);
+  --app-color-primary-container: var(--mat-sys-primary-container);
+  --app-color-error: var(--mat-sys-error);
+  --app-color-on-error: var(--mat-sys-on-error);
+  --app-color-surface: var(--mat-sys-surface);
+  --app-color-surface-variant: var(--mat-sys-surface-variant);
+  --app-color-surface-container: var(--mat-sys-surface-container);
+  --app-color-surface-container-low: var(--mat-sys-surface-container-low);
+  --app-color-on-surface: var(--mat-sys-on-surface);
+  --app-color-on-surface-variant: var(--mat-sys-on-surface-variant);
+  --app-color-outline: var(--mat-sys-outline);
+  --app-color-outline-variant: var(--mat-sys-outline-variant);
+  --app-opacity-pressed-state-layer: var(--mat-sys-pressed-state-layer-opacity);
+  --app-color-active-chip: #008b00;
 
   &.dark-mode {
     color-scheme: dark;
 
-    --active-chip-color: #41c300;
+    --app-color-active-chip: #41c300;
   }
 }
 

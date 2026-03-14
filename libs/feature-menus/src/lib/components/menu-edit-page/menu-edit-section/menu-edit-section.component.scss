@@ -1,10 +1,10 @@
 @use 'mixins' as *;
 
 .section-card {
-  border: 1px solid var(--mat-sys-outline-variant);
+  border: 1px solid var(--app-color-outline-variant);
   border-radius: 12px;
   padding: 16px;
-  background: var(--mat-sys-surface);
+  background: var(--app-color-surface);
 }
 
 .section-header {
@@ -14,7 +14,7 @@
 }
 
 .drag-handle {
-  color: var(--mat-sys-outline);
+  color: var(--app-color-outline);
   cursor: grab;
   user-select: none;
 
@@ -53,7 +53,7 @@
 }
 
 .items-container {
-  border-left: 2px solid var(--mat-sys-primary-container);
+  border-left: 2px solid var(--app-color-primary-container);
   padding-left: 16px;
   margin-top: 8px;
   display: flex;
@@ -67,9 +67,9 @@
 
 .item-drag-placeholder {
   min-height: 48px;
-  border: 2px dashed var(--mat-sys-outline-variant);
+  border: 2px dashed var(--app-color-outline-variant);
   border-radius: 8px;
-  background: var(--mat-sys-surface-variant);
+  background: var(--app-color-surface-variant);
   opacity: 0.5;
 }
 

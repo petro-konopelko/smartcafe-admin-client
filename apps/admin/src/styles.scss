@@ -31,18 +31,18 @@ main {
 }
 
 .chip-published {
-  @include chip-color(var(--mat-sys-primary));
+  @include chip-color(var(--app-color-primary));
 }
 
 .chip-active {
-  @include chip-color(var(--active-chip-color));
+  @include chip-color(var(--app-color-active-chip));
 }
 
 .icon-error {
-  --mat-icon-color: var(--mat-sys-error);
-  --mat-menu-item-icon-color: var(--mat-sys-error);
+  --mat-icon-color: var(--app-color-error);
+  --mat-menu-item-icon-color: var(--app-color-error);
 }
 
 .ng-invalid .mat-form-field-outline {
-  border-color: var(--mat-sys-error) !important;
+  border-color: var(--app-color-error) !important;
 }
