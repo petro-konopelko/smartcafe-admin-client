@@ -27,8 +27,8 @@
 }
 
 .discount-badge {
-  background: var(--mat-sys-error);
-  color: var(--mat-sys-on-error);
+  background: var(--app-color-error);
+  color: var(--app-color-on-error);
   border-radius: 999px;
   padding: 2px 8px;
   font-size: 12px;

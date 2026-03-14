@@ -1,7 +1,7 @@
 @use 'mixins' as *;
 
 .item-card {
-  border: 1px solid var(--mat-sys-outline-variant);
+  border: 1px solid var(--app-color-outline-variant);
   border-radius: 8px;
   padding: 12px 16px;
   transition: box-shadow 0.2s;
@@ -22,7 +22,7 @@
   flex-wrap: nowrap;
 
   .drag-handle {
-    color: var(--mat-sys-outline);
+    color: var(--app-color-outline);
     cursor: grab;
     margin-top: 0;
     flex-shrink: 0;
@@ -88,7 +88,7 @@
   height: 40px;
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid var(--mat-sys-outline-variant);
+  border: 1px solid var(--app-color-outline-variant);
   flex-shrink: 0;
   margin-top: 2px;
 
@@ -107,8 +107,8 @@
     align-items: center;
     justify-content: center;
     gap: 2px;
-    background: color-mix(in srgb, var(--mat-sys-surface-variant) 55%, var(--mat-sys-surface));
-    color: var(--mat-sys-on-surface-variant);
+    background: color-mix(in srgb, var(--app-color-surface-variant) 55%, var(--app-color-surface));
+    color: var(--app-color-on-surface-variant);
   }
 }
 
@@ -131,7 +131,7 @@
 .item-description-preview {
   font-style: italic;
   font-family: cursive;
-  color: var(--mat-sys-on-surface-variant);
+  color: var(--app-color-on-surface-variant);
   white-space: normal;
   overflow-wrap: anywhere;
 }
@@ -216,10 +216,10 @@
   width: 100%;
   flex: 1;
   min-height: 80px;
-  border: 2px dashed var(--mat-sys-outline-variant);
+  border: 2px dashed var(--app-color-outline-variant);
   border-radius: 8px;
   background: transparent;
-  color: var(--mat-sys-primary);
+  color: var(--app-color-primary);
   display: flex;
   cursor: pointer;
   flex-direction: column;
@@ -229,8 +229,8 @@
   transition: all 0.2s;
 
   &:hover {
-    border-color: var(--mat-sys-primary);
-    background: color-mix(in srgb, var(--mat-sys-primary) 4%, transparent);
+    border-color: var(--app-color-primary);
+    background: color-mix(in srgb, var(--app-color-primary) 4%, transparent);
   }
 
   .upload-text {
@@ -245,7 +245,7 @@
   min-height: 80px;
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid var(--mat-sys-outline-variant);
+  border: 1px solid var(--app-color-outline-variant);
 
   .image-preview {
     width: 100%;
@@ -261,11 +261,11 @@
     --mdc-icon-button-state-layer-size: 28px;
     --mdc-icon-button-icon-size: 18px;
 
-    background: var(--mat-sys-error);
-    color: var(--mat-sys-on-error);
+    background: var(--app-color-error);
+    color: var(--app-color-on-error);
 
     &:hover {
-      background: color-mix(in srgb, var(--mat-sys-error) 90%, black);
+      background: color-mix(in srgb, var(--app-color-error) 90%, black);
     }
   }
 }

@@ -2,7 +2,7 @@
   display: block;
   font-size: inherit;
   font-weight: inherit;
-  color: var(--mat-sys-on-surface-variant);
+  color: var(--app-color-on-surface-variant);
   margin-bottom: 8px;
 }
 
@@ -19,9 +19,9 @@
   gap: 4px;
   padding: 4px;
   border-radius: 20px;
-  border: 1px solid var(--mat-sys-outline);
-  background: var(--mat-sys-surface-container-low);
-  color: var(--mat-sys-on-surface);
+  border: 1px solid var(--app-color-outline);
+  background: var(--app-color-surface-container-low);
+  color: var(--app-color-on-surface);
   font-size: inherit;
   font-weight: inherit;
   line-height: 1.5;
@@ -31,7 +31,7 @@
   min-height: 30px;
 
   &:hover {
-    background: var(--mat-sys-surface-container);
+    background: var(--app-color-surface-container);
   }
 }
 
@@ -80,7 +80,7 @@
   gap: 4px;
   padding: 4px 4px 4px 12px;
   border-radius: 20px;
-  border: 1px dashed var(--mat-sys-outline-variant);
+  border: 1px dashed var(--app-color-outline-variant);
   background: transparent;
   transition:
     border-color 0.2s,
@@ -88,8 +88,8 @@
   min-height: 30px;
 
   &:focus-within {
-    border-color: var(--mat-sys-primary);
-    background: var(--mat-sys-surface-container-low);
+    border-color: var(--app-color-primary);
+    background: var(--app-color-surface-container-low);
   }
 }
 
@@ -99,14 +99,14 @@
   background: transparent;
   font-size: inherit;
   font-weight: inherit;
-  color: var(--mat-sys-on-surface);
+  color: var(--app-color-on-surface);
   width: 120px;
   min-width: 80px;
   padding: 2px 0;
   font-family: inherit;
 
   &::placeholder {
-    color: var(--mat-sys-on-surface-variant);
+    color: var(--app-color-on-surface-variant);
     opacity: 0.7;
   }
 }
