@@ -4,8 +4,7 @@ updates:
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
-      day: friday
+      interval: daily
     open-pull-requests-limit: 10
     groups:
       angular:
@@ -69,8 +68,7 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
-      day: friday
+      interval: daily
     open-pull-requests-limit: 5
     groups:
       github-actions:
