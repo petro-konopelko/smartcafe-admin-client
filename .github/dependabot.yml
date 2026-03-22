@@ -57,6 +57,9 @@ updates:
       playwright:
         patterns:
           - '@playwright/*'
+      commitlint:
+        patterns:
+          - '@commitlint/*'
       typescript:
         patterns:
           - 'typescript'
