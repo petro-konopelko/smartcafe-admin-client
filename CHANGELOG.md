@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.0.5](https://github.com/petro-konopelko/smartcafe-admin-client/compare/v1.0.4...v1.0.5) (2026-03-22)
+
+
+### Bug Fixes
+
+* **dependabot:** add commitlint group to bundle all @commitlint/* packages into a single PR ([#66](https://github.com/petro-konopelko/smartcafe-admin-client/issues/66)) ([7670b27](https://github.com/petro-konopelko/smartcafe-admin-client/commit/7670b2795ccd4e2820641388c01f68aafe608dd1))
+* update styles for dark mode and return fonts for icons ([#52](https://github.com/petro-konopelko/smartcafe-admin-client/issues/52)) ([be475b6](https://github.com/petro-konopelko/smartcafe-admin-client/commit/be475b67ff620ac108c7b59585f98fbad9e3b4d7))
+
+
+### Code Refactoring
+
+* define custom tone colors and update styles to use them ([30b536a](https://github.com/petro-konopelko/smartcafe-admin-client/commit/30b536a6836a38e5589354284b8e5f7930c51e76))
+
+
+### Miscellaneous
+
+* **dependabot:** change schedule interval from weekly to daily ([#64](https://github.com/petro-konopelko/smartcafe-admin-client/issues/64)) ([8748093](https://github.com/petro-konopelko/smartcafe-admin-client/commit/87480931d8066a34e91b707d514bd2a0a0c6dc00))
+* **deps-dev:** bump @swc/core from 1.15.18 to 1.15.21 in the swc group ([fa313a4](https://github.com/petro-konopelko/smartcafe-admin-client/commit/fa313a43dbe5fc0df0aaef301be491ba955a5700))
+* **deps-dev:** bump @types/node from 25.3.5 to 25.5.0 ([fe4c1c9](https://github.com/petro-konopelko/smartcafe-admin-client/commit/fe4c1c9aac38dda3830bc21a6421609075230bd7))
+* **deps-dev:** bump jsdom from 28.1.0 to 29.0.0 ([635dc26](https://github.com/petro-konopelko/smartcafe-admin-client/commit/635dc26cdd47cfe06b22c89e9eb815a52c3e4201))
+* **deps-dev:** bump stylelint in the stylelint group ([27eaeb8](https://github.com/petro-konopelko/smartcafe-admin-client/commit/27eaeb8180951de0d2a0e698c4aa751e368d413d))
+* **deps-dev:** bump the commitlint group with 2 updates ([162ece7](https://github.com/petro-konopelko/smartcafe-admin-client/commit/162ece7105f47b7cc22c28f780342427cfe6fe2c))
+* **deps-dev:** bump the eslint group across 1 directory with 6 updates ([cd4c4f7](https://github.com/petro-konopelko/smartcafe-admin-client/commit/cd4c4f79a49c8609a3bbb6d396a94c62bbc4906d))
+* **deps-dev:** bump the nx group with 11 updates ([2414110](https://github.com/petro-konopelko/smartcafe-admin-client/commit/241411060ba1e4be39ddac50c3cb01ef2a1f38a5))
+* **deps-dev:** bump the storybook group with 6 updates ([82ff623](https://github.com/petro-konopelko/smartcafe-admin-client/commit/82ff623750bde24f09058ec6b4859f485793ef05))
+* **deps:** bump the angular group with 16 updates ([726f696](https://github.com/petro-konopelko/smartcafe-admin-client/commit/726f6967f00f7a1d662ea427b35753e8786d77aa))
+
 ## [1.0.4](https://github.com/petro-konopelko/smartcafe-admin-client/compare/v1.0.3...v1.0.4) (2026-03-13)
 
 
