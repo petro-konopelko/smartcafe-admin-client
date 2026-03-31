@@ -54,7 +54,7 @@
     "rxjs": "7.8.2"
   },
   "devDependencies": {
-    "@analogjs/storybook-angular": "2.3.1",
+    "@analogjs/storybook-angular": "2.4.0",
     "@analogjs/vite-plugin-angular": "2.3.1",
     "@analogjs/vitest-angular": "2.3.1",
     "@angular-devkit/core": "21.2.5",
