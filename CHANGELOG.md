@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.0.6](https://github.com/petro-konopelko/smartcafe-admin-client/compare/v1.0.5...v1.0.6) (2026-04-13)
+
+
+### Miscellaneous
+
+* **deps-dev:** bump @analogjs/storybook-angular in the storybook group ([59dedc3](https://github.com/petro-konopelko/smartcafe-admin-client/commit/59dedc37cd0992296fb412b2bdb7c0892490b491))
+* **deps-dev:** bump @playwright/test in the playwright group ([8212659](https://github.com/petro-konopelko/smartcafe-admin-client/commit/82126593863ac8c91dba740e9f966ef577f9f6b6))
+* **deps-dev:** bump @swc/helpers in the swc group ([8136224](https://github.com/petro-konopelko/smartcafe-admin-client/commit/8136224e4b0fd17835dbdf00ccba4bd08d4c25fe))
+* **deps-dev:** bump @types/node from 25.5.0 to 25.5.2 ([7ae2897](https://github.com/petro-konopelko/smartcafe-admin-client/commit/7ae289747eb0c9524759362fc416c5abcc1adc80))
+* **deps-dev:** bump eslint from 10.1.0 to 10.2.0 in the eslint group ([35cc03b](https://github.com/petro-konopelko/smartcafe-admin-client/commit/35cc03b973c27ec30fe23eb8474b2fa38d4cbc99))
+* **deps-dev:** bump stylelint in the stylelint group ([271cf06](https://github.com/petro-konopelko/smartcafe-admin-client/commit/271cf06df4f4a1b36fa61724c2d52eab95ebba66))
+* **deps-dev:** bump the analogjs group with 2 updates ([9babfea](https://github.com/petro-konopelko/smartcafe-admin-client/commit/9babfead092a7cee30768f55cbed965259d72a85))
+* **deps-dev:** bump the angular group with 5 updates ([c086297](https://github.com/petro-konopelko/smartcafe-admin-client/commit/c086297f5e1f8dcc827777309511c4aa0f4cef79))
+* **deps-dev:** bump the nx group with 11 updates ([879d5b7](https://github.com/petro-konopelko/smartcafe-admin-client/commit/879d5b75bc1a4c83f16715c2500a4508af8bf7f8))
+* **deps-dev:** bump the nx group with 11 updates ([41cb70d](https://github.com/petro-konopelko/smartcafe-admin-client/commit/41cb70d4ba856e6f6782446b6ccff80117b0521b))
+* **deps-dev:** bump the nx group with 11 updates ([5f434e3](https://github.com/petro-konopelko/smartcafe-admin-client/commit/5f434e3c4264d484b4bcd266e27bfed761bb8479))
+* **deps-dev:** bump the nx group with 11 updates ([01810db](https://github.com/petro-konopelko/smartcafe-admin-client/commit/01810dba9e709bd67faef6fdd7cfaa8c911d34bd))
+* **deps-dev:** bump the storybook group with 6 updates ([8236e60](https://github.com/petro-konopelko/smartcafe-admin-client/commit/8236e6056959eb0e689cd87f88abd14ca99cb8f7))
+* **deps-dev:** bump the storybook group with 6 updates ([604731c](https://github.com/petro-konopelko/smartcafe-admin-client/commit/604731c63afaaa324365300e2f401c56133bc73e))
+* **deps-dev:** bump the swc group across 1 directory with 2 updates ([8c3a3df](https://github.com/petro-konopelko/smartcafe-admin-client/commit/8c3a3dfe911972b5884d16caa7ed363db573f413))
+* **deps-dev:** bump the vitest group with 3 updates ([bd44317](https://github.com/petro-konopelko/smartcafe-admin-client/commit/bd44317fe53724d1402dfb5b53d1a7ff8527fc1f))
+* **deps-dev:** bump the vitest group with 3 updates ([3d05d5b](https://github.com/petro-konopelko/smartcafe-admin-client/commit/3d05d5bd5656b92c1cec40acb4abb7c8830f9338))
+* **deps-dev:** bump typescript-eslint in the eslint group ([50f816b](https://github.com/petro-konopelko/smartcafe-admin-client/commit/50f816b3e338536c8fbb54d57b42793e2ef4494e))
+* **deps-dev:** bump typescript-eslint in the eslint group ([ff581cd](https://github.com/petro-konopelko/smartcafe-admin-client/commit/ff581cdef42872a8692772cf936a15d7402c2098))
+* **deps-dev:** bump vite from 7.3.1 to 8.0.5 ([811e99f](https://github.com/petro-konopelko/smartcafe-admin-client/commit/811e99f2c35e36eda9fc7dee916fe3000eec4900))
+* **deps:** bump @ngrx/signals from 21.0.1 to 21.1.0 in the ngrx group ([49d5b09](https://github.com/petro-konopelko/smartcafe-admin-client/commit/49d5b0904141172ad6c722e108f17a6655eb74e4))
+* **deps:** bump the angular group with 11 updates ([45a864a](https://github.com/petro-konopelko/smartcafe-admin-client/commit/45a864a565f5e11c5b56f6bb32014175de55c1e6))
+* **deps:** bump the angular group with 16 updates ([d1105e6](https://github.com/petro-konopelko/smartcafe-admin-client/commit/d1105e62f45109514affccb0ad7d2976fd4f56b3))
+* **deps:** bump the angular group with 16 updates ([f7a5723](https://github.com/petro-konopelko/smartcafe-admin-client/commit/f7a5723f9bd25c8107a20b931b71e4a5bb9d1193))
+
 ## [1.0.5](https://github.com/petro-konopelko/smartcafe-admin-client/compare/v1.0.4...v1.0.5) (2026-03-22)
 
 
