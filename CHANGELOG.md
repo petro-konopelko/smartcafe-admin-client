@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.7](https://github.com/petro-konopelko/smartcafe-admin-client/compare/v1.0.6...v1.0.7) (2026-04-24)
+
+
+### Miscellaneous
+
+* **deps-dev:** bump stylelint ([9f0fb32](https://github.com/petro-konopelko/smartcafe-admin-client/commit/9f0fb320324c7efaa920b16bf2b81d197975dc47))
+* **deps-dev:** bump the eslint group across 1 directory with 2 updates ([b10feac](https://github.com/petro-konopelko/smartcafe-admin-client/commit/b10feacd17acd3f8f9d3d222ef29a9f65b9ced66))
+* **deps-dev:** bump the vitest group with 3 updates ([516a786](https://github.com/petro-konopelko/smartcafe-admin-client/commit/516a7865a9996632320d22715c9845ceb1479ad7))
+* **deps:** bump the angular group across 1 directory with 16 updates ([da9d9bf](https://github.com/petro-konopelko/smartcafe-admin-client/commit/da9d9bfa0e4f8996300f217b278e13e8adf4e988))
+
 ## [1.0.6](https://github.com/petro-konopelko/smartcafe-admin-client/compare/v1.0.5...v1.0.6) (2026-04-13)
 
 
