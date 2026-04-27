@@ -87,7 +87,7 @@
     "@storybook/addon-themes": "10.3.4",
     "@storybook/angular": "10.3.4",
     "@swc-node/register": "1.11.1",
-    "@swc/core": "1.15.24",
+    "@swc/core": "1.15.30",
     "@swc/helpers": "0.5.21",
     "@types/node": "25.5.2",
     "@vitest/coverage-v8": "4.1.4",
