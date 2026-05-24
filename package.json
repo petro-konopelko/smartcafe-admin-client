@@ -89,7 +89,7 @@
     "@swc-node/register": "1.11.1",
     "@swc/core": "1.15.32",
     "@swc/helpers": "0.5.21",
-    "@types/node": "25.6.0",
+    "@types/node": "25.9.1",
     "@vitest/coverage-v8": "4.1.5",
     "@vitest/ui": "4.1.5",
     "angular-eslint": "21.3.1",
