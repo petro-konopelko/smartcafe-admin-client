@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.0.0](https://github.com/petro-konopelko/smartcafe-admin-client/compare/v1.0.7...v2.0.0) (2026-05-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* update proxy configuration for local configuration
+
+### Features
+
+* update proxy configuration for local configuration ([51490d8](https://github.com/petro-konopelko/smartcafe-admin-client/commit/51490d8190c3c9d3e7d5907910c4c6a50441da09))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump the eslint group across 1 directory with 6 updates ([666df52](https://github.com/petro-konopelko/smartcafe-admin-client/commit/666df52208559ebc03f2be0468559ddc3f5d5df7))
+* **deps-dev:** bump the vitest group across 1 directory with 3 updates ([6eba2a3](https://github.com/petro-konopelko/smartcafe-admin-client/commit/6eba2a3793ca0ea9e5ddabced14fc0b439fb8ae2))
+* **deps:** bump the angular group across 1 directory with 16 updates ([fb85894](https://github.com/petro-konopelko/smartcafe-admin-client/commit/fb858948ea7da225b91f1c27b01205fa0a133339))
+* **deps:** bump the angular group with 16 updates ([30ecf3a](https://github.com/petro-konopelko/smartcafe-admin-client/commit/30ecf3a0a26e685f0e0b8ed440aaf96081e90b70))
+
 ## [1.0.7](https://github.com/petro-konopelko/smartcafe-admin-client/compare/v1.0.6...v1.0.7) (2026-05-01)
 
 
