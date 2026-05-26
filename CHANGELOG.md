@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.0.1](https://github.com/petro-konopelko/smartcafe-admin-client/compare/v2.0.0...v2.0.1) (2026-05-26)
+
+
+### Miscellaneous
+
+* **deps-dev:** bump stylelint ([4c7a23e](https://github.com/petro-konopelko/smartcafe-admin-client/commit/4c7a23e64dd91e89bc5bbf682b700bf6d185621c))
+* **deps-dev:** bump the analogjs group across 1 directory with 2 updates ([8512bac](https://github.com/petro-konopelko/smartcafe-admin-client/commit/8512bac9755801410aab3bf119e2e8e88dddf06a))
+* **deps-dev:** bump the commitlint group across 1 directory with 2 updates ([2acf778](https://github.com/petro-konopelko/smartcafe-admin-client/commit/2acf7783b06831e882a42812da0402fe926ea7e2))
+* **deps-dev:** bump the swc group across 1 directory with 2 updates ([74d1cc7](https://github.com/petro-konopelko/smartcafe-admin-client/commit/74d1cc77fe6746bc549af1de651e9d24d0563693))
+
 ## [2.0.0](https://github.com/petro-konopelko/smartcafe-admin-client/compare/v1.0.7...v2.0.0) (2026-05-25)
 
 
