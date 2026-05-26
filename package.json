@@ -55,8 +55,8 @@
   },
   "devDependencies": {
     "@analogjs/storybook-angular": "2.5.0",
-    "@analogjs/vite-plugin-angular": "2.5.0",
-    "@analogjs/vitest-angular": "2.5.0",
+    "@analogjs/vite-plugin-angular": "2.5.2",
+    "@analogjs/vitest-angular": "2.5.2",
     "@angular-devkit/core": "21.2.12",
     "@angular-devkit/schematics": "21.2.12",
     "@angular-eslint/eslint-plugin": "21.4.0",
